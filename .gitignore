@@ -1,8 +1,10 @@
-class
+*.class
 ludum-dare-26/bin
 ludum-dare-26-android/bin
 ludum-dare-26-android/gen
 ludum-dare-26-desktop/bin
 ludum-dare-26-desktop/assets
+ludum-dare-26-html/gwt-unitCache
+ludum-dare-26-html/war
 .idea
 *.iml
