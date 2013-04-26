@@ -1,0 +1,4 @@
+*.class
+ludum-dare-26/bin
+ludum-dare-26-android/bin
+ludum-dare-26-desktop/gen
