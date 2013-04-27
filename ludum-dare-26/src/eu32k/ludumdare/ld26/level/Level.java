@@ -48,6 +48,7 @@ public class Level {
             Tile tile = createRandomTile(j * TILE_WIDTH, i * TILE_WIDTH);
             tiles.add(tile);
             tileMatrix[i][j] = tile;
+            System.out.println("dfsas");
          }
       }
       placeNeighbors();
@@ -56,7 +57,7 @@ public class Level {
    private Tile createRandomTile(int x, int y) {
       int randType = tileRandom.nextInt(4);
       int randRot = tileRandom.nextInt(4);
-      Tile tile = new Tile(x * 27, y * 27, Type.values()[randType], Rotation.values()[randRot]);
+      Tile tile = new Tile(x, y, Type.values()[randType], Rotation.values()[randRot]);
       return tile;
    }
 
