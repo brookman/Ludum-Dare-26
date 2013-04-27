@@ -1,6 +1,7 @@
-package eu32k.ludumdare.ld26;
+package eu32k.ludumdare.ld26.effects;
 
 import com.badlogic.gdx.graphics.Color;
+
 
 public class ColorPulseManager {
    public final static IntensityData TEST_01 = new IntensityData(new float[] { 0.2f, 0.5f, 1f, 0.7f }, 0.180f);
@@ -69,7 +70,6 @@ public class ColorPulseManager {
          return;
 
       if (beatIntensity.update(delta) || songIntensity.update(delta)) {
-         System.out.println(String.format("Updated color to %f %f %f", currentColor.r, currentColor.g, currentColor.b));
          updateColor();
       }
    }
