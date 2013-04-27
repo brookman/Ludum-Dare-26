@@ -15,7 +15,7 @@ public class StateMachine {
 		states = new HashMap<Class<? extends GameState>, GameState>();
 	}
 
-	public StateMachine instance() {
+	public static StateMachine instance() {
 		if (INSTANCE == null) {
 			INSTANCE = new StateMachine();
 		}
@@ -41,15 +41,23 @@ public class StateMachine {
 
 	@SuppressWarnings("unchecked")
 	public <T extends GameState> T enterState(Class<T> stateClass) {
-		if (current.getTransitions().contains(stateClass)) {
-			current = states.get(stateClass);
-			if (current != null) {
-				current.enter();
-			}
+		if(current == null) {
+			changeCurrentState(stateClass);
 		} else {
-			System.out.println("State has no transition to "+stateClass.getName());
+			if (current.getTransitions().contains(stateClass)) {
+				changeCurrentState(stateClass);
+			} else {
+				System.out.println("State has no transition to "+stateClass.getName());
+			}
 		}
 		return (T) current;
+	}
+
+	private <T extends GameState> void changeCurrentState(Class<T> stateClass) {
+		current = states.get(stateClass);
+		if (current != null) {
+			current.enter();
+		}
 	}
 
 }
