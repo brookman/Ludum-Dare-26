@@ -59,8 +59,8 @@ public class LudumDare26 extends SimpleGame {
       makeTile(3, 2, Type.T, Rotation.U);
       makeTile(3, 3, Type.T, Rotation.D);
 
-      colors.init(ColorPulseManager.INTENSITY_BEAT, ColorPulseManager.TEST_03, new Color(41 / 255f, 106 / 255f, 149 / 255f, 1f));
-
+      colors.init(ColorPulseManager.INTENSITY_BEAT, ColorPulseManager.INTENSITY_BITBREAK, new Color(41 / 255f, 106 / 255f, 149 / 255f, 1f));
+      colors.setMinSongIntensity(0f);
       player = new Player(50, 50);
 
    }
