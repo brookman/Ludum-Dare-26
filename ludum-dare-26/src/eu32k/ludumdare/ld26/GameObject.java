@@ -64,5 +64,4 @@ public abstract class GameObject {
         position.x += Gdx.graphics.getDeltaTime() * speed;
     }
 
-    public boolean
 }
