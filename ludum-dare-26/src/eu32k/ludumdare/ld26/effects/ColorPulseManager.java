@@ -70,7 +70,6 @@ public class ColorPulseManager {
          return;
 
       if (beatIntensity.update(delta) || songIntensity.update(delta)) {
-         System.out.println(String.format("Updated color to %f %f %f", currentColor.r, currentColor.g, currentColor.b));
          updateColor();
       }
    }
