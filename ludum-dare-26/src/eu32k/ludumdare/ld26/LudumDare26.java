@@ -28,6 +28,7 @@ public class LudumDare26 extends SimpleGame {
    private List<Tile> tiles = new ArrayList<Tile>();
    private ColorPulseManager colors;
    private Player player;
+    private List<Tile2> tiles2 = new ArrayList<Tile2>();
 
    public LudumDare26() {
       super(false);
@@ -73,6 +74,10 @@ public class LudumDare26 extends SimpleGame {
       colors.init(ColorPulseManager.INTENSITY_BEAT, ColorPulseManager.INTENSITY_FULL, new Color(41 / 255f, 106 / 255f, 149 / 255f, 1f));
       colors.setMinSongIntensity(0.5f);
       player = new Player(50, 50);
+       tiles2.add(new Tile2(-27, -27, Tile2.Type.I, Tile2.Rotation.D));
+       tiles2.add(new Tile2(-54, -27, Tile2.Type.T, Tile2.Rotation.D));
+       tiles2.add(new Tile2(-27, -54, Tile2.Type.X, Tile2.Rotation.D));
+       tiles2.add(new Tile2(-54, -54, Tile2.Type.L, Tile2.Rotation.D));
 
    }
 
@@ -106,7 +111,7 @@ public class LudumDare26 extends SimpleGame {
       }
 
       // updates --------------------------------------
-      player.update();
+      player.update(tiles2);
       setZoom(zoom);
       if (music.isPlaying()) {
          colors.update(delta);
@@ -123,6 +128,9 @@ public class LudumDare26 extends SimpleGame {
          tile.getSprite().draw(batch);
       }
 
+       for (Tile2 t : tiles2) {
+           t.draw(batch);
+       }
       player.draw(batch);
 
       batch.end();

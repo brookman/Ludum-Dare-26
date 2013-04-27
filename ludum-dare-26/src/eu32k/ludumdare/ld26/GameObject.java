@@ -25,16 +25,11 @@ public abstract class GameObject {
         this.speed = getSpeed();
 
         this.sprite = loadSprite();
-        this.sprite.setPosition(position.x, position.y);
     }
 
     public abstract Sprite loadSprite();
 
     public abstract float getSpeed();
-
-    public Sprite getSprite() {
-        return sprite;
-    }
 
     public void draw(SpriteBatch batch) {
         sprite.draw(batch);
