@@ -3,7 +3,7 @@ package eu32k.ludumdare.ld26.events;
 public class EventBase implements IEvent {
    private float time;
 
-   protected void setTime(int time) {
+   protected void setTime(float time) {
       this.time = time;
    }
 

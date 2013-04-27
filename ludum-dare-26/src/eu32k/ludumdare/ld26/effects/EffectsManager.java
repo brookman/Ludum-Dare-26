@@ -16,8 +16,6 @@ public class EffectsManager implements IEventHandler {
 
    public final static String TRACK_BITBREAK_INTRO = "sound/bitbreak_intro.ogg";
    public final static String TRACK_BITBREAK_BODY = "sound/bitbreak_body.ogg";
-
-   private float currentSongLength = 0f;
    
    private ColorPulseManager colors;
    private EventQueue events;
@@ -26,7 +24,7 @@ public class EffectsManager implements IEventHandler {
    public EffectsManager() {
       events = new EventQueue();
       colors = new ColorPulseManager();
-      colors.setMainColor(new Color(41 / 255f, 106 / 255f, 149 / 255f, 1f));
+      colors.setMainColor(new Color(85 / 255f, 163 / 255f, 215 / 255f, 1f));
       events.addHandler(this);
    }
 
@@ -71,13 +69,15 @@ public class EffectsManager implements IEventHandler {
          stop();
          break;
       case PART_BITBREAK_INTRO:
-         colors.init(ColorPulseManager.INTENSITY_EMPTY, ColorPulseManager.INTENSITY_FULL);
+         colors.init(ColorPulseManager.INTENSITY_EMPTY, ColorPulseManager.INTENSITY_BITBREAK_INTRO);
          play(TRACK_BITBREAK_INTRO, false);
-         events.enqueue(new PlayPartEvent(6, SONG_BITBREAK, PART_BITBREAK_BODY));
+         events.enqueue(new PlayPartEvent(6.1f, SONG_BITBREAK, PART_BITBREAK_BODY));
+         colors.setMinSongIntensity(0f);
          break;
       case PART_BITBREAK_BODY:
-         colors.init(ColorPulseManager.INTENSITY_BEAT, ColorPulseManager.INTENSITY_FULL);
+         colors.init(ColorPulseManager.INTENSITY_BEAT, ColorPulseManager.INTENSITY_BITBREAK_BODY);
          play(TRACK_BITBREAK_BODY, false);
+         colors.setMinSongIntensity(0.5f);
          events.enqueue(new PlayPartEvent(72, SONG_BITBREAK, PART_BITBREAK_BODY));
          break;
       }
@@ -94,7 +94,6 @@ public class EffectsManager implements IEventHandler {
    private void stop() {
       colors.stop();
       music.stop();
-      currentSongLength = 0;
    }
 
    public Color getCurrentColor() {
