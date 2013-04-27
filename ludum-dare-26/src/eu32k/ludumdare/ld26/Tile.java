@@ -16,6 +16,10 @@ import eu32k.libgdx.rendering.Textures;
 
 public class Tile {
 
+   public static final float S = 27;
+   public static final float T = 9;
+   public static final float WIDTH = S, HEIGHT = S;
+
    public void draw(SpriteBatch batch) {
       sprite.draw(batch);
    }
@@ -30,39 +34,144 @@ public class Tile {
 
    private static Rectangle[][] rects = new Rectangle[][] { //
    //
-         { new Rectangle(54, 27, 27, 27), new Rectangle(54, 81, 27, 27), new Rectangle(54, 0, 27, 27), new Rectangle(54, 54, 27, 27) }, //
-         { new Rectangle(0, 27, 27, 27), new Rectangle(0, 27, 27, 27), new Rectangle(0, 0, 27, 27), new Rectangle(0, 0, 27, 27) }, //
-         { new Rectangle(0, 54, 27, 27), new Rectangle(0, 54, 27, 27), new Rectangle(0, 54, 27, 27), new Rectangle(0, 54, 27, 27) }, //
-         { new Rectangle(27, 54, 27, 27), new Rectangle(27, 0, 27, 27), new Rectangle(27, 27, 27, 27), new Rectangle(27, 81, 27, 27) } //
+         { new Rectangle(2.0f * S, S, S, S), new Rectangle(2.0f * S, 3.0f * S, S, S), new Rectangle(2.0f * S, 0, S, S), new Rectangle(2.0f * S, 2.0f * S, S, S) }, //
+         { new Rectangle(0, S, S, S), new Rectangle(0, S, S, S), new Rectangle(0, 0, S, S), new Rectangle(0, 0, S, S) }, //
+         { new Rectangle(0, 2.0f * S, S, S), new Rectangle(0, 2.0f * S, S, S), new Rectangle(0, 2.0f * S, S, S), new Rectangle(0, 2.0f * S, S, S) }, //
+         { new Rectangle(S, 2.0f * S, S, S), new Rectangle(S, 0, S, S), new Rectangle(S, S, S, S), new Rectangle(S, 3.0f * S, S, S) } //
    };
 
-   private static Rectangle[][] b = new Rectangle[][] { //
-   //
-         { new Rectangle(54, 27, 27, 27), new Rectangle(54, 81, 27, 27), new Rectangle(54, 0, 27, 27), new Rectangle(54, 54, 27, 27) }, //
-         { new Rectangle(0, 27, 27, 27), new Rectangle(0, 27, 27, 27), new Rectangle(0, 0, 27, 27), new Rectangle(0, 0, 27, 27) }, //
-         { new Rectangle(0, 54, 27, 27), new Rectangle(0, 54, 27, 27), new Rectangle(0, 54, 27, 27), new Rectangle(0, 54, 27, 27) }, //
-         { new Rectangle(27, 54, 27, 27), new Rectangle(27, 0, 27, 27), new Rectangle(27, 27, 27, 27), new Rectangle(27, 81, 27, 27) } //
-   };
+   private static boolean[][][] boxes = new boolean[4][4][9];
+   static {
+      boxes[Type.L.ordinal()][Rotation.R.ordinal()] = new boolean[] { //
+      //
+            false, true, false,//
+            false, true, true,//
+            false, false, false,//
+      };
+      boxes[Type.L.ordinal()][Rotation.L.ordinal()] = new boolean[] { //
+      //
+            false, false, false,//
+            true, true, false,//
+            false, true, false,//
+      };
+      boxes[Type.L.ordinal()][Rotation.U.ordinal()] = new boolean[] { //
+      //
+            false, true, false,//
+            true, true, false,//
+            false, false, false,//
+      };
+      boxes[Type.L.ordinal()][Rotation.D.ordinal()] = new boolean[] { //
+      //
+            false, false, false,//
+            false, true, true,//
+            false, true, false,//
+      };
 
-   private Type type;
-   private Rotation rotation;
+      boxes[Type.I.ordinal()][Rotation.R.ordinal()] = new boolean[] { //
+      //
+            false, true, false,//
+            false, true, false,//
+            false, true, false,//
+      };
+      boxes[Type.I.ordinal()][Rotation.L.ordinal()] = new boolean[] { //
+      //
+            false, true, false,//
+            false, true, false,//
+            false, true, false,//
+      };
+      boxes[Type.I.ordinal()][Rotation.U.ordinal()] = new boolean[] { //
+      //
+            false, false, false,//
+            true, true, true,//
+            false, false, false,//
+      };
+      boxes[Type.I.ordinal()][Rotation.D.ordinal()] = new boolean[] { //
+      //
+            false, false, false,//
+            true, true, true,//
+            false, false, false,//
+      };
 
-   private int x, y;
-   public static final float WIDTH = 27, HEIGHT = 27;
+      boxes[Type.X.ordinal()][Rotation.R.ordinal()] = new boolean[] { //
+      //
+            false, true, false,//
+            true, true, true,//
+            false, true, false,//
+      };
+      boxes[Type.X.ordinal()][Rotation.L.ordinal()] = new boolean[] { //
+      //
+            false, true, false,//
+            true, true, true,//
+            false, true, false,//
+      };
+      boxes[Type.X.ordinal()][Rotation.U.ordinal()] = new boolean[] { //
+      //
+            false, true, false,//
+            true, true, true,//
+            false, true, false,//
+      };
+      boxes[Type.X.ordinal()][Rotation.D.ordinal()] = new boolean[] { //
+      //
+            false, true, false,//
+            true, true, true,//
+            false, true, false,//
+      };
+
+      boxes[Type.T.ordinal()][Rotation.R.ordinal()] = new boolean[] { //
+      //
+            false, false, false,//
+            true, true, true,//
+            false, true, false,//
+      };
+      boxes[Type.T.ordinal()][Rotation.L.ordinal()] = new boolean[] { //
+      //
+            false, true, false,//
+            true, true, true,//
+            false, false, false,//
+      };
+      boxes[Type.T.ordinal()][Rotation.U.ordinal()] = new boolean[] { //
+      //
+            false, true, false,//
+            false, true, true,//
+            false, true, false,//
+      };
+      boxes[Type.T.ordinal()][Rotation.D.ordinal()] = new boolean[] { //
+      //
+            false, true, false,//
+            true, true, false,//
+            false, true, false,//
+      };
+   }
+   public Type type;
+   public Rotation rotation;
+
+   private float x, y;
+
    private Sprite sprite;
    private List<Rectangle> bounds;
    private boolean isMoving;
    private Map<Direction, Tile> neighbors;
 
-   public Tile(int x, int y, Type type, Rotation rotation) {
+   public Tile(float x, float y, Type type, Rotation rotation) {
       this.type = type;
       this.rotation = rotation;
       this.x = x;
       this.y = y;
-      sprite = loadSprite();
-      bounds = calculateBounds();
-      neighbors = new HashMap<Direction, Tile>();
 
+      sprite = loadSprite();
+
+      bounds = new ArrayList<Rectangle>();
+      for (int i = 0; i < 9; i++) {
+         boolean isPath = boxes[type.ordinal()][rotation.ordinal()][i];
+         if (!isPath) {
+            int xPos = i % 3;
+            int yPos = 2 - i / 3;
+
+            bounds.add(new Rectangle(x + xPos * T, y + yPos * T, T, T));
+         }
+      }
+
+      neighbors = new HashMap<Direction, Tile>();
    }
 
    public List<Rectangle> getBounds() {
@@ -119,7 +228,7 @@ public class Tile {
    }
 
    public void setMoving(boolean isMoving) {
-      this.isMoving = isMoving;
+      isMoving = isMoving;
    }
 
    public Map<Direction, Tile> getNeighbors() {
@@ -127,7 +236,7 @@ public class Tile {
    }
 
    public void setNeighbors(Map<Direction, Tile> neighbors) {
-      this.neighbors = neighbors;
+      neighbors = neighbors;
    }
 
 }

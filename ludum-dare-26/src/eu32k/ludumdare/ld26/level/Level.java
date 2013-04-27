@@ -34,12 +34,12 @@ public class Level {
    private Tile nextTile;
 
    public Level(int width, int height) {
-      this.tileMatrix = new Tile[height][width];
+      tileMatrix = new Tile[height][width];
       this.height = height;
       this.width = width;
       GlobalState globalState = StateMachine.instance().getState(GlobalState.class);
-      this.tileRandom = globalState.createNewRandom("tiles");
-      this.tiles = new ArrayList<Tile>();
+      tileRandom = globalState.createNewRandom("tiles");
+      tiles = new ArrayList<Tile>();
    }
 
    public void generateRandomTiles() {
