@@ -1,7 +1,10 @@
 package eu32k.ludumdare.ld26.level;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import eu32k.ludumdare.ld26.Direction;
 import eu32k.ludumdare.ld26.Tile2;
 import eu32k.ludumdare.ld26.Tile2.Rotation;
 import eu32k.ludumdare.ld26.Tile2.Type;
@@ -14,7 +17,7 @@ public class Level {
       TOP, RIGHT, BOTTOM, LEFT;
    }
 
-   private Tile2[][] tiles;
+   private Tile2[][] tileMatrix;
 
    private int width;
 
@@ -23,13 +26,16 @@ public class Level {
    private int dufficulty;
    
    private Random tileRandom;
+   
+   private List<Tile2> tiles;
 
    public Level(int width, int height) {
-      tiles = new Tile2[height][width];
+      this.tileMatrix = new Tile2[height][width];
       this.height = height;
       this.width = width;
       GlobalState globalState = StateMachine.instance().getState(GlobalState.class);
       this.tileRandom = globalState.createNewRandom("tiles");
+      this.tiles = new ArrayList<Tile2>();
    }
    
    public void generateRandomTiles() {
@@ -38,8 +44,41 @@ public class Level {
             int randType = tileRandom.nextInt(4);
             int randRot = tileRandom.nextInt(4);
             Tile2 tile = new Tile2(j * 27, i * 27, Type.values()[randType], Rotation.values()[randRot]);
-            tiles[i][j] = tile;
+            tiles.add(tile);
+            tileMatrix[i][j] = tile;
          }
+      }
+      placeNeighbors();
+   }
+   
+   private void placeNeighbors() {
+      for(int i = 0; i < height; i++) {
+         for(int j = 0; j < width; j++) {
+            Tile2 tile = tileMatrix[i][j];
+            Tile2 north, east, south, west;
+            if(i > 0) {
+               north = tileMatrix[i-1][j];
+               addNeighbor(tile, north, Direction.N);
+            }
+            if(j > 0) {
+               west = tileMatrix[i][j-1];
+               addNeighbor(tile, west, Direction.W);
+            }
+            if(i < height - 1) {
+               south = tileMatrix[i+1][j];
+               addNeighbor(tile, south, Direction.S);
+            }
+            if(j < width - 1) {
+               east = tileMatrix[i][j+1];
+               addNeighbor(tile, east, Direction.E);
+            }
+         }
+      }
+   }
+   
+   private void addNeighbor(Tile2 target, Tile2 neighbor, Direction direction) {
+      if(neighbor != null) {
+         target.getNeighbors().put(direction, neighbor);
       }
    }
 
@@ -68,16 +107,16 @@ public class Level {
          popped = shiftRight(x, y);
          break;
       }
-      tiles[y][x] = tile;
+      tileMatrix[y][x] = tile;
    }
 
    private Tile2 shiftDown(int x, int y) {
       int toPopX = x;
       int toPopY = height - 1;
-      Tile2 popped = tiles[toPopY][toPopX];
+      Tile2 popped = tileMatrix[toPopY][toPopX];
       for (int i = height - 1; i > 0; i--) {
          int toShiftY = i - 1;
-         tiles[i][x] = tiles[toShiftY][x];
+         tileMatrix[i][x] = tileMatrix[toShiftY][x];
       }
       return popped;
    }
@@ -85,10 +124,10 @@ public class Level {
    private Tile2 shiftLeft(int x, int y) {
       int toPopX = width - 1;
       int toPopY = y;
-      Tile2 popped = tiles[toPopY][toPopX];
+      Tile2 popped = tileMatrix[toPopY][toPopX];
       for (int i = 0; i < width - 1; i++) {
          int toShiftX = i + 1;
-         tiles[y][i] = tiles[y][toShiftX];
+         tileMatrix[y][i] = tileMatrix[y][toShiftX];
       }
       return popped;
    }
@@ -96,10 +135,10 @@ public class Level {
    private Tile2 shiftUp(int x, int y) {
       int toPopX = x;
       int toPopY = 0;
-      Tile2 popped = tiles[toPopY][toPopX];
+      Tile2 popped = tileMatrix[toPopY][toPopX];
       for (int i = 0; i < height - 1; i++) {
          int toShiftY = i + 1;
-         tiles[i][x] = tiles[toShiftY][x];
+         tileMatrix[i][x] = tileMatrix[toShiftY][x];
       }
       return popped;
    }
@@ -107,19 +146,19 @@ public class Level {
    private Tile2 shiftRight(int x, int y) {
       int toPopX = 0;
       int toPopY = y;
-      Tile2 popped = tiles[toPopY][toPopX];
+      Tile2 popped = tileMatrix[toPopY][toPopX];
       for (int i = width - 1; i > 0; i--) {
          int toShiftX = i - 1;
-         tiles[y][i] = tiles[y][toShiftX];
+         tileMatrix[y][i] = tileMatrix[y][toShiftX];
       }
       return popped;
    }
-
-   public Tile2[][] getTiles() {
+   
+   public List<Tile2> getTiles() {
       return tiles;
    }
 
-   public void setTiles(Tile2[][] tiles) {
+   public void setTiles(List<Tile2> tiles) {
       this.tiles = tiles;
    }
 
