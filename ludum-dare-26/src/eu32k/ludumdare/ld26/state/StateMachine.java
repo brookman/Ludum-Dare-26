@@ -30,7 +30,6 @@ public class StateMachine {
 		   origState.destroy();
 		}
 		try {
-			state = stateClass.getConstructor().newInstance();
 			state.init();
 			this.states.put(stateClass, state);
 		} catch (Exception e) {
