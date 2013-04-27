@@ -69,6 +69,7 @@ public class MainRenderer {
       hudBatch.begin();
       text.draw(hudBatch, 30.0f, 50.0f);
       fps.draw(hudBatch, "fps: " + Gdx.graphics.getFramesPerSecond(), 30.0f, Gdx.graphics.getHeight() - 30.0f);
+      fps.draw(hudBatch, DebugText.text == null ? "null" : DebugText.text, 30.0f, Gdx.graphics.getHeight() - 60.0f);
       hudBatch.end();
 
    }
