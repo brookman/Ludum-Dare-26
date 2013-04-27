@@ -3,8 +3,10 @@ package eu32k.ludumdare.ld26;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -14,7 +16,11 @@ import eu32k.libgdx.SimpleGame;
 import eu32k.ludumdare.ld26.Tile.Rotation;
 import eu32k.ludumdare.ld26.Tile.Type;
 import eu32k.ludumdare.ld26.effects.ColorPulseManager;
-import eu32k.ludumdare.ld26.state.*;
+import eu32k.ludumdare.ld26.state.LevelFinishedState;
+import eu32k.ludumdare.ld26.state.LevelState;
+import eu32k.ludumdare.ld26.state.MenuState;
+import eu32k.ludumdare.ld26.state.PauseState;
+import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class LudumDare26 extends SimpleGame {
 
@@ -60,8 +66,13 @@ public class LudumDare26 extends SimpleGame {
       makeTile(3, 2, Type.T, Rotation.U);
       makeTile(3, 3, Type.T, Rotation.D);
 
-      colors.init(ColorPulseManager.INTENSITY_BEAT, ColorPulseManager.TEST_03, new Color(41 / 255f, 106 / 255f, 149 / 255f, 1f));
+      music = Gdx.audio.newMusic(Gdx.files.getFileHandle("sound/bitbreak.ogg", FileType.Internal));
+      music.setLooping(true);
+      music.setVolume(0.5f);
+      music.play();
 
+      colors.init(ColorPulseManager.INTENSITY_BEAT, ColorPulseManager.INTENSITY_FULL, new Color(41 / 255f, 106 / 255f, 149 / 255f, 1f));
+      colors.setMinSongIntensity(0.5f);
       player = new Player(50, 50);
        tiles2.add(new Tile2(-27, -27, Tile2.Type.I, Tile2.Rotation.D));
        tiles2.add(new Tile2(-54, -27, Tile2.Type.T, Tile2.Rotation.D));
@@ -78,6 +89,7 @@ public class LudumDare26 extends SimpleGame {
    }
 
    private float zoom = 100.0f;
+   private Music music;
 
    @Override
    public void draw(float delta) {
@@ -101,7 +113,9 @@ public class LudumDare26 extends SimpleGame {
       // updates --------------------------------------
       player.update(tiles2);
       setZoom(zoom);
-      colors.update(delta);
+      if (music.isPlaying()) {
+         colors.update(delta);
+      }
       // rendering ------------------------------------
       Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
