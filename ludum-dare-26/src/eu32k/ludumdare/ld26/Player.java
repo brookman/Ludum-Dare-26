@@ -17,8 +17,6 @@ public class Player extends GameObject {
 
    public Player(int x, int y) {
       super(new Vector2(x, y), WIDTH, HEIGHT);
-
-      bounds.add(new Rectangle(x - WIDTH / 2, y - HEIGHT / 2, WIDTH, HEIGHT));
    }
 
    @Override
@@ -26,50 +24,52 @@ public class Player extends GameObject {
       Texture texture = new Texture(Gdx.files.internal("textures/shroom.png"));
       Sprite sprite = new Sprite(texture);
       sprite.setSize(WIDTH, HEIGHT);
-      sprite.setPosition(position.x, position.y);
 
       return sprite;
    }
 
    public void update(List<Tile2> tiles) {
-      super.update();
+      // super.update();
+      //
+      // for (Tile2 tile : tiles) {
+      // for (Rectangle tileBound : tile.getBounds()) {
+      // for (Rectangle playerBound : bounds) {
+      // if (CollisionUtil.rectanglesOverlap(tileBound, playerBound)) {
+      //
+      // System.out.println("COLLISION");
+      // }
+      // }
+      // }
+      // }
+   }
 
-      for (Tile2 tile : tiles) {
-         for (Rectangle tileBound : tile.getBounds()) {
-            for (Rectangle playerBound : bounds) {
-               if (CollisionUtil.rectanglesOverlap(tileBound, playerBound)) {
+   public void move(Vector2 velocity, Tile2[][] tiles) {
+      Vector2 scaledVelocity = velocity.cpy().mul(SPEED);
 
-                  System.out.println("COLLISION");
+      Vector2 xPart = new Vector2(scaledVelocity.x, 0.0f);
+      Vector2 yPart = new Vector2(0.0f, scaledVelocity.y);
+
+      if (tryToMove(position.cpy().add(xPart), tiles)) {
+         position.add(scaledVelocity);
+      }
+
+      if (tryToMove(position.cpy().add(yPart), tiles)) {
+         position.add(scaledVelocity);
+      }
+   }
+
+   private boolean tryToMove(Vector2 newPos, Tile2[][] tiles) {
+      Rectangle bounds = getBounds(newPos);
+
+      for (Tile2[] tile1 : tiles) {
+         for (Tile2 tile : tile1) {
+            for (Rectangle tileBound : tile.getBounds()) {
+               if (CollisionUtil.rectanglesOverlap(tileBound, bounds)) {
+                  return false;
                }
             }
          }
       }
+      return true;
    }
-
-   @Override
-   public void move(Vector2 velocity) {
-      super.move(velocity.mul(SPEED));
-   }
-
-   // public void move(Vector2 velocity, List<Tile2> tiles) {
-   // velocity.mul(SPEED);
-   // Vector2 nextPos = position.cpy().add(velocity);
-   //
-   // for (Tile2 tile : tiles) {
-   // for (Rectangle tileBound : tile.getBounds()) {
-   // for (Rectangle playerBound : bounds) {
-   // if (CollisionUtil.rectanglesOverlap(tileBound, playerBound)) {
-   //
-   // System.out.println("COLLISION");
-   // }
-   // }
-   // }
-   // }
-   // }
-
-   @Override
-   public float getSpeed() {
-      return SPEED;
-   }
-
 }
