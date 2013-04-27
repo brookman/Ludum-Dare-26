@@ -33,14 +33,20 @@ public class MainRenderer {
 
       debugRenderer.setProjectionMatrix(camera.combined);
       debugRenderer.begin(ShapeType.FilledRectangle);
-      debugRenderer.setColor(new Color(1.0f, 1.0f, 1.0f, 0.5f));
+      debugRenderer.setColor(new Color(1.0f, 1.0f, 1.0f, 0.05f));
       for (Tile tile : tiles) {
-         System.out.print(tile.type + "/" + tile.rotation + " ");
          for (Rectangle rect : tile.getBounds()) {
             debugRenderer.filledRect(rect.x, rect.y, rect.width, rect.height);
          }
       }
       debugRenderer.end();
+
+      // debugRenderer.begin(ShapeType.FilledRectangle);
+      // debugRenderer.setColor(new Color(1.0f, 0.0f, 0.0f, 1.0f));
+      // Vector3 p = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0.0f);
+      // camera.unproject(p);
+      // debugRenderer.filledRect(p.x, p.y, 10.0f, 10.0f);
+      // debugRenderer.end();
 
       batch.setProjectionMatrix(camera.combined);
       batch.begin();
