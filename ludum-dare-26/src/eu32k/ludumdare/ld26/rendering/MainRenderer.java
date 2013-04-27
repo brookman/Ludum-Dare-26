@@ -35,7 +35,6 @@ public class MainRenderer {
       debugRenderer.begin(ShapeType.FilledRectangle);
       debugRenderer.setColor(new Color(1.0f, 1.0f, 1.0f, 0.5f));
       for (Tile tile : tiles) {
-         System.out.print(tile.type + "/" + tile.rotation + " ");
          for (Rectangle rect : tile.getBounds()) {
             debugRenderer.filledRect(rect.x, rect.y, rect.width, rect.height);
          }
