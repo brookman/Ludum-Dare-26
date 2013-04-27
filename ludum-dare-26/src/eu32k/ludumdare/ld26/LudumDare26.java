@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import eu32k.libgdx.SimpleGame;
 import eu32k.ludumdare.ld26.Tile.Rotation;
 import eu32k.ludumdare.ld26.Tile.Type;
+import eu32k.ludumdare.ld26.effects.ColorPulseManager;
 import eu32k.ludumdare.ld26.state.*;
 
 public class LudumDare26 extends SimpleGame {
