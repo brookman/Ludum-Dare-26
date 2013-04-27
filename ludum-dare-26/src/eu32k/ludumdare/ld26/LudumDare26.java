@@ -18,9 +18,11 @@ public class LudumDare26 extends SimpleGame {
 
    private SpriteBatch batch;
    private List<Tile> tiles = new ArrayList<Tile>();
-
+   private ColorPulseManager colors;
+   
    public LudumDare26() {
       super(false);
+      colors = new ColorPulseManager();
    }
 
    @Override
@@ -47,6 +49,7 @@ public class LudumDare26 extends SimpleGame {
       makeTile(3, 2, Type.T, Rotation.U);
       makeTile(3, 3, Type.T, Rotation.D);
 
+      colors.init(ColorPulseManager.INTENSITY_BEAT, ColorPulseManager.INTENSITY_FULL, Color.RED);
    }
 
    private void makeTile(int x, int y, Type t, Rotation r) {
@@ -75,7 +78,7 @@ public class LudumDare26 extends SimpleGame {
 
       // updates --------------------------------------
       setZoom(zoom);
-
+      colors.update(delta);
       // rendering ------------------------------------
       Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -83,7 +86,7 @@ public class LudumDare26 extends SimpleGame {
       batch.setProjectionMatrix(camera.combined);
       batch.begin();
       for (Tile tile : tiles) {
-         tile.getSprite().setColor(Color.GREEN);
+         tile.getSprite().setColor(colors.getCurrentColor());
          tile.getSprite().draw(batch);
       }
       batch.end();
