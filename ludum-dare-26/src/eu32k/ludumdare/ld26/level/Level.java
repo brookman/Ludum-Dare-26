@@ -91,93 +91,93 @@ public class Level {
       }
    }
 
-//   public Tile insertTile(Tile tile, Edge edge, int position) {
-//      int x = 0, y = 0;
-//      Tile popped;
-//      switch (edge) {
-//      case TOP:
-//         x = position;
-//         y = 0;
-//         popped = shiftDown(x, y);
-//         break;
-//      case RIGHT:
-//         x = this.width - 1;
-//         y = position;
-//         popped = shiftLeft(x, y);
-//         break;
-//      case BOTTOM:
-//         x = position;
-//         y = this.height - 1;
-//         popped = shiftUp(x, y);
-//         break;
-//      case LEFT:
-//      default:
-//         x = 0;
-//         y = position;
-//         popped = shiftRight(x, y);
-//         break;
-//      }
-//      tileMatrix[y][x] = tile;
-//      return popped;
-//   }
+   // public Tile insertTile(Tile tile, Edge edge, int position) {
+   // int x = 0, y = 0;
+   // Tile popped;
+   // switch (edge) {
+   // case TOP:
+   // x = position;
+   // y = 0;
+   // popped = shiftDown(x, y);
+   // break;
+   // case RIGHT:
+   // x = this.width - 1;
+   // y = position;
+   // popped = shiftLeft(x, y);
+   // break;
+   // case BOTTOM:
+   // x = position;
+   // y = this.height - 1;
+   // popped = shiftUp(x, y);
+   // break;
+   // case LEFT:
+   // default:
+   // x = 0;
+   // y = position;
+   // popped = shiftRight(x, y);
+   // break;
+   // }
+   // tileMatrix[y][x] = tile;
+   // return popped;
+   // }
 
-//   private Tile shiftDown(int x, int y) {
-//      int toPopX = x;
-//      int toPopY = height - 1;
-//      Tile popped = tileMatrix[toPopY][toPopX];
-//      for (int i = height - 1; i > 0; i--) {
-//         int toShiftY = i - 1;
-//         tileMatrix[i][x] = tileMatrix[toShiftY][x];
-//      }
-//      return popped;
-//   }
-//
-//   private Tile shiftLeft(int x, int y) {
-//      int toPopX = width - 1;
-//      int toPopY = y;
-//      Tile popped = tileMatrix[toPopY][toPopX];
-//      for (int i = 0; i < width - 1; i++) {
-//         int toShiftX = i + 1;
-//         tileMatrix[y][i] = tileMatrix[y][toShiftX];
-//      }
-//      return popped;
-//   }
-//
-//   private Tile shiftUp(int x, int y) {
-//      int toPopX = x;
-//      int toPopY = 0;
-//      Tile popped = tileMatrix[toPopY][toPopX];
-//      for (int i = 0; i < height - 1; i++) {
-//         int toShiftY = i + 1;
-//         tileMatrix[i][x] = tileMatrix[toShiftY][x];
-//      }
-//      return popped;
-//   }
-//
-//   private Tile shiftRight(int x, int y) {
-//      int toPopX = 0;
-//      int toPopY = y;
-//      Tile popped = tileMatrix[toPopY][toPopX];
-//      for (int i = width - 1; i > 0; i--) {
-//         int toShiftX = i - 1;
-//         tileMatrix[y][i] = tileMatrix[y][toShiftX];
-//      }
-//      return popped;
-//   }
+   // private Tile shiftDown(int x, int y) {
+   // int toPopX = x;
+   // int toPopY = height - 1;
+   // Tile popped = tileMatrix[toPopY][toPopX];
+   // for (int i = height - 1; i > 0; i--) {
+   // int toShiftY = i - 1;
+   // tileMatrix[i][x] = tileMatrix[toShiftY][x];
+   // }
+   // return popped;
+   // }
+   //
+   // private Tile shiftLeft(int x, int y) {
+   // int toPopX = width - 1;
+   // int toPopY = y;
+   // Tile popped = tileMatrix[toPopY][toPopX];
+   // for (int i = 0; i < width - 1; i++) {
+   // int toShiftX = i + 1;
+   // tileMatrix[y][i] = tileMatrix[y][toShiftX];
+   // }
+   // return popped;
+   // }
+   //
+   // private Tile shiftUp(int x, int y) {
+   // int toPopX = x;
+   // int toPopY = 0;
+   // Tile popped = tileMatrix[toPopY][toPopX];
+   // for (int i = 0; i < height - 1; i++) {
+   // int toShiftY = i + 1;
+   // tileMatrix[i][x] = tileMatrix[toShiftY][x];
+   // }
+   // return popped;
+   // }
+   //
+   // private Tile shiftRight(int x, int y) {
+   // int toPopX = 0;
+   // int toPopY = y;
+   // Tile popped = tileMatrix[toPopY][toPopX];
+   // for (int i = width - 1; i > 0; i--) {
+   // int toShiftX = i - 1;
+   // tileMatrix[y][i] = tileMatrix[y][toShiftX];
+   // }
+   // return popped;
+   // }
 
-   public void spawnTile() {
-      int edgeRand = tileRandom.nextInt(4);
-      int xRand = tileRandom.nextInt(width - 1);
-      int yRand = tileRandom.nextInt(height - 1);
+   public Tile spawnTile() {
+      int edgeRand = tileRandom.nextInt(40) % 4;
+      int xRand = tileRandom.nextInt((width - 1) * 10) % (width - 1);
+      int yRand = tileRandom.nextInt((height - 1) * 10) % (height - 1);
       Edge edge = Edge.values()[edgeRand];
       int x, y;
       switch (edge) {
       case TOP:
          x = xRand * TILE_WIDTH;
-         y = (height + 1) * TILE_WIDTH;
+         y = (height) * TILE_WIDTH;
          break;
       case RIGHT:
-         x = (width + 1) * TILE_WIDTH;
+         x = (width) * TILE_WIDTH;
          y = yRand * TILE_WIDTH;
          break;
       case BOTTOM:
@@ -191,9 +191,9 @@ public class Level {
          break;
       }
       nextTile = createRandomTile(x, y);
-      tiles.add(nextTile);
+      return nextTile;
    }
-   
+
    public void popTile(Tile tile) {
       tiles.remove(tile);
    }

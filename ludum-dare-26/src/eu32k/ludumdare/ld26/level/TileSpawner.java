@@ -12,15 +12,26 @@ public class TileSpawner implements IEventHandler {
 
    public TileSpawner() {
       globalState = StateMachine.instance().getState(GlobalState.class);
+      globalState.getEvents().addHandler(this);
+   }
+   
+   public void init() {
+      LevelState levelState = StateMachine.instance().getState(LevelState.class);
+      globalState.getEvents().enqueue(new SpawnTileEvent(2, levelState.getLevel().spawnTile()));
    }
 
    @Override
    public void handle(IEvent ev) {
       if (ev instanceof SpawnTileEvent) {
          SpawnTileEvent event = (SpawnTileEvent) ev;
-         StateMachine.instance().getState(LevelState.class).getLevel().getTiles().add(event.getTile());
+         LevelState levelState = StateMachine.instance().getState(LevelState.class);
+         levelState.getLevel().getTiles().add(event.getTile());
+         globalState.getEvents().enqueue(new SpawnTileEvent(2, levelState.getLevel().spawnTile()));
       }
 
+   }
+   
+   public void update(float delta) {
    }
 
 }

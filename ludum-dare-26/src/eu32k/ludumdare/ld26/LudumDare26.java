@@ -30,6 +30,14 @@ public class LudumDare26 extends SimpleGame {
 
    public LudumDare26() {
       super(false);
+      StateMachine.instance().createState(new GlobalState());
+      StateMachine.instance().createState(new PlayerState());
+      StateMachine.instance().createState(new MenuState());
+      StateMachine.instance().createState(new LevelState());
+      StateMachine.instance().createState(new LevelFinishedState());
+      StateMachine.instance().createState(new PauseState());
+      StateMachine.instance().enterState(LevelState.class);
+      
       effects = new EffectsManager();
       tileSpawner = new TileSpawner();
       levelState = StateMachine.instance().getState(LevelState.class);
@@ -39,21 +47,13 @@ public class LudumDare26 extends SimpleGame {
    public void init() {
       renderer = new MainRenderer();
 
-      StateMachine.instance().createState(new GlobalState());
-      StateMachine.instance().createState(new PlayerState());
-      StateMachine.instance().createState(new MenuState());
-      StateMachine.instance().createState(new LevelState());
-      StateMachine.instance().createState(new LevelFinishedState());
-      StateMachine.instance().createState(new PauseState());
-
-      StateMachine.instance().enterState(LevelState.class);
-
       player = new Player(13.5f, 13.5f);
       level = new Level(5, 5);
       level.generateRandomTiles();
       
       levelState.setLevel(level);
 
+      tileSpawner.init();
       effects.initBitbreak();
    }
 
@@ -94,6 +94,7 @@ public class LudumDare26 extends SimpleGame {
          effects.stopSong(null);
       }
       StateMachine.instance().getState(GlobalState.class).getEvents().tick(delta);
+      tileSpawner.update(delta);
       effects.update(delta);
 
       camera.position.x = 100;
