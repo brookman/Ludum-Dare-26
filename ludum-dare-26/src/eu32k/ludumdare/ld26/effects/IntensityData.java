@@ -32,4 +32,13 @@ public class IntensityData {
    public float getValue() {
       return intensity[index];
    }
+
+   public boolean setTime(float ms) {
+      int oldIndex = index;
+      index = (int)(ms   / stepSize);
+      while (index >= length) {
+         index -= length;
+      }
+      return index != oldIndex;
+   }
 }

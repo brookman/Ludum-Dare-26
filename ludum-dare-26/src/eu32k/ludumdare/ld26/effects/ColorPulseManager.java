@@ -111,11 +111,14 @@ public class ColorPulseManager {
       currentColor = new Color();
    }
 
-   public void init(IntensityData beatIntensity, IntensityData songIntensity, Color mainColor) {
+   public void setMainColor(Color mainColor) {
+      this.mainColor = mainColor;
+   }
+
+   public void init(IntensityData beatIntensity, IntensityData songIntensity) {
       stop();
       if (beatIntensity == null || songIntensity == null || mainColor == null)
          return;
-      this.mainColor = mainColor;
       this.beatIntensity = beatIntensity;
       this.songIntensity = songIntensity;
 
@@ -136,6 +139,15 @@ public class ColorPulseManager {
       if (beatIntensity.update(delta) || songIntensity.update(delta)) {
          updateColor();
       }
+   }
+
+   public void setTime(float ms) {
+      if (beatIntensity == null || songIntensity == null)
+         return;
+      if (beatIntensity.setTime(ms) || songIntensity.setTime(ms)) {
+         updateColor();
+      }
+      
    }
 
    private void updateColor() {
