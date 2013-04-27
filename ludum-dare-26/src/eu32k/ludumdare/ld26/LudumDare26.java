@@ -13,13 +13,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import eu32k.libgdx.SimpleGame;
 import eu32k.ludumdare.ld26.Tile.Rotation;
 import eu32k.ludumdare.ld26.Tile.Type;
+import eu32k.ludumdare.ld26.state.*;
 
 public class LudumDare26 extends SimpleGame {
 
    private SpriteBatch batch;
    private List<Tile> tiles = new ArrayList<Tile>();
    private ColorPulseManager colors;
-   
+   private Player player;
+
    public LudumDare26() {
       super(false);
       colors = new ColorPulseManager();
@@ -27,6 +29,13 @@ public class LudumDare26 extends SimpleGame {
 
    @Override
    public void init() {
+      StateMachine.instance().createState(MenuState.class);
+      StateMachine.instance().createState(LevelState.class);
+      StateMachine.instance().createState(LevelFinishedState.class);
+      StateMachine.instance().createState(PauseState.class);
+
+      StateMachine.instance().enterState(LevelState.class);
+
       batch = new SpriteBatch();
 
       makeTile(0, 0, Type.L, Rotation.R);
@@ -50,6 +59,9 @@ public class LudumDare26 extends SimpleGame {
       makeTile(3, 3, Type.T, Rotation.D);
 
       colors.init(ColorPulseManager.INTENSITY_BEAT, ColorPulseManager.INTENSITY_FULL, Color.RED);
+
+      player = new Player(50, 50);
+
    }
 
    private void makeTile(int x, int y, Type t, Rotation r) {
@@ -71,12 +83,17 @@ public class LudumDare26 extends SimpleGame {
       boolean right = Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT);
 
       if (up) {
-         zoom += delta * 20.0f;
+         player.moveUp();
       } else if (down) {
-         zoom -= delta * 20.0f;
+         player.moveDown();
+      } else if (left) {
+         player.moveLeft();
+      } else if (right) {
+         player.moveRight();
       }
 
       // updates --------------------------------------
+      player.update();
       setZoom(zoom);
       colors.update(delta);
       // rendering ------------------------------------
@@ -85,10 +102,14 @@ public class LudumDare26 extends SimpleGame {
 
       batch.setProjectionMatrix(camera.combined);
       batch.begin();
+
       for (Tile tile : tiles) {
          tile.getSprite().setColor(colors.getCurrentColor());
          tile.getSprite().draw(batch);
       }
+
+      player.draw(batch);
+
       batch.end();
    }
 

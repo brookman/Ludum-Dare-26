@@ -8,3 +8,5 @@ ludum-dare-26-html/gwt-unitCache
 ludum-dare-26-html/war
 .idea
 *.iml
+tools/ludum-dare-tool/screens
+out
