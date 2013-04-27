@@ -30,10 +30,10 @@ public class LudumDare26 extends SimpleGame {
 
    @Override
    public void init() {
-      StateMachine.instance().createState(MenuState.class);
-      StateMachine.instance().createState(LevelState.class);
-      StateMachine.instance().createState(LevelFinishedState.class);
-      StateMachine.instance().createState(PauseState.class);
+      StateMachine.instance().createState(new MenuState());
+      StateMachine.instance().createState(new LevelState());
+      StateMachine.instance().createState(new LevelFinishedState());
+      StateMachine.instance().createState(new PauseState());
 
       StateMachine.instance().enterState(LevelState.class);
 
