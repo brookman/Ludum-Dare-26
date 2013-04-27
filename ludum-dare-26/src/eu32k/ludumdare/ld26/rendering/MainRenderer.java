@@ -1,5 +1,6 @@
 package eu32k.ludumdare.ld26.rendering;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
@@ -8,13 +9,17 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 
+import eu32k.libgdx.rendering.MultiPassRenderer;
+import eu32k.libgdx.rendering.Renderer;
+import eu32k.libgdx.rendering.TextureRenderer;
 import eu32k.ludumdare.ld26.Player;
-import eu32k.ludumdare.ld26.Tile;
 import eu32k.ludumdare.ld26.level.Level;
+import eu32k.ludumdare.ld26.level.Tile;
 
 public class MainRenderer {
 
@@ -24,15 +29,27 @@ public class MainRenderer {
    private RunText text;
    private BitmapFont fps;
 
+   private MultiPassRenderer multiPass;
+
    public MainRenderer() {
       batch = new SpriteBatch();
       hudBatch = new SpriteBatch();
       debugRenderer = new ShapeRenderer();
-      text = new RunText("Welcome to the super minimalistic labyrinth game!           yay! :D", 3.0f);
+      text = new RunText("Welcome to the super minimalistic labyrinth game!           yay! :D", 5.0f);
       fps = new BitmapFont(Gdx.files.internal("fonts/calibri.fnt"), Gdx.files.internal("fonts/calibri.png"), false);
+
+      ShaderProgram verticalBlur = new ShaderProgram(Gdx.files.internal("shaders/simple.vsh").readString(), Gdx.files.internal("shaders/blur_v.fsh").readString());
+      ShaderProgram horizontalBlur = new ShaderProgram(Gdx.files.internal("shaders/simple.vsh").readString(), Gdx.files.internal("shaders/blur_h.fsh").readString());
+
+      List<Renderer> renderStack = new ArrayList<Renderer>();
+      renderStack.add(new TextureRenderer(400, 300, verticalBlur));
+      renderStack.add(new TextureRenderer(400, 300, horizontalBlur));
+      multiPass = new MultiPassRenderer(renderStack);
    }
 
    public void render(float delta, Camera camera, Level level, List<Tile> tiles, Player player, Color color) {
+      // multiPass.begin();
+
       Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
       Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -72,6 +89,7 @@ public class MainRenderer {
       fps.draw(hudBatch, DebugText.text == null ? "null" : DebugText.text, 30.0f, Gdx.graphics.getHeight() - 60.0f);
       hudBatch.end();
 
+      // multiPass.endAndRender();
    }
 
    public void dispose() {
