@@ -23,19 +23,18 @@ public class StateMachine {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends GameState> T createState(Class<T> stateClass) {
-		GameState state = states.get(stateClass);
-		if(state != null) {
-			state.destroy();
+	public void createState(GameState state) {
+	   Class<? extends GameState> stateClass = state.getClass();
+		GameState origState = states.get(state.getClass());
+		if(origState != null) {
+		   origState.destroy();
 		}
 		try {
 			state = stateClass.getConstructor().newInstance();
 			state.init();
 			this.states.put(stateClass, state);
-			return (T) state;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
 		}
 	}
 
