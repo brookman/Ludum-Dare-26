@@ -1,7 +1,7 @@
 package eu32k.ludumdare.ld26.effects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Files.FileType;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 
@@ -13,13 +13,18 @@ public class EffectsManager implements IEventHandler {
    public final static int SONG_BITBREAK = 1;
    public final static int PART_BITBREAK_INTRO = 0;
    public final static int PART_BITBREAK_BODY = 1;
+   public final static int PART_BITBREAK_OUTRO = 2;
 
    public final static String TRACK_BITBREAK_INTRO = "sound/bitbreak_intro.ogg";
    public final static String TRACK_BITBREAK_BODY = "sound/bitbreak_body.ogg";
-   
+   public final static String TRACK_BITBREAK_OUTRO = "sound/bitbreak_outro.ogg";
+
    private ColorPulseManager colors;
    private EventQueue events;
    private Music music;
+
+   private int currentSong;
+   private int currentPart;
 
    public EffectsManager() {
       events = new EventQueue();
@@ -32,11 +37,10 @@ public class EffectsManager implements IEventHandler {
       return events;
    }
 
-   public void initBitbreak()
-   {
+   public void initBitbreak() {
       events.enqueue(new PlayPartEvent(0, SONG_BITBREAK, PART_BITBREAK_INTRO));
    }
-   
+
    public void update(float delta) {
       events.tick(delta);
       if (music != null && music.isPlaying()) {
@@ -53,6 +57,8 @@ public class EffectsManager implements IEventHandler {
    }
 
    private void handlePlayPartEvent(PlayPartEvent ev) {
+      this.currentSong = ev.song;
+      this.currentPart = ev.part;
       switch (ev.song) {
       default:
          stop();
@@ -80,24 +86,64 @@ public class EffectsManager implements IEventHandler {
          colors.setMinSongIntensity(0.5f);
          events.enqueue(new PlayPartEvent(72, SONG_BITBREAK, PART_BITBREAK_BODY));
          break;
+      case PART_BITBREAK_OUTRO:
+         colors.init(ColorPulseManager.INTENSITY_EMPTY, ColorPulseManager.INTENSITY_BITBREAK_OUTRO);
+         play(TRACK_BITBREAK_OUTRO, false);
+         colors.setMinSongIntensity(0f);
+         events.enqueue(new PlayPartEvent(72, 0, 0));
+         break;
       }
    }
 
    private void play(String track, boolean loop) {
+      if (music != null && music.isPlaying()) {
+         music.stop();
+      }
       music = Gdx.audio.newMusic(Gdx.files.getFileHandle(track, FileType.Internal));
       music.setLooping(loop);
       music.setVolume(0.5f);
       music.play();
-      
+
    }
 
    private void stop() {
       colors.stop();
       music.stop();
+      currentSong = 0;
+      currentPart = 0;
    }
 
    public Color getCurrentColor() {
       return colors.getCurrentColor();
+   }
+
+   public void stopSong(Integer nextSong) {
+      float barLength = 3;
+      float position = music.getPosition() % barLength;
+      float timeLeft = barLength - position;
+
+      events.enqueue(new PlayPartEvent(timeLeft, currentSong, getOutroPart(currentSong)));
+      if (nextSong != null) {
+         events.enqueue(new PlayPartEvent(timeLeft + getOutroTime(currentSong), nextSong, 0));
+      }
+   }
+
+   private int getOutroPart(int song) {
+      switch (song) {
+      default:
+         return -1;
+      case SONG_BITBREAK:
+         return PART_BITBREAK_OUTRO;
+      }
+   }
+
+   private float getOutroTime(int song) {
+      switch (song) {
+      default:
+         return 0;
+      case SONG_BITBREAK:
+         return 3;
+      }
    }
 
 }
