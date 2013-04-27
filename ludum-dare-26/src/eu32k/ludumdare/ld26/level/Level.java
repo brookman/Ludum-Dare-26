@@ -167,8 +167,8 @@ public class Level {
 
    public Tile spawnTile() {
       int edgeRand = tileRandom.nextInt(40) % 4;
-      int xRand = tileRandom.nextInt((width - 1) * 10) % (width - 1);
-      int yRand = tileRandom.nextInt((height - 1) * 10) % (height - 1);
+      int xRand = tileRandom.nextInt(width) ;
+      int yRand = tileRandom.nextInt(height) ;
       Edge edge = Edge.values()[edgeRand];
       int x, y;
       switch (edge) {
