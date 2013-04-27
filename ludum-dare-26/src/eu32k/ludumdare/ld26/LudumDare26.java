@@ -41,7 +41,7 @@ public class LudumDare26 extends SimpleGame {
 
       StateMachine.instance().enterState(LevelState.class);
 
-      player = new Player(-20, -20);
+      player = new Player(13.5f, 13.5f);
       level = new Level(5, 5);
       level.generateRandomTiles();
 

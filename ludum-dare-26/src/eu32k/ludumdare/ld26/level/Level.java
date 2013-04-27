@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Random;
 
 import eu32k.ludumdare.ld26.Direction;
-import eu32k.ludumdare.ld26.Tile2;
-import eu32k.ludumdare.ld26.Tile2.Rotation;
-import eu32k.ludumdare.ld26.Tile2.Type;
+import eu32k.ludumdare.ld26.Tile;
+import eu32k.ludumdare.ld26.Tile.Rotation;
+import eu32k.ludumdare.ld26.Tile.Type;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
@@ -17,7 +17,7 @@ public class Level {
       TOP, RIGHT, BOTTOM, LEFT;
    }
 
-   private Tile2[][] tileMatrix;
+   private Tile[][] tileMatrix;
 
    private int width;
 
@@ -27,15 +27,15 @@ public class Level {
    
    private Random tileRandom;
    
-   private List<Tile2> tiles;
+   private List<Tile> tiles;
 
    public Level(int width, int height) {
-      this.tileMatrix = new Tile2[height][width];
+      this.tileMatrix = new Tile[height][width];
       this.height = height;
       this.width = width;
       GlobalState globalState = StateMachine.instance().getState(GlobalState.class);
       this.tileRandom = globalState.createNewRandom("tiles");
-      this.tiles = new ArrayList<Tile2>();
+      this.tiles = new ArrayList<Tile>();
    }
    
    public void generateRandomTiles() {
@@ -43,7 +43,7 @@ public class Level {
          for(int j = 0; j < width; j++) {
             int randType = tileRandom.nextInt(4);
             int randRot = tileRandom.nextInt(4);
-            Tile2 tile = new Tile2(j * 27, i * 27, Type.values()[randType], Rotation.values()[randRot]);
+            Tile tile = new Tile(j * 27, i * 27, Type.values()[randType], Rotation.values()[randRot]);
             tiles.add(tile);
             tileMatrix[i][j] = tile;
          }
@@ -54,8 +54,8 @@ public class Level {
    private void placeNeighbors() {
       for(int i = 0; i < height; i++) {
          for(int j = 0; j < width; j++) {
-            Tile2 tile = tileMatrix[i][j];
-            Tile2 north, east, south, west;
+            Tile tile = tileMatrix[i][j];
+            Tile north, east, south, west;
             if(i > 0) {
                north = tileMatrix[i-1][j];
                addNeighbor(tile, north, Direction.N);
@@ -76,15 +76,15 @@ public class Level {
       }
    }
    
-   private void addNeighbor(Tile2 target, Tile2 neighbor, Direction direction) {
+   private void addNeighbor(Tile target, Tile neighbor, Direction direction) {
       if(neighbor != null) {
          target.getNeighbors().put(direction, neighbor);
       }
    }
 
-   public void insertTile(Tile2 tile, Edge edge, int position) {
+   public void insertTile(Tile tile, Edge edge, int position) {
       int x = 0, y = 0;
-      Tile2 popped;
+      Tile popped;
       switch (edge) {
       case TOP:
          x = position;
@@ -110,10 +110,10 @@ public class Level {
       tileMatrix[y][x] = tile;
    }
 
-   private Tile2 shiftDown(int x, int y) {
+   private Tile shiftDown(int x, int y) {
       int toPopX = x;
       int toPopY = height - 1;
-      Tile2 popped = tileMatrix[toPopY][toPopX];
+      Tile popped = tileMatrix[toPopY][toPopX];
       for (int i = height - 1; i > 0; i--) {
          int toShiftY = i - 1;
          tileMatrix[i][x] = tileMatrix[toShiftY][x];
@@ -121,10 +121,10 @@ public class Level {
       return popped;
    }
 
-   private Tile2 shiftLeft(int x, int y) {
+   private Tile shiftLeft(int x, int y) {
       int toPopX = width - 1;
       int toPopY = y;
-      Tile2 popped = tileMatrix[toPopY][toPopX];
+      Tile popped = tileMatrix[toPopY][toPopX];
       for (int i = 0; i < width - 1; i++) {
          int toShiftX = i + 1;
          tileMatrix[y][i] = tileMatrix[y][toShiftX];
@@ -132,10 +132,10 @@ public class Level {
       return popped;
    }
 
-   private Tile2 shiftUp(int x, int y) {
+   private Tile shiftUp(int x, int y) {
       int toPopX = x;
       int toPopY = 0;
-      Tile2 popped = tileMatrix[toPopY][toPopX];
+      Tile popped = tileMatrix[toPopY][toPopX];
       for (int i = 0; i < height - 1; i++) {
          int toShiftY = i + 1;
          tileMatrix[i][x] = tileMatrix[toShiftY][x];
@@ -143,10 +143,10 @@ public class Level {
       return popped;
    }
 
-   private Tile2 shiftRight(int x, int y) {
+   private Tile shiftRight(int x, int y) {
       int toPopX = 0;
       int toPopY = y;
-      Tile2 popped = tileMatrix[toPopY][toPopX];
+      Tile popped = tileMatrix[toPopY][toPopX];
       for (int i = width - 1; i > 0; i--) {
          int toShiftX = i - 1;
          tileMatrix[y][i] = tileMatrix[y][toShiftX];
@@ -154,11 +154,11 @@ public class Level {
       return popped;
    }
    
-   public List<Tile2> getTiles() {
+   public List<Tile> getTiles() {
       return tiles;
    }
 
-   public void setTiles(List<Tile2> tiles) {
+   public void setTiles(List<Tile> tiles) {
       this.tiles = tiles;
    }
 
