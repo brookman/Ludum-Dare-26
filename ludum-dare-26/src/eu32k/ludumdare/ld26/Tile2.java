@@ -1,14 +1,16 @@
 package eu32k.ludumdare.ld26;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Tile2 {
 
@@ -23,7 +25,7 @@ public class Tile2 {
     public enum Rotation {
         R, L, U, D // Right, Left, Up, Down
     }
-
+    
     private Type type;
     private Rotation rotation;
     private int x, y;
@@ -31,6 +33,7 @@ public class Tile2 {
     private Sprite sprite;
     private List<Rectangle> bounds;
     private boolean isMoving;
+    private Map<Direction, Tile2> neighbors;
 
     public Tile2(int x, int y, Type type, Rotation rotation) {
         this.type = type;
@@ -39,6 +42,7 @@ public class Tile2 {
         this.y = y;
         this.sprite = loadSprite();
         this.bounds = calculateBounds();
+        this.neighbors = new HashMap<Direction, Tile2>();
     }
 
     public List<Rectangle> getBounds() {
@@ -135,6 +139,14 @@ public class Tile2 {
 
    public void setMoving(boolean isMoving) {
       this.isMoving = isMoving;
+   }
+
+   public Map<Direction, Tile2> getNeighbors() {
+      return neighbors;
+   }
+
+   public void setNeighbors(Map<Direction, Tile2> neighbors) {
+      this.neighbors = neighbors;
    }
 
 }
