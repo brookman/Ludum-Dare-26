@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import eu32k.libgdx.SimpleGame;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.level.Level;
+import eu32k.ludumdare.ld26.level.TileSpawner;
 import eu32k.ludumdare.ld26.rendering.MainRenderer;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelFinishedState;
@@ -22,10 +23,16 @@ public class LudumDare26 extends SimpleGame {
    private Player player;
    private Level level;
    private EffectsManager effects;
+   
+   private TileSpawner tileSpawner;
+   
+   private LevelState levelState;
 
    public LudumDare26() {
       super(false);
       effects = new EffectsManager();
+      tileSpawner = new TileSpawner();
+      levelState = StateMachine.instance().getState(LevelState.class);
    }
 
    @Override
@@ -44,6 +51,8 @@ public class LudumDare26 extends SimpleGame {
       player = new Player(13.5f, 13.5f);
       level = new Level(5, 5);
       level.generateRandomTiles();
+      
+      levelState.setLevel(level);
 
       effects.initBitbreak();
    }
@@ -84,6 +93,7 @@ public class LudumDare26 extends SimpleGame {
       if (escapePressed) {
          effects.stopSong(null);
       }
+      StateMachine.instance().getState(GlobalState.class).getEvents().tick(delta);
       effects.update(delta);
 
       camera.position.x = 100;

@@ -4,11 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import eu32k.ludumdare.ld26.events.EventQueue;
+
 public class GlobalState extends GameState {
 
    private Random masterRandom;
 
    private Map<String, Random> randoms;
+
+   private EventQueue events;
 
    private static final long TEST_SEED = 543524654365L;
 
@@ -16,6 +20,7 @@ public class GlobalState extends GameState {
    public void init() {
       masterRandom = new Random(TEST_SEED);
       randoms = new HashMap<String, Random>();
+      events = new EventQueue();
    }
 
    @Override
@@ -45,6 +50,10 @@ public class GlobalState extends GameState {
    
    public Random getRandom(String name) {
       return randoms.get(name);
+   }
+   
+   public EventQueue getEvents() {
+      return events;
    }
 
 }
