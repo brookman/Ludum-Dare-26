@@ -9,7 +9,6 @@ public class LevelState extends GameState {
 	@Override
 	public void init() {
 		transitions.add(LevelFinishedState.class);
-		
 	}
 
 	@Override
@@ -23,5 +22,13 @@ public class LevelState extends GameState {
 		// TODO Auto-generated method stub
 
 	}
+
+   public Level getLevel() {
+      return level;
+   }
+
+   public void setLevel(Level level) {
+      this.level = level;
+   }
 
 }
