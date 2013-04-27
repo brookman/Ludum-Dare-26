@@ -57,8 +57,9 @@ public class StateMachine {
 		}
 	}
 	
-	public <T extends GameState> GameState getState(Class<T> stateClass) {
-	   return states.get(stateClass);
+	@SuppressWarnings("unchecked")
+   public <T extends GameState> T getState(Class<T> stateClass) {
+	   return (T) states.get(stateClass);
 	}
 
 }

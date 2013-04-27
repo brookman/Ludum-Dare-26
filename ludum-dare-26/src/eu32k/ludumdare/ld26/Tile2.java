@@ -16,11 +16,11 @@ public class Tile2 {
         sprite.draw(batch);
     }
 
-    enum Type {
+    public enum Type {
         L, I, X, T // L Shape, I Shape, X Shape (+ Shape), T Shape
     }
 
-    enum Rotation {
+    public enum Rotation {
         R, L, U, D // Right, Left, Up, Down
     }
 

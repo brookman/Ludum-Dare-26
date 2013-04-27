@@ -5,11 +5,11 @@ import java.util.Map;
 import java.util.Random;
 
 public class GlobalState extends GameState {
-   
+
    private Random masterRandom;
-   
+
    private Map<String, Random> randoms;
-   
+
    private static final long TEST_SEED = 543524654365L;
 
    @Override
@@ -29,15 +29,22 @@ public class GlobalState extends GameState {
       // TODO Auto-generated method stub
 
    }
-   
+
    public Random getMasterRandom() {
       return masterRandom;
    }
-   
+
    public Random createNewRandom(String name) {
-      Random rand = new Random(masterRandom.nextLong());
-      this.randoms.put(name, rand);
+      Random rand = randoms.get(name);
+      if (rand == null) {
+         rand = new Random(masterRandom.nextLong());
+         this.randoms.put(name, rand);
+      }
       return rand;
+   }
+   
+   public Random getRandom(String name) {
+      return randoms.get(name);
    }
 
 }

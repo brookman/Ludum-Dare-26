@@ -1,6 +1,12 @@
 package eu32k.ludumdare.ld26.level;
 
+import java.util.Random;
+
 import eu32k.ludumdare.ld26.Tile2;
+import eu32k.ludumdare.ld26.Tile2.Rotation;
+import eu32k.ludumdare.ld26.Tile2.Type;
+import eu32k.ludumdare.ld26.state.GlobalState;
+import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class Level {
 
@@ -15,11 +21,26 @@ public class Level {
    private int height;
 
    private int dufficulty;
+   
+   private Random tileRandom;
 
    public Level(int width, int height) {
       tiles = new Tile2[height][width];
       this.height = height;
       this.width = width;
+      GlobalState globalState = StateMachine.instance().getState(GlobalState.class);
+      this.tileRandom = globalState.createNewRandom("tiles");
+   }
+   
+   public void generateRandomTiles() {
+      for(int i = 0; i < height; i++) {
+         for(int j = 0; j < width; j++) {
+            int randType = tileRandom.nextInt(4);
+            int randRot = tileRandom.nextInt(4);
+            Tile2 tile = new Tile2(j * 27, i * 27, Type.values()[randType], Rotation.values()[randRot]);
+            tiles[i][j] = tile;
+         }
+      }
    }
 
    public void insertTile(Tile2 tile, Edge edge, int position) {
