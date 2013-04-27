@@ -5,16 +5,24 @@ import java.util.Iterator;
 import java.util.List;
 
 public class EventQueue {
+   private boolean isTicking;
    private List<IEvent> events;
    private List<IEventHandler> handlers;
+   private List<IEvent> tickEvents;
 
    public EventQueue() {
+      isTicking = false;
       events = new ArrayList<IEvent>();
+      tickEvents = new ArrayList<IEvent>();
       handlers = new ArrayList<IEventHandler>();
    }
 
    public void enqueue(IEvent event) {
-      events.add(event);
+      if (isTicking) {
+         tickEvents.add(event);
+      } else {
+         events.add(event);
+      }
    }
 
    public void addHandler(IEventHandler handler) {
@@ -22,10 +30,17 @@ public class EventQueue {
    }
 
    public void tick(float delta) {
+      isTicking = true;
       Iterator<IEvent> iterator = events.iterator();
       while (iterator.hasNext()) {
          eventTick(delta, iterator);
       }
+      if(tickEvents.size() > 0)
+      {
+         events.addAll(tickEvents);
+         tickEvents.clear();
+      }
+      isTicking = false;
    }
 
    private void eventTick(float delta, Iterator<IEvent> iterator) {

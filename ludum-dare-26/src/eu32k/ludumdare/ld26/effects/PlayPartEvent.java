@@ -1,0 +1,14 @@
+package eu32k.ludumdare.ld26.effects;
+
+import eu32k.ludumdare.ld26.events.EventBase;
+
+public class PlayPartEvent extends EventBase {
+   public int song;
+   public int part;
+
+   public PlayPartEvent(int time, int song, int part) {
+      this.song = song;
+      this.part = part;
+      setTime(time);
+   }
+}
