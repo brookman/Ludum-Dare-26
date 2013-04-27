@@ -1,4 +1,4 @@
-package eu32k.ludumdare.ld26;
+package eu32k.ludumdare.ld26.level;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
 import eu32k.libgdx.rendering.Textures;
+import eu32k.ludumdare.ld26.Direction;
 
 public class Tile {
 
