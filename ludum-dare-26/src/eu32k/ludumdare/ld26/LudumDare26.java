@@ -60,7 +60,7 @@ public class LudumDare26 extends SimpleGame {
       boolean right = Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT);
 
       boolean escapePressed = Gdx.input.isKeyPressed(Input.Keys.ESCAPE);
-      
+
       // updates --------------------------------------
       Vector2 velocity = new Vector2(0.0f, 0.0f);
       if (up) {
@@ -81,11 +81,14 @@ public class LudumDare26 extends SimpleGame {
 
       setZoom(zoom);
 
-      if(escapePressed)
-      {
+      if (escapePressed) {
          effects.stopSong(null);
       }
       effects.update(delta);
+
+      camera.position.x = 100;
+      camera.position.y = 60;
+      camera.update();
 
       // rendering ------------------------------------
       renderer.render(delta, camera, level, level.getTiles(), player, effects.getCurrentColor());
