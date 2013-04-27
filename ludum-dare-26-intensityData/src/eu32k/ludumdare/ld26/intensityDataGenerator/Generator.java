@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 public class Generator {
 
 	public static void main(String[] args) throws Exception {
-		float[] result = loadImage("data/bitbreak intensity.png");
+		float[] result = loadImage("data/bitbreak body intensity.png");
 //		float[] result = loadImage("data/test.png");
 		System.out.print("new float[]{");
 		for(int x = 0; x < result.length; x++)
