@@ -48,7 +48,6 @@ public class Level {
             Tile tile = createRandomTile(j * TILE_WIDTH, i * TILE_WIDTH);
             tiles.add(tile);
             tileMatrix[i][j] = tile;
-            System.out.println("dfsas");
          }
       }
       placeNeighbors();
