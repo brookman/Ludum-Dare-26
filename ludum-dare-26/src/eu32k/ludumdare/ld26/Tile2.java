@@ -30,6 +30,7 @@ public class Tile2 {
     public static final float WIDTH = 27, HEIGHT = 27;
     private Sprite sprite;
     private List<Rectangle> bounds;
+    private boolean isMoving;
 
     public Tile2(int x, int y, Type type, Rotation rotation) {
         this.type = type;
@@ -122,6 +123,14 @@ public class Tile2 {
     private void rotate(Rectangle rectangle) {
         //todo
     }
+
+   public boolean isMoving() {
+      return isMoving;
+   }
+
+   public void setMoving(boolean isMoving) {
+      this.isMoving = isMoving;
+   }
 
 
 }

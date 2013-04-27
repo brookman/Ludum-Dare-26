@@ -94,6 +94,38 @@ public class Level {
       return popped;
    }
 
+   public Tile2[][] getTiles() {
+      return tiles;
+   }
+
+   public void setTiles(Tile2[][] tiles) {
+      this.tiles = tiles;
+   }
+
+   public int getWidth() {
+      return width;
+   }
+
+   public void setWidth(int width) {
+      this.width = width;
+   }
+
+   public int getHeight() {
+      return height;
+   }
+
+   public void setHeight(int height) {
+      this.height = height;
+   }
+
+   public int getDufficulty() {
+      return dufficulty;
+   }
+
+   public void setDufficulty(int dufficulty) {
+      this.dufficulty = dufficulty;
+   }
+
 //   public static void main(String[] args) {
 //      Level l = new Level(5, 4);
 //      l.tiles[0][0] = new Tile(Type.L, Rotation.R);
