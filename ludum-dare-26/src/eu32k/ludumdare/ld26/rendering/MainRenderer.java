@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -18,11 +19,17 @@ import eu32k.ludumdare.ld26.level.Level;
 public class MainRenderer {
 
    private SpriteBatch batch;
+   private SpriteBatch hudBatch;
    private ShapeRenderer debugRenderer;
+   private RunText text;
+   private BitmapFont fps;
 
    public MainRenderer() {
       batch = new SpriteBatch();
+      hudBatch = new SpriteBatch();
       debugRenderer = new ShapeRenderer();
+      text = new RunText("Welcome to the super minimalistic labyrinth game!           yay! :D", 3.0f);
+      fps = new BitmapFont(Gdx.files.internal("fonts/calibri.fnt"), Gdx.files.internal("fonts/calibri.png"), false);
    }
 
    public void render(float delta, Camera camera, Level level, List<Tile> tiles, Player player, Color color) {
@@ -58,6 +65,12 @@ public class MainRenderer {
       player.draw(batch);
 
       batch.end();
+
+      hudBatch.begin();
+      text.draw(hudBatch, 30.0f, 50.0f);
+      fps.draw(hudBatch, "fps: " + Gdx.graphics.getFramesPerSecond(), 30.0f, Gdx.graphics.getHeight() - 30.0f);
+      fps.draw(hudBatch, DebugText.text == null ? "null" : DebugText.text, 30.0f, Gdx.graphics.getHeight() - 60.0f);
+      hudBatch.end();
 
    }
 

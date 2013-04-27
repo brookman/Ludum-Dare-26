@@ -5,9 +5,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 
-import eu32k.ludumdare.ld26.events.EventQueue;
 import eu32k.ludumdare.ld26.events.IEvent;
 import eu32k.ludumdare.ld26.events.IEventHandler;
+import eu32k.ludumdare.ld26.state.GlobalState;
+import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class EffectsManager implements IEventHandler {
    public final static int SONG_BITBREAK = 1;
@@ -20,29 +21,25 @@ public class EffectsManager implements IEventHandler {
    public final static String TRACK_BITBREAK_OUTRO = "sound/bitbreak_outro.ogg";
 
    private ColorPulseManager colors;
-   private EventQueue events;
    private Music music;
 
    private int currentSong;
    private int currentPart;
+   
+   private GlobalState state;
 
    public EffectsManager() {
-      events = new EventQueue();
       colors = new ColorPulseManager();
       colors.setMainColor(new Color(85 / 255f, 163 / 255f, 215 / 255f, 1f));
-      events.addHandler(this);
-   }
-
-   public EventQueue getEvents() {
-      return events;
+      state = StateMachine.instance().getState(GlobalState.class);
+      state.getEvents().addHandler(this);
    }
 
    public void initBitbreak() {
-      events.enqueue(new PlayPartEvent(0, SONG_BITBREAK, PART_BITBREAK_INTRO));
+      state.getEvents().enqueue(new PlayPartEvent(0, SONG_BITBREAK, PART_BITBREAK_INTRO));
    }
 
    public void update(float delta) {
-      events.tick(delta);
       if (music != null && music.isPlaying()) {
 
          colors.setTime(music.getPosition());
@@ -77,20 +74,20 @@ public class EffectsManager implements IEventHandler {
       case PART_BITBREAK_INTRO:
          colors.init(ColorPulseManager.INTENSITY_EMPTY, ColorPulseManager.INTENSITY_BITBREAK_INTRO);
          play(TRACK_BITBREAK_INTRO, false);
-         events.enqueue(new PlayPartEvent(6.1f, SONG_BITBREAK, PART_BITBREAK_BODY));
+         state.getEvents().enqueue(new PlayPartEvent(6.1f, SONG_BITBREAK, PART_BITBREAK_BODY));
          colors.setMinSongIntensity(0f);
          break;
       case PART_BITBREAK_BODY:
          colors.init(ColorPulseManager.INTENSITY_BEAT, ColorPulseManager.INTENSITY_BITBREAK_BODY);
          play(TRACK_BITBREAK_BODY, false);
          colors.setMinSongIntensity(0.5f);
-         events.enqueue(new PlayPartEvent(72, SONG_BITBREAK, PART_BITBREAK_BODY));
+         state.getEvents().enqueue(new PlayPartEvent(72, SONG_BITBREAK, PART_BITBREAK_BODY));
          break;
       case PART_BITBREAK_OUTRO:
          colors.init(ColorPulseManager.INTENSITY_BEAT, ColorPulseManager.INTENSITY_BITBREAK_OUTRO);
          play(TRACK_BITBREAK_OUTRO, false);
          colors.setMinSongIntensity(0f);
-         events.enqueue(new PlayPartEvent(72, 0, 0));
+         state.getEvents().enqueue(new PlayPartEvent(72, 0, 0));
          break;
       }
    }
@@ -123,13 +120,13 @@ public class EffectsManager implements IEventHandler {
       float position = music.getPosition() % barLength;
       float timeLeft = barLength - position;
 
-      events.enqueue(new PlayPartEvent(timeLeft, currentSong, getOutroPart(currentSong)));
+      state.getEvents().enqueue(new PlayPartEvent(timeLeft, currentSong, getOutroPart(currentSong)));
       if (nextSong == null) {
-         events.enqueue(new PlayPartEvent(timeLeft + getOutroTime(currentSong), 0, 0));                  
+         state.getEvents().enqueue(new PlayPartEvent(timeLeft + getOutroTime(currentSong), 0, 0));                  
       }
       else
       {
-         events.enqueue(new PlayPartEvent(timeLeft + getOutroTime(currentSong), nextSong, 0));         
+         state.getEvents().enqueue(new PlayPartEvent(timeLeft + getOutroTime(currentSong), nextSong, 0));         
       }
    }
 
