@@ -8,6 +8,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 import eu32k.libgdx.SimpleGame;
 import eu32k.ludumdare.ld26.Tile.Rotation;
@@ -24,9 +25,9 @@ public class LudumDare26 extends SimpleGame {
    private SpriteBatch batch;
    private List<Tile> tiles = new ArrayList<Tile>();
    private Player player;
-    private List<Tile2> tiles2 = new ArrayList<Tile2>();
-    private EffectsManager effects;
-    
+   private List<Tile2> tiles2 = new ArrayList<Tile2>();
+   private EffectsManager effects;
+
    public LudumDare26() {
       super(false);
       effects = new EffectsManager();
@@ -63,14 +64,13 @@ public class LudumDare26 extends SimpleGame {
       makeTile(3, 2, Type.T, Rotation.U);
       makeTile(3, 3, Type.T, Rotation.D);
 
-
       player = new Player(50, 50);
-       tiles2.add(new Tile2(-27, -27, Tile2.Type.I, Tile2.Rotation.D));
-       tiles2.add(new Tile2(-54, -27, Tile2.Type.T, Tile2.Rotation.D));
-       tiles2.add(new Tile2(-27, -54, Tile2.Type.X, Tile2.Rotation.D));
-       tiles2.add(new Tile2(-54, -54, Tile2.Type.L, Tile2.Rotation.D));
+      tiles2.add(new Tile2(-27, -27, Tile2.Type.I, Tile2.Rotation.D));
+      tiles2.add(new Tile2(-54, -27, Tile2.Type.T, Tile2.Rotation.D));
+      tiles2.add(new Tile2(-27, -54, Tile2.Type.X, Tile2.Rotation.D));
+      tiles2.add(new Tile2(-54, -54, Tile2.Type.L, Tile2.Rotation.D));
 
-       effects.initBitbreak();
+      effects.initBitbreak();
    }
 
    private void makeTile(int x, int y, Type t, Rotation r) {
@@ -91,24 +91,33 @@ public class LudumDare26 extends SimpleGame {
       boolean left = Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT);
       boolean right = Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT);
 
-      if (up) {
-         player.moveUp();
-      } else if (down) {
-         player.moveDown();
-      } else if (left) {
-         player.moveLeft();
-      } else if (right) {
-         player.moveRight();
-      }
-
       // updates --------------------------------------
+      Vector2 velocity = new Vector2(0.0f, 0.0f);
+      if (up) {
+         velocity.add(new Vector2(0.0f, 1.0f));
+      }
+      if (down) {
+         velocity.add(new Vector2(0.0f, -1.0f));
+      }
+      if (left) {
+         velocity.add(new Vector2(-1.0f, 0.0f));
+      }
+      if (right) {
+         velocity.add(new Vector2(1.0f, 0.0f));
+      }
+      velocity.nor();
+      velocity.mul(delta);
+      player.move(velocity);
       player.update(tiles2);
+
       setZoom(zoom);
       effects.update(delta);
-      
+
       // rendering ------------------------------------
-      Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
-      Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+      Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+      Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+      Gdx.gl.glEnable(GL20.GL_BLEND);
+      Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
       batch.setProjectionMatrix(camera.combined);
       batch.begin();
@@ -118,10 +127,10 @@ public class LudumDare26 extends SimpleGame {
          tile.getSprite().draw(batch);
       }
 
-       for (Tile2 t : tiles2) {
-          t.getSprite().setColor(effects.getCurrentColor());
-           t.draw(batch);
-       }
+      for (Tile2 t : tiles2) {
+         t.getSprite().setColor(effects.getCurrentColor());
+         t.draw(batch);
+      }
       player.draw(batch);
 
       batch.end();

@@ -22,7 +22,6 @@ public class StateMachine {
 		return INSTANCE;
 	}
 
-	@SuppressWarnings("unchecked")
 	public void createState(GameState state) {
 	   Class<? extends GameState> stateClass = state.getClass();
 		GameState origState = states.get(state.getClass());
@@ -56,6 +55,10 @@ public class StateMachine {
 		if (current != null) {
 			current.enter();
 		}
+	}
+	
+	public <T extends GameState> GameState getState(Class<T> stateClass) {
+	   return states.get(stateClass);
 	}
 
 }
