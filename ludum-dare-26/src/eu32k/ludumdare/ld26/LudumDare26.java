@@ -18,6 +18,7 @@ public class LudumDare26 extends SimpleGame {
 
    private SpriteBatch batch;
    private List<Tile> tiles = new ArrayList<Tile>();
+    private Player player;
 
    public LudumDare26() {
       super(false);
@@ -47,6 +48,8 @@ public class LudumDare26 extends SimpleGame {
       makeTile(3, 2, Type.T, Rotation.U);
       makeTile(3, 3, Type.T, Rotation.D);
 
+       player = new Player(50, 50);
+
    }
 
    private void makeTile(int x, int y, Type t, Rotation r) {
@@ -68,12 +71,17 @@ public class LudumDare26 extends SimpleGame {
       boolean right = Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT);
 
       if (up) {
-         zoom += delta * 20.0f;
+         player.moveUp();
       } else if (down) {
-         zoom -= delta * 20.0f;
+          player.moveDown();
+      } else if (left) {
+          player.moveLeft();
+      } else if (right) {
+          player.moveRight();
       }
 
       // updates --------------------------------------
+       player.update();
       setZoom(zoom);
 
       // rendering ------------------------------------
@@ -82,10 +90,14 @@ public class LudumDare26 extends SimpleGame {
 
       batch.setProjectionMatrix(camera.combined);
       batch.begin();
+
       for (Tile tile : tiles) {
          tile.getSprite().setColor(Color.GREEN);
          tile.getSprite().draw(batch);
       }
+
+      player.draw(batch);
+
       batch.end();
    }
 
