@@ -17,7 +17,6 @@ public class IntensityData {
 
    public boolean update(float delta) {
       offset += delta;
-      System.out.println(String.format("Delta: %f", delta));
       boolean hasChanged = false;
       while (offset >= stepSize) {
          index++;
