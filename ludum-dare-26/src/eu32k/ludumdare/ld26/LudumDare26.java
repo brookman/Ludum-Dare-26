@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import eu32k.libgdx.SimpleGame;
 import eu32k.ludumdare.ld26.Tile.Rotation;
 import eu32k.ludumdare.ld26.Tile.Type;
+import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class LudumDare26 extends SimpleGame {
 
@@ -26,6 +27,13 @@ public class LudumDare26 extends SimpleGame {
 
    @Override
    public void init() {
+       StateMachine.instance().createState(MenuState.class);
+       StateMachine.instance().createState(LevelState.class);
+       StateMachine.instance().createState(LevelFinishedState.class);
+       StateMachine.instance().createState(PauseState.class);
+
+       StateMachine.instance().enterState(LevelState.class);
+
       batch = new SpriteBatch();
 
       makeTile(0, 0, Type.L, Rotation.R);
