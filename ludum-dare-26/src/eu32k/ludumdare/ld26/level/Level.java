@@ -1,6 +1,6 @@
 package eu32k.ludumdare.ld26.level;
 
-import eu32k.ludumdare.ld26.Tile;
+import eu32k.ludumdare.ld26.Tile2;
 
 public class Level {
 
@@ -8,7 +8,7 @@ public class Level {
       TOP, RIGHT, BOTTOM, LEFT;
    }
 
-   private Tile[][] tiles;
+   private Tile2[][] tiles;
 
    private int width;
 
@@ -17,14 +17,14 @@ public class Level {
    private int dufficulty;
 
    public Level(int width, int height) {
-      tiles = new Tile[height][width];
+      tiles = new Tile2[height][width];
       this.height = height;
       this.width = width;
    }
 
-   public void insertTile(Tile tile, Edge edge, int position) {
+   public void insertTile(Tile2 tile, Edge edge, int position) {
       int x = 0, y = 0;
-      Tile popped;
+      Tile2 popped;
       switch (edge) {
       case TOP:
          x = position;
@@ -50,10 +50,10 @@ public class Level {
       tiles[y][x] = tile;
    }
 
-   private Tile shiftDown(int x, int y) {
+   private Tile2 shiftDown(int x, int y) {
       int toPopX = x;
       int toPopY = height - 1;
-      Tile popped = tiles[toPopY][toPopX];
+      Tile2 popped = tiles[toPopY][toPopX];
       for (int i = height - 1; i > 0; i--) {
          int toShiftY = i - 1;
          tiles[i][x] = tiles[toShiftY][x];
@@ -61,10 +61,10 @@ public class Level {
       return popped;
    }
 
-   private Tile shiftLeft(int x, int y) {
+   private Tile2 shiftLeft(int x, int y) {
       int toPopX = width - 1;
       int toPopY = y;
-      Tile popped = tiles[toPopY][toPopX];
+      Tile2 popped = tiles[toPopY][toPopX];
       for (int i = 0; i < width - 1; i++) {
          int toShiftX = i + 1;
          tiles[y][i] = tiles[y][toShiftX];
@@ -72,10 +72,10 @@ public class Level {
       return popped;
    }
 
-   private Tile shiftUp(int x, int y) {
+   private Tile2 shiftUp(int x, int y) {
       int toPopX = x;
       int toPopY = 0;
-      Tile popped = tiles[toPopY][toPopX];
+      Tile2 popped = tiles[toPopY][toPopX];
       for (int i = 0; i < height - 1; i++) {
          int toShiftY = i + 1;
          tiles[i][x] = tiles[toShiftY][x];
@@ -83,10 +83,10 @@ public class Level {
       return popped;
    }
 
-   private Tile shiftRight(int x, int y) {
+   private Tile2 shiftRight(int x, int y) {
       int toPopX = 0;
       int toPopY = y;
-      Tile popped = tiles[toPopY][toPopX];
+      Tile2 popped = tiles[toPopY][toPopX];
       for (int i = width - 1; i > 0; i--) {
          int toShiftX = i - 1;
          tiles[y][i] = tiles[y][toShiftX];
