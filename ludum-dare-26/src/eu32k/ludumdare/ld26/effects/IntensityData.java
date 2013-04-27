@@ -7,7 +7,7 @@ public class IntensityData {
    private float stepSize;
    private float offset;
 
-   public IntensityData(float[] data, float stepSize) {
+   public IntensityData(float stepSize, float[] data) {
       this.index = 0;
       this.offset = 0;
       this.stepSize = stepSize;
