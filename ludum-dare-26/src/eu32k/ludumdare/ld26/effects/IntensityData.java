@@ -1,4 +1,4 @@
-package eu32k.ludumdare.ld26;
+package eu32k.ludumdare.ld26.effects;
 
 public class IntensityData {
    private float[] intensity;

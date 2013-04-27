@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import eu32k.libgdx.SimpleGame;
 import eu32k.ludumdare.ld26.Tile.Rotation;
 import eu32k.ludumdare.ld26.Tile.Type;
+import eu32k.ludumdare.ld26.effects.ColorPulseManager;
 import eu32k.ludumdare.ld26.state.*;
 
 public class LudumDare26 extends SimpleGame {
@@ -58,7 +59,7 @@ public class LudumDare26 extends SimpleGame {
       makeTile(3, 2, Type.T, Rotation.U);
       makeTile(3, 3, Type.T, Rotation.D);
 
-      colors.init(ColorPulseManager.INTENSITY_BEAT, ColorPulseManager.INTENSITY_FULL, Color.RED);
+      colors.init(ColorPulseManager.INTENSITY_BEAT, ColorPulseManager.TEST_03, new Color(41 / 255f, 106 / 255f, 149 / 255f, 1f));
 
       player = new Player(50, 50);
 
