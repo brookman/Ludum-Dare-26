@@ -2,7 +2,6 @@ package eu32k.ludumdare.ld26;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -10,7 +9,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import eu32k.libgdx.SimpleGame;
-import eu32k.ludumdare.ld26.animation.TileAnimator;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.level.Level;
 import eu32k.ludumdare.ld26.level.Tile;
@@ -55,23 +53,23 @@ public class LudumDare26 extends SimpleGame {
    public void init() {
       renderer = new MainRenderer();
 
-      player = new Player(13.5f, 13.5f);
+      player = new Player(0.5f, 0.5f);
       level = new Level(5, 5);
       level.generateRandomTiles();
 
       levelState.setLevel(level);
 
-      
       Tile t = level.getTiles().get(0);
-         
+
       TileMove move = new TileMove();
       move.initMove(t, 0, -100, 15f);
       levelState.getMovingTiles().add(move);
+
       tileSpawner.init();
       effects.initBitbreak(0);
    }
 
-   private float zoom = 100.0f;
+   private float zoom = 4.0f;
 
    @Override
    public void draw(float delta) {
@@ -128,11 +126,13 @@ public class LudumDare26 extends SimpleGame {
       }
       StateMachine.instance().getState(GlobalState.class).getEvents().tick(delta);
       tileSpawner.update(delta);
-      //tileAnimator.update(delta);
+
+      // tileAnimator.update(delta);
+
       effects.update(delta);
 
-      camera.position.x = 100;
-      camera.position.y = 60;
+      camera.position.x = 2.5f;
+      camera.position.y = 2.5f;
       camera.update();
 
       // rendering ------------------------------------

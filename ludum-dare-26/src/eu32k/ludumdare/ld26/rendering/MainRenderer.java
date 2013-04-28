@@ -58,24 +58,8 @@ public class MainRenderer {
    }
 
    public void render(float delta, Camera camera, List<Tile> tiles, Player player, Color color) {
+
       mainBuffer.begin();
-
-      // debugRenderer.setProjectionMatrix(camera.combined);
-      // debugRenderer.begin(ShapeType.FilledRectangle);
-      // debugRenderer.setColor(new Color(1.0f, 1.0f, 1.0f, 0.05f));
-      // for (Tile tile : tiles) {
-      // for (Rectangle rect : tile.getBounds()) {
-      // debugRenderer.filledRect(rect.x, rect.y, rect.width, rect.height);
-      // }
-      // }
-      // debugRenderer.end();
-
-      // debugRenderer.begin(ShapeType.FilledRectangle);
-      // debugRenderer.setColor(new Color(1.0f, 0.0f, 0.0f, 1.0f));
-      // Vector3 p = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0.0f);
-      // camera.unproject(p);
-      // debugRenderer.filledRect(p.x, p.y, 10.0f, 10.0f);
-      // debugRenderer.end();
 
       render(true, camera, tiles, player, color);
 
@@ -120,18 +104,6 @@ public class MainRenderer {
 
       mixerShader.renderToQuad(null, true, new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
       mixerShader.end();
-
-      // verticalBlurRenderer.begin();
-      // render(false, camera, tiles, player, color);
-      // verticalBlurRenderer.end();
-      //
-      // horizontalBlurRenderer.begin();
-      // verticalBlurRenderer.render();
-      // horizontalBlurRenderer.end();
-      //
-      // mixer.setFactor1(1.0f);
-      // mixer.setFactor2(1.0f);
-      // mixer.render();
    }
 
    private void render(boolean bg, Camera camera, List<Tile> tiles, Player player, Color color) {
@@ -169,6 +141,23 @@ public class MainRenderer {
       player.draw(batch);
 
       batch.end();
+
+      // debugRenderer.setProjectionMatrix(camera.combined);
+      // debugRenderer.begin(ShapeType.FilledRectangle);
+      // debugRenderer.setColor(new Color(1.0f, 1.0f, 1.0f, 0.05f));
+      // for (Tile tile : tiles) {
+      // for (Rectangle rect : tile.getBounds()) {
+      // debugRenderer.filledRect(rect.x, rect.y, rect.width, rect.height);
+      // }
+      // }
+      // debugRenderer.end();
+
+      // debugRenderer.begin(ShapeType.FilledRectangle);
+      // debugRenderer.setColor(new Color(1.0f, 0.0f, 0.0f, 1.0f));
+      // Vector3 p = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0.0f);
+      // camera.unproject(p);
+      // debugRenderer.filledRect(p.x, p.y, 10.0f, 10.0f);
+      // debugRenderer.end();
    }
 
    public void dispose() {

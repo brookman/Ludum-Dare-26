@@ -12,9 +12,9 @@ import eu32k.ludumdare.ld26.level.Tile;
 
 public class Player extends GameObject {
 
-   public static final float WIDTH = 6, HEIGHT = 6;
-   public static final float RADIUS = 3;
-   public static final float SPEED = 30;
+   public static final float WIDTH = 0.2f, HEIGHT = 0.2f;
+   public static final float RADIUS = 0.1f;
+   public static final float SPEED = 0.7f;
    private Texture[] textures = new Texture[2];
 
    public Player(float x, float y) {
