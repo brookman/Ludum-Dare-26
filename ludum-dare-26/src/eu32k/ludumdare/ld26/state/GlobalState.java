@@ -14,7 +14,7 @@ public class GlobalState extends GameState {
 
    private EventQueue events;
 
-   private static final long TEST_SEED = 5798776531225L;
+   private static final long TEST_SEED = 76531225L;
 
    @Override
    public void init() {

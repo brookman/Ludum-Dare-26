@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class GameObject {
 
-   protected Vector2 position;
+   public Vector2 position;
    private float width, height;
    private MultiLayerSprite sprite;
 
@@ -35,19 +35,16 @@ public abstract class GameObject {
       return sprite;
    }
 
-   public void setPosition(float x, float y)
-   {
+   public void setPosition(float x, float y) {
       position.x = x - width / 2f;
       position.y = y - height / 2f;
    }
-   
-   public float getX()
-   {
+
+   public float getX() {
       return position.x + width / 2f;
    }
 
-   public float getY()
-   {
+   public float getY() {
       return position.y + height / 2f;
    }
 }
