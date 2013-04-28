@@ -10,3 +10,4 @@ ludum-dare-26-html/war
 *.iml
 tools/ludum-dare-tool/screens
 out
+ludum-dare-26-html/.gwt/.gwt-log
