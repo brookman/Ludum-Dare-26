@@ -1,8 +1,11 @@
 package eu32k.ludumdare.ld26.level;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import eu32k.ludumdare.ld26.Direction;
 import eu32k.ludumdare.ld26.Tile;
@@ -12,10 +15,6 @@ import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class Level {
-
-   enum Edge {
-      TOP, RIGHT, BOTTOM, LEFT;
-   }
 
    private Tile[][] tileMatrix;
 
@@ -51,9 +50,10 @@ public class Level {
          }
       }
       placeNeighbors();
+      System.out.println(tiles);
    }
 
-   private Tile createRandomTile(int x, int y) {
+   private Tile createRandomTile(float x, float y) {
       int randType = tileRandom.nextInt(4);
       int randRot = tileRandom.nextInt(4);
       Tile tile = new Tile(x, y, Type.values()[randType], Rotation.values()[randRot]);
@@ -166,31 +166,53 @@ public class Level {
    // }
 
    public Tile spawnTile() {
-      int edgeRand = tileRandom.nextInt(40) % 4;
-      int xRand = tileRandom.nextInt(width) ;
-      int yRand = tileRandom.nextInt(height) ;
-      Edge edge = Edge.values()[edgeRand];
-      int x, y;
-      switch (edge) {
-      case TOP:
-         x = xRand * TILE_WIDTH;
-         y = (height) * TILE_WIDTH;
+      List<Tile> edgeTiles = new ArrayList<Tile>();
+      for(Tile tile : tiles) {
+         if(tile.getX() == 0 || tile.getY() == 0) {
+            edgeTiles.add(tile);
+         }
+      }
+      int randomTile = tileRandom.nextInt(edgeTiles.size());
+      Tile target = edgeTiles.get(randomTile);
+      float xRand = target.getX();
+      float yRand = target.getY();
+      Set<Direction> dirs = target.getNeighbors().keySet();
+      List<Direction> allDirs = new ArrayList<Direction>();
+      allDirs = Arrays.asList(Direction.values());
+      Iterator<Direction> it = allDirs.iterator();
+      List<Direction> freeDirs = new ArrayList<Direction>();
+      while(it.hasNext()) {
+         Direction dir = it.next();
+         if(!dirs.contains(dir)) {
+            freeDirs.add(dir);
+         }
+      }
+      int dirRand = tileRandom.nextInt(freeDirs.size());
+      Direction dir = freeDirs.get(dirRand);
+      System.out.println(dir);
+      float x, y;
+      switch (dir) {
+      case S:
+         x = xRand;
+         y = yRand + TILE_WIDTH;
          break;
-      case RIGHT:
-         x = (width) * TILE_WIDTH;
-         y = yRand * TILE_WIDTH;
+      case W:
+         x = xRand - TILE_WIDTH;
+         y = yRand;
          break;
-      case BOTTOM:
-         x = xRand * TILE_WIDTH;
-         y = TILE_WIDTH * -1;
+      case N:
+         x = xRand;
+         y = yRand - TILE_WIDTH;
          break;
-      case LEFT:
+      case E:
       default:
-         x = TILE_WIDTH * -1;
-         y = yRand * TILE_WIDTH;
+         x = xRand - TILE_WIDTH;
+         y = yRand;
          break;
       }
-      nextTile = createRandomTile(x, y);
+      Tile nextTile = createRandomTile(x, y);
+      nextTile.getNeighbors().put(dir, target);
+      target.getNeighbors().put(Direction.getOpposite(dir), nextTile);
       return nextTile;
    }
 

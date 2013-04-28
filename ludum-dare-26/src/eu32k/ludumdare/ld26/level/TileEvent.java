@@ -2,7 +2,6 @@ package eu32k.ludumdare.ld26.level;
 
 import eu32k.ludumdare.ld26.Tile;
 import eu32k.ludumdare.ld26.events.EventBase;
-import eu32k.ludumdare.ld26.level.Level.Edge;
 
 public class TileEvent extends EventBase {
    
