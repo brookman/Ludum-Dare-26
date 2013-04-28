@@ -168,6 +168,23 @@ public class Tile {
 
       neighbors = new HashMap<Direction, Tile>();
    }
+   
+   private void updateBounds()
+   {
+      int index = 0;
+      for (int i = 0; i < 9; i++) {
+         boolean isPath = boxes[type.ordinal()][rotation.ordinal()][i];
+         if (!isPath) {
+            int xPos = i % 3;
+            int yPos = 2 - i / 3;
+            Rectangle rect = bounds.get(index);
+            rect.x = x + xPos;
+            rect.y = y + yPos;
+            index++;
+         }
+      }
+
+   }
 
    public List<Rectangle> getBounds() {
       return bounds;
@@ -243,6 +260,7 @@ public class Tile {
    public void setX(float x) {
       this.x = x;
       sprite.setPosition(x,  y);
+      updateBounds();
    }
 
    public float getY() {
@@ -252,6 +270,7 @@ public class Tile {
    public void setY(float y) {
       this.y = y;
       sprite.setPosition(x,  y);
+      updateBounds();
    }
    
    public Type getType() {
