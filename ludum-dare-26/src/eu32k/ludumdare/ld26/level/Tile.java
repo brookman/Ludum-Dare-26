@@ -178,8 +178,8 @@ public class Tile {
             int xPos = i % 3;
             int yPos = 2 - i / 3;
             Rectangle rect = bounds.get(index);
-            rect.x = x + xPos;
-            rect.y = y + yPos;
+            rect.x = x + xPos * T;
+            rect.y = y + yPos * T;
             index++;
          }
       }

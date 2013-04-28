@@ -64,11 +64,12 @@ public class LudumDare26 extends SimpleGame {
 
       levelState.setLevel(level);
 
-      Tile t = level.getTiles().get(0);
-
-      TileMove move = new TileMove();
-      move.initMove(t, 0, -100, 15f);
-      levelState.getMovingTiles().add(move);
+      for(Tile t : level.getTiles())
+      {
+         TileMove move = new TileMove();
+         move.initMove(t, -27, 0, 5f);
+         levelState.getMovingTiles().add(move);
+      }
       tileSpawner.init();
       effects.initBitbreak(0);
    }
