@@ -19,11 +19,7 @@ import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.level.TileMove;
 import eu32k.ludumdare.ld26.level.TileSpawner;
 import eu32k.ludumdare.ld26.rendering.MainRenderer;
-import eu32k.ludumdare.ld26.state.GlobalState;
-import eu32k.ludumdare.ld26.state.LevelFinishedState;
 import eu32k.ludumdare.ld26.state.LevelState;
-import eu32k.ludumdare.ld26.state.MenuState;
-import eu32k.ludumdare.ld26.state.PauseState;
 import eu32k.ludumdare.ld26.state.PlayerState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
@@ -43,11 +39,12 @@ public class GameStage extends Stage {
 
    private PlayerState playerState;
 
-   public GameStage() {
+   public GameStage(EffectsManager effects) {
+      this.effects = effects;
+
       float aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
       camera = new OrthographicCamera(2.0f * aspectRatio * ZOOM, 2.0f * ZOOM);
 
-      effects = new EffectsManager();
       tileSpawner = new TileSpawner();
       levelState = StateMachine.instance().getState(LevelState.class);
 
@@ -63,7 +60,6 @@ public class GameStage extends Stage {
 
       levelState.setLevel(level);
       tileSpawner.init();
-      effects.initOtgy(0);
 
       renderer.getConsole().addLine("Hallo Velo");
       renderer.getConsole().addLine("Hallo Tibau abuas");
@@ -97,7 +93,7 @@ public class GameStage extends Stage {
             }
          }
       }
-      
+
       fadeTiles(delta);
 
       Vector2 velocity = new Vector2(0.0f, 0.0f);
@@ -125,10 +121,9 @@ public class GameStage extends Stage {
       if (escapePressed) {
          effects.stopSong(null);
       }
-      StateMachine.instance().getState(GlobalState.class).getEvents().tick(delta);
+
       tileSpawner.update(delta);
       // tileAnimator.update(delta);
-      effects.update(delta);
 
       camera.position.x = level.getWidth() / 2.0f;
       camera.position.y = level.getHeight() / 2.0f;
@@ -137,7 +132,7 @@ public class GameStage extends Stage {
       // rendering ------------------------------------
       renderer.render(delta, camera, level.getTiles(), player, effects.getCurrentColor());
    }
-   
+
    private void fadeTiles(float delta) {
       List<TileFade> fades = levelState.getFadingTiles();
       Iterator<TileFade> fadeIterator = fades.iterator();

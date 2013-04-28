@@ -2,6 +2,7 @@ package eu32k.ludumdare.ld26.rendering;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 public class Background {
 
@@ -20,8 +21,9 @@ public class Background {
       backgroundShader = new AdvancedShader(Gdx.files.internal("shaders/simple.vsh").readString(), Gdx.files.internal("shaders/background.fsh").readString());
    }
 
-   public void draw() {
+   public void draw(Vector3 color) {
       backgroundShader.begin();
+      backgroundShader.setUniformf("color", color);
       backgroundShader.renderToQuad(null, true, new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
       backgroundShader.end();
    }
