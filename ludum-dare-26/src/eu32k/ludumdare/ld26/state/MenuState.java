@@ -1,17 +1,12 @@
 package eu32k.ludumdare.ld26.state;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
+
 public class MenuState extends GameState {
 
-	@Override
+   @Override
 	public void init() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void enter() {
-		// TODO Auto-generated method stub
-
+		transitions.add(LevelState.class);
 	}
 
 	@Override

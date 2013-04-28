@@ -1,5 +1,6 @@
 package eu32k.ludumdare.ld26.level;
 
+import eu32k.ludumdare.ld26.effects.FadeComplete;
 import eu32k.ludumdare.ld26.events.IEvent;
 import eu32k.ludumdare.ld26.events.IEventHandler;
 import eu32k.ludumdare.ld26.level.TileEvent.TileEventType;
@@ -29,7 +30,7 @@ public class TileSpawner implements IEventHandler {
          case TRIGGER_SPAWN:
             levelState.spawned = levelState.getLevel().spawnTile();
             levelState.getTileAnimator().animateSpawn(levelState.spawned);
-//            globalState.getEvents().enqueue(new TileEvent(1, levelState.spawned, TileEventType.SPAWNED));
+            // globalState.getEvents().enqueue(new TileEvent(1, levelState.spawned, TileEventType.SPAWNED));
             break;
          case SPAWNED:
             levelState.getTileAnimator().animateShift(event.getTile());
@@ -46,11 +47,15 @@ public class TileSpawner implements IEventHandler {
          MoveComplete event = (MoveComplete) ev;
          Tile moved = event.move.getTile();
          if (moved.equals(levelState.toPop)) {
-            globalState.getEvents().enqueue(new TileEvent(0, moved, TileEventType.TRIGGER_POP));
-         } else if(moved.equals(levelState.spawned)) {
+            levelState.getTileAnimator().animatePop(moved);
+         } else if (moved.equals(levelState.spawned)) {
             globalState.getEvents().enqueue(new TileEvent((2 / levelState.getLevel().getDufficulty()) - 1, moved, TileEventType.SPAWNED));
             levelState.spawned = null;
          }
+      } else if (ev instanceof FadeComplete) {
+         System.out.println("fade complete");
+         FadeComplete event = (FadeComplete) ev;
+         globalState.getEvents().enqueue(new TileEvent(0, event.fade.getTile(), TileEventType.TRIGGER_POP));
       }
 
    }

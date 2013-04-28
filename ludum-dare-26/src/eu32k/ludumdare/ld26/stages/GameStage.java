@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import eu32k.ludumdare.ld26.Player;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
+import eu32k.ludumdare.ld26.effects.TileFade;
 import eu32k.ludumdare.ld26.level.Level;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.level.TileMove;
@@ -45,13 +46,6 @@ public class GameStage extends Stage {
    public GameStage() {
       float aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
       camera = new OrthographicCamera(2.0f * aspectRatio * ZOOM, 2.0f * ZOOM);
-
-      StateMachine.instance().createState(new GlobalState());
-      StateMachine.instance().createState(new MenuState());
-      StateMachine.instance().createState(new LevelState());
-      StateMachine.instance().createState(new LevelFinishedState());
-      StateMachine.instance().createState(new PauseState());
-      StateMachine.instance().enterState(LevelState.class);
 
       effects = new EffectsManager();
       tileSpawner = new TileSpawner();
@@ -103,6 +97,8 @@ public class GameStage extends Stage {
             }
          }
       }
+      
+      fadeTiles(delta);
 
       Vector2 velocity = new Vector2(0.0f, 0.0f);
       if (up) {
@@ -140,6 +136,22 @@ public class GameStage extends Stage {
 
       // rendering ------------------------------------
       renderer.render(delta, camera, level.getTiles(), player, effects.getCurrentColor());
+   }
+   
+   private void fadeTiles(float delta) {
+      List<TileFade> fades = levelState.getFadingTiles();
+      Iterator<TileFade> fadeIterator = fades.iterator();
+      while (fadeIterator.hasNext()) {
+         TileFade fade = fadeIterator.next();
+         if (fade.complete()) {
+            fadeIterator.remove();
+         } else {
+            fade.update(delta);
+            if (fade.complete()) {
+               fadeIterator.remove();
+            }
+         }
+      }
    }
 
    private void setPlayerTile() {

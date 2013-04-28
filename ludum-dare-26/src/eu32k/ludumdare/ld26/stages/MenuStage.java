@@ -13,12 +13,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import eu32k.libgdx.rendering.Textures;
 import eu32k.ludumdare.ld26.LudumDare26;
 import eu32k.ludumdare.ld26.rendering.Background;
+import eu32k.ludumdare.ld26.state.LevelState;
+import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class MenuStage extends Stage {
 
    private Skin skin;
 
-   public MenuStage(final LudumDare26 hook) {
+   public MenuStage() {
       skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 
       Table table = new Table();
@@ -32,7 +34,7 @@ public class MenuStage extends Stage {
       challengeButton.addListener(new InputListener() {
          @Override
          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            hook.startGame();
+            StateMachine.instance().enterState(LevelState.class);
             return false;
          }
       });

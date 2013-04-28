@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
+
 import eu32k.ludumdare.ld26.events.EventQueue;
 
 public class GlobalState extends GameState {
@@ -15,18 +17,12 @@ public class GlobalState extends GameState {
    private EventQueue events;
 
    private static final long TEST_SEED = 76531225L;
-
+   
    @Override
    public void init() {
       masterRandom = new Random(TEST_SEED);
       randoms = new HashMap<String, Random>();
       events = new EventQueue();
-   }
-
-   @Override
-   public void enter() {
-      // TODO Auto-generated method stub
-
    }
 
    @Override

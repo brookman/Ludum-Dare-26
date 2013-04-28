@@ -1,6 +1,7 @@
 package eu32k.ludumdare.ld26.animation;
 
 import eu32k.ludumdare.ld26.Direction;
+import eu32k.ludumdare.ld26.effects.TileFade;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.level.TileEvent;
 import eu32k.ludumdare.ld26.level.TileMove;
@@ -74,12 +75,14 @@ public class TileAnimator {
          break;
       }
       TileMove move = new TileMove();
-      move.initMove(spawned, targetX, targetY, 4f);
+      move.initMove(spawned, targetX, targetY, 0.8f);
       StateMachine.instance().getState(LevelState.class).getMovingTiles().add(move);
    }
 
    public void animatePop(Tile popped) {
-
+      TileFade fade = new TileFade();
+      fade.initFade(popped, 1f);
+      StateMachine.instance().getState(LevelState.class).getFadingTiles().add(fade);
    }
 
 }

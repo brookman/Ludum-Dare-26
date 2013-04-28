@@ -33,7 +33,7 @@ public class Level {
       tileMatrix = new Tile[height][width];
       this.height = height;
       this.width = width;
-      this.dufficulty = 10;
+      this.dufficulty = 1;
       GlobalState globalState = StateMachine.instance().getState(GlobalState.class);
       tileRandom = globalState.createNewRandom("tiles");
       tiles = new ArrayList<Tile>();
