@@ -69,7 +69,7 @@ public class LudumDare26 extends SimpleGame {
       effects.initBitbreak(0);
    }
 
-   private float zoom = 4.0f;
+   private float zoom = 5.55555555f;
 
    @Override
    public void draw(float delta) {
@@ -131,8 +131,8 @@ public class LudumDare26 extends SimpleGame {
 
       effects.update(delta);
 
-      camera.position.x = 2.5f;
-      camera.position.y = 2.5f;
+      camera.position.x = level.getWidth() / 2.0f;
+      camera.position.y = level.getHeight() / 2.0f;
       camera.update();
 
       // rendering ------------------------------------
