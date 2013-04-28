@@ -277,7 +277,7 @@ public class Tile {
    
    public boolean contains(float tx, float ty)
    {
-      return !(tx < x || tx >= x + WIDTH || ty < y || ty >= y + HEIGHT);
+      return !(tx < x || tx >= x + 1 || ty < y || ty >= y + 1);
    }
 
 }

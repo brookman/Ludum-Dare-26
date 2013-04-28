@@ -34,10 +34,11 @@ public class LudumDare26 extends SimpleGame {
 
    private LevelState levelState;
 
+   private PlayerState playerState;
+   
    public LudumDare26() {
       super(false);
       StateMachine.instance().createState(new GlobalState());
-      StateMachine.instance().createState(new PlayerState());
       StateMachine.instance().createState(new MenuState());
       StateMachine.instance().createState(new LevelState());
       StateMachine.instance().createState(new LevelFinishedState());
@@ -52,19 +53,25 @@ public class LudumDare26 extends SimpleGame {
    @Override
    public void init() {
       renderer = new MainRenderer();
-
-      player = new Player(0.5f, 0.5f);
+      
+      StateMachine.instance().createState(new PlayerState());
+      playerState = StateMachine.instance().getState(PlayerState.class);      
+      player = playerState.getPlayer();
+      playerState.initLevel(13.5f, 13.5f);
+      
       level = new Level(5, 5);
       level.generateRandomTiles();
 
       levelState.setLevel(level);
 
-      Tile t = level.getTiles().get(0);
-
-      TileMove move = new TileMove();
-      move.initMove(t, 0, -100, 15f);
-      levelState.getMovingTiles().add(move);
-
+      /*
+      for(Tile t : level.getTiles())
+      {
+         TileMove move = new TileMove();
+         move.initMove(t, 32, 32, 0.1f);
+         levelState.getMovingTiles().add(move);
+      }
+*/
       tileSpawner.init();
       effects.initBitbreak(0);
    }
@@ -83,6 +90,8 @@ public class LudumDare26 extends SimpleGame {
       boolean escapePressed = Gdx.input.isKeyPressed(Input.Keys.ESCAPE);
 
       // updates --------------------------------------
+      setPlayerTile();
+
       List<TileMove> moves = levelState.getMovingTiles();
       Iterator<TileMove> moveIterator = moves.iterator();
       while (moveIterator.hasNext()) {
@@ -126,9 +135,7 @@ public class LudumDare26 extends SimpleGame {
       }
       StateMachine.instance().getState(GlobalState.class).getEvents().tick(delta);
       tileSpawner.update(delta);
-
       // tileAnimator.update(delta);
-
       effects.update(delta);
 
       camera.position.x = level.getWidth() / 2.0f;
@@ -137,6 +144,24 @@ public class LudumDare26 extends SimpleGame {
 
       // rendering ------------------------------------
       renderer.render(delta, camera, level.getTiles(), player, effects.getCurrentColor());
+   }
+
+   private void setPlayerTile() {
+      float px = player.position.x;
+      float py = player.position.y;
+      if(levelState.playerTile != null && levelState.playerTile.contains(px, py))
+         return;
+      levelState.playerTile = findPlayerTile();
+   }
+
+   private Tile findPlayerTile() {
+      List<Tile> tiles = levelState.getLevel().getTiles();
+      for (Tile tile : tiles) {
+         if (tile.contains(player.position.x, player.position.y)) {
+            return tile;
+         }
+      }
+      return null;
    }
 
    @Override

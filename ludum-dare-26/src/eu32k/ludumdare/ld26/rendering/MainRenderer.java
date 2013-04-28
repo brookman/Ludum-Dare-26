@@ -10,7 +10,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 import eu32k.ludumdare.ld26.Config;
 import eu32k.ludumdare.ld26.MultiLayerSprite;
@@ -62,6 +65,7 @@ public class MainRenderer {
       mainBuffer.begin();
 
       render(true, camera, tiles, player, color);
+      //renderDebug(camera, tiles);
 
       hudBatch.begin();
       text.draw(hudBatch, 30.0f, 50.0f);
@@ -104,6 +108,25 @@ public class MainRenderer {
 
       mixerShader.renderToQuad(null, true, new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
       mixerShader.end();
+   }
+
+   private void renderDebug(Camera camera, List<Tile> tiles) {
+      debugRenderer.setProjectionMatrix(camera.combined);
+      debugRenderer.begin(ShapeType.FilledRectangle);
+      debugRenderer.setColor(new Color(1.0f, 1.0f, 1.0f, 0.05f));
+      for (Tile tile : tiles) {
+      for (Rectangle rect : tile.getBounds()) {
+      debugRenderer.filledRect(rect.x, rect.y, rect.width, rect.height);
+      }
+      }
+      debugRenderer.end();
+
+      debugRenderer.begin(ShapeType.FilledRectangle);
+      debugRenderer.setColor(new Color(1.0f, 0.0f, 0.0f, 1.0f));
+      Vector3 p = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0.0f);
+      camera.unproject(p);
+      debugRenderer.filledRect(p.x, p.y, 10.0f, 10.0f);
+      debugRenderer.end();
    }
 
    private void render(boolean bg, Camera camera, List<Tile> tiles, Player player, Color color) {

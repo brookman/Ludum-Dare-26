@@ -1,23 +1,37 @@
 package eu32k.ludumdare.ld26.state;
 
-public class PlayerState extends GameState {
+import eu32k.ludumdare.ld26.Player;
 
+public class PlayerState extends GameState {
+   private Player player;
+   
    @Override
    public void init() {
-      // TODO Auto-generated method stub
-
+      player = new Player(13.5f, 13.5f);
    }
 
+   public void initLevel(float x, float y)
+   {
+      player.getPosition().set(x, y);
+   }
+   
    @Override
    public void enter() {
-      // TODO Auto-generated method stub
-
+      
    }
 
    @Override
    public void destroy() {
       // TODO Auto-generated method stub
 
+   }
+
+   public Player getPlayer() {
+      return player;
+   }
+
+   public void setPlayer(Player player) {
+      this.player = player;
    }
 
 }
