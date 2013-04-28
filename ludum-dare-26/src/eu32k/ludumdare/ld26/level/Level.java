@@ -166,8 +166,11 @@ public class Level {
 
    public Tile spawnTile() {
       List<Tile> edgeTiles = new ArrayList<Tile>();
-      for(Tile tile : tiles) {
-         if(tile.getX() == 0 || tile.getY() == 0) {
+      for (Tile tile : tiles) {
+         if (tile.getX() == 0 || tile.getY() == 0) {
+            edgeTiles.add(tile);
+         } else if (tile.getX() == (width) * TILE_WIDTH 
+               || tile.getY() == (height) * TILE_WIDTH) {
             edgeTiles.add(tile);
          }
       }
@@ -180,9 +183,9 @@ public class Level {
       allDirs = Arrays.asList(Direction.values());
       Iterator<Direction> it = allDirs.iterator();
       List<Direction> freeDirs = new ArrayList<Direction>();
-      while(it.hasNext()) {
+      while (it.hasNext()) {
          Direction dir = it.next();
-         if(!dirs.contains(dir)) {
+         if (!dirs.contains(dir)) {
             freeDirs.add(dir);
          }
       }
