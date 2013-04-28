@@ -2,10 +2,8 @@ package eu32k.ludumdare.ld26.level;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -90,80 +88,6 @@ public class Level {
          target.getNeighbors().put(direction, neighbor);
       }
    }
-
-   // public Tile insertTile(Tile tile, Edge edge, int position) {
-   // int x = 0, y = 0;
-   // Tile popped;
-   // switch (edge) {
-   // case TOP:
-   // x = position;
-   // y = 0;
-   // popped = shiftDown(x, y);
-   // break;
-   // case RIGHT:
-   // x = this.width - 1;
-   // y = position;
-   // popped = shiftLeft(x, y);
-   // break;
-   // case BOTTOM:
-   // x = position;
-   // y = this.height - 1;
-   // popped = shiftUp(x, y);
-   // break;
-   // case LEFT:
-   // default:
-   // x = 0;
-   // y = position;
-   // popped = shiftRight(x, y);
-   // break;
-   // }
-   // tileMatrix[y][x] = tile;
-   // return popped;
-   // }
-
-   // private Tile shiftDown(int x, int y) {
-   // int toPopX = x;
-   // int toPopY = height - 1;
-   // Tile popped = tileMatrix[toPopY][toPopX];
-   // for (int i = height - 1; i > 0; i--) {
-   // int toShiftY = i - 1;
-   // tileMatrix[i][x] = tileMatrix[toShiftY][x];
-   // }
-   // return popped;
-   // }
-   //
-   // private Tile shiftLeft(int x, int y) {
-   // int toPopX = width - 1;
-   // int toPopY = y;
-   // Tile popped = tileMatrix[toPopY][toPopX];
-   // for (int i = 0; i < width - 1; i++) {
-   // int toShiftX = i + 1;
-   // tileMatrix[y][i] = tileMatrix[y][toShiftX];
-   // }
-   // return popped;
-   // }
-   //
-   // private Tile shiftUp(int x, int y) {
-   // int toPopX = x;
-   // int toPopY = 0;
-   // Tile popped = tileMatrix[toPopY][toPopX];
-   // for (int i = 0; i < height - 1; i++) {
-   // int toShiftY = i + 1;
-   // tileMatrix[i][x] = tileMatrix[toShiftY][x];
-   // }
-   // return popped;
-   // }
-   //
-   // private Tile shiftRight(int x, int y) {
-   // int toPopX = 0;
-   // int toPopY = y;
-   // Tile popped = tileMatrix[toPopY][toPopX];
-   // for (int i = width - 1; i > 0; i--) {
-   // int toShiftX = i - 1;
-   // tileMatrix[y][i] = tileMatrix[y][toShiftX];
-   // }
-   // return popped;
-   // }
 
    public Tile spawnTile() {
       System.out.println("spawn tile");
@@ -275,8 +199,6 @@ public class Level {
          Tile newLeft, newRight;
          Direction dirLeft = CCW(dir);
          Direction dirRight = CW(dir);
-         Tile currentLeft = toShift.getNeighbors().get(dirLeft);
-         Tile currentRight = toShift.getNeighbors().get(dirRight);
          Tile front = toShift.getNeighbors().get(dir);
          
 
@@ -295,13 +217,6 @@ public class Level {
                toShift.getNeighbors().remove(dir);
             }
          }
-//         if(currentLeft != null) {
-//            currentLeft.getNeighbors().remove(dirRight);
-//         }
-//         if(currentRight != null) {
-//            currentRight.getNeighbors().remove(dirLeft);
-//         }
-
       }
 
    }
