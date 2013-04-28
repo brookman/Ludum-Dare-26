@@ -64,17 +64,19 @@ public class LudumDare26 extends SimpleGame {
 
       levelState.setLevel(level);
 
+      /*
       for(Tile t : level.getTiles())
       {
          TileMove move = new TileMove();
-         move.initMove(t, -27, 0, 5f);
+         move.initMove(t, 32, 32, 0.1f);
          levelState.getMovingTiles().add(move);
       }
+*/
       tileSpawner.init();
       effects.initBitbreak(0);
    }
 
-   private float zoom = 100.0f;
+   private float zoom = 4.0f;
 
    @Override
    public void draw(float delta) {
@@ -136,8 +138,8 @@ public class LudumDare26 extends SimpleGame {
       // tileAnimator.update(delta);
       effects.update(delta);
 
-      camera.position.x = 100;
-      camera.position.y = 60;
+      camera.position.x = 2.5f;
+      camera.position.y = 2.5f;
       camera.update();
 
       // rendering ------------------------------------
