@@ -36,8 +36,6 @@ public class LudumDare26 extends SimpleGame {
 
    private LevelState levelState;
 
-   private TileAnimator tileAnimator;
-
    public LudumDare26() {
       super(false);
       StateMachine.instance().createState(new GlobalState());
@@ -51,7 +49,6 @@ public class LudumDare26 extends SimpleGame {
       effects = new EffectsManager();
       tileSpawner = new TileSpawner();
       levelState = StateMachine.instance().getState(LevelState.class);
-      tileAnimator = new TileAnimator();
    }
 
    @Override
@@ -74,6 +71,7 @@ public class LudumDare26 extends SimpleGame {
          levelState.getMovingTiles().add(move);
       //tileSpawner.init();
       }
+      tileSpawner.init();
       effects.initBitbreak(0);
    }
 
@@ -133,8 +131,8 @@ public class LudumDare26 extends SimpleGame {
          effects.stopSong(null);
       }
       StateMachine.instance().getState(GlobalState.class).getEvents().tick(delta);
-      //tileSpawner.update(delta);
-      tileAnimator.update(delta);
+      tileSpawner.update(delta);
+//      tileAnimator.update(delta);
       effects.update(delta);
 
       camera.position.x = 100;

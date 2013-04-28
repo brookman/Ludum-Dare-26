@@ -53,4 +53,13 @@ public class TileMove {
       tile.setX(x);
       tile.setY(y);
    }
+
+   public Tile getTile() {
+      return tile;
+   }
+
+   public void setTile(Tile tile) {
+      this.tile = tile;
+   }
+   
 }

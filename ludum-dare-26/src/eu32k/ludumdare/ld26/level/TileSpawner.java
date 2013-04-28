@@ -10,6 +10,8 @@ import eu32k.ludumdare.ld26.state.StateMachine;
 public class TileSpawner implements IEventHandler {
 
    private GlobalState globalState;
+   
+   public Tile toPop;
 
    public TileSpawner() {
       globalState = StateMachine.instance().getState(GlobalState.class);
@@ -33,6 +35,7 @@ public class TileSpawner implements IEventHandler {
             break;
          case SPAWNED:
             levelState.getLevel().setNextTile(event.getTile());
+            levelState.getTileAnimator().animateShift(event.getTile());
             break;
          case TRIGGER_POP:
             levelState.getLevel().popTile(event.getTile());
@@ -41,6 +44,12 @@ public class TileSpawner implements IEventHandler {
          case POPPED:
             globalState.getEvents().enqueue(new TileEvent(1, levelState.getLevel().spawnTile(), TileEventType.TRIGGER_SPAWN));
             break;
+         }
+      } if(ev instanceof MoveComplete) {
+         MoveComplete event = (MoveComplete) ev;
+         Tile moved = event.move.getTile();
+         if(moved.equals(toPop)) {
+            globalState.getEvents().enqueue(new TileEvent(1, moved, TileEventType.TRIGGER_POP));
          }
       }
 
