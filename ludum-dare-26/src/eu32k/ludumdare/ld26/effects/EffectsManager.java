@@ -44,7 +44,7 @@ public class EffectsManager implements IEventHandler {
       addColor(85, 163, 215); // BLUE
       addColor(173, 81, 185); // VIOLET
       addColor(184, 152, 208); // Light VIOLET
-      
+      colors.setColorIntensity(ColorPulseManager.TEST_03);
       state = StateMachine.instance().getState(GlobalState.class);
       state.getEvents().addHandler(this);
    }

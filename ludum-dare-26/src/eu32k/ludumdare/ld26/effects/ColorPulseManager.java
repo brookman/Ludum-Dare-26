@@ -273,7 +273,7 @@ public class ColorPulseManager {
    public void update(float delta) {
       if (beatIntensity == null || songIntensity == null)
          return;
-
+      colorIntensity.update(delta);
       if (beatIntensity.update(delta) || songIntensity.update(delta)) {
          updateColor();
       }
