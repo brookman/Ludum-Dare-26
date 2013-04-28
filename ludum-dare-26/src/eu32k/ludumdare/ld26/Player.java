@@ -8,10 +8,11 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import eu32k.libgdx.rendering.Textures;
+import eu32k.ludumdare.ld26.level.Tile;
 
 public class Player extends GameObject {
 
-   public static final float WIDTH = 4, HEIGHT = 4;
+   public static final float WIDTH = 5, HEIGHT = 5;
    public static final float SPEED = 30;
 
    public Player(float x, float y) {
@@ -20,7 +21,7 @@ public class Player extends GameObject {
 
    @Override
    public Sprite loadSprite() {
-      Texture texture = Textures.get("textures/shroom.png");
+      Texture texture = Textures.get("textures/circle.png");
       Sprite sprite = new Sprite(texture);
       sprite.setSize(WIDTH, HEIGHT);
 
