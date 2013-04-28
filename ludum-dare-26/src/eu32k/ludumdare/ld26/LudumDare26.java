@@ -65,6 +65,9 @@ public class LudumDare26 extends SimpleGame {
       levelState.setLevel(level);
       tileSpawner.init();
       effects.initBitbreak(0);
+      
+      renderer.getConsole().addLine("Hallo Velo");
+      renderer.getConsole().addLine("Hallo Tibau abuas");
    }
 
    private float zoom = 4.0f;
@@ -142,7 +145,12 @@ public class LudumDare26 extends SimpleGame {
       float py = player.position.y;
       if (levelState.playerTile != null && levelState.playerTile.contains(px, py))
          return;
-      levelState.playerTile = findPlayerTile();
+      Tile t = findPlayerTile();
+      levelState.playerTile = t;
+      if(t != null)
+      {
+         renderer.getConsole().addLine("Player entered tile on position: " + Float.toString(t.getX()) + "/" + Float.toString(t.getY()));
+      }
    }
 
    private Tile findPlayerTile() {
