@@ -28,12 +28,7 @@ public class LevelState extends GameState {
    @Override
    public void init() {
       transitions.add(LevelFinishedState.class);
-   }
-
-   @Override
-   public void enter() {
-      // TODO Auto-generated method stub
-
+      transitions.add(PauseState.class);
    }
 
    @Override

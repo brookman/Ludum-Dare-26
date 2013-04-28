@@ -62,4 +62,8 @@ public class StateMachine {
 	   return (T) states.get(stateClass);
 	}
 
+   public GameState getCurrentState() {
+      return current;
+   }
+
 }

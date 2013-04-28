@@ -47,13 +47,6 @@ public class GameStage extends Stage {
       float aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
       camera = new OrthographicCamera(2.0f * aspectRatio * ZOOM, 2.0f * ZOOM);
 
-      StateMachine.instance().createState(new GlobalState());
-      StateMachine.instance().createState(new MenuState());
-      StateMachine.instance().createState(new LevelState());
-      StateMachine.instance().createState(new LevelFinishedState());
-      StateMachine.instance().createState(new PauseState());
-      StateMachine.instance().enterState(LevelState.class);
-
       effects = new EffectsManager();
       tileSpawner = new TileSpawner();
       levelState = StateMachine.instance().getState(LevelState.class);

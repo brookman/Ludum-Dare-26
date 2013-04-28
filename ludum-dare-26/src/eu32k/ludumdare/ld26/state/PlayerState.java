@@ -1,23 +1,19 @@
 package eu32k.ludumdare.ld26.state;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
+
 import eu32k.ludumdare.ld26.Player;
 
 public class PlayerState extends GameState {
    private Player player;
-   
+
    @Override
    public void init() {
       player = new Player(0, 0);
    }
 
-   public void initLevel(int tileX, int tileY)
-   {
+   public void initLevel(int tileX, int tileY) {
       player.setPosition(tileX + 0.5f, tileY + 0.5f);
-   }
-   
-   @Override
-   public void enter() {
-      
    }
 
    @Override
