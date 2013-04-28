@@ -3,6 +3,7 @@ package eu32k.ludumdare.ld26.state;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu32k.ludumdare.ld26.animation.TileAnimator;
 import eu32k.ludumdare.ld26.level.Level;
 import eu32k.ludumdare.ld26.level.TileMove;
 
@@ -10,9 +11,11 @@ public class LevelState extends GameState {
 
    private Level level;
    private List<TileMove> movingTiles;
+   private TileAnimator tileAnimator;
 
    public LevelState() {
       this.movingTiles = new ArrayList<TileMove>();
+      tileAnimator = new TileAnimator();
    }
 
    @Override
@@ -40,8 +43,15 @@ public class LevelState extends GameState {
       this.level = level;
    }
 
-   public List<TileMove> getMovingTiles()
-   {
+   public List<TileMove> getMovingTiles() {
       return movingTiles;
+   }
+
+   public TileAnimator getTileAnimator() {
+      return tileAnimator;
+   }
+
+   public void setTileAnimator(TileAnimator tileAnimator) {
+      this.tileAnimator = tileAnimator;
    }
 }
