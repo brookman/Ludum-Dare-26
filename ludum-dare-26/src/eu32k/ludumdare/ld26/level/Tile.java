@@ -15,10 +15,6 @@ import eu32k.ludumdare.ld26.MultiLayerSprite;
 
 public class Tile {
 
-   public static final float S = 108;
-   public static final float T = 9;
-   public static final float WIDTH = S, HEIGHT = S;
-
    public enum Type {
       L, I, X, T // L Shape, I Shape, X Shape (+ Shape), T Shape
    }
@@ -27,6 +23,9 @@ public class Tile {
       R, L, U, D // Right, Left, Up, Down
    }
 
+   private static float SIZE = 1.0f / 3.0f; // 0.333333333
+
+   private static final float S = 108;
    private static Rectangle[][] rects = new Rectangle[][] { //
    //
          { new Rectangle(2.0f * S, S, S, S), new Rectangle(2.0f * S, 3.0f * S, S, S), new Rectangle(2.0f * S, 0, S, S), new Rectangle(2.0f * S, 2.0f * S, S, S) }, //
@@ -156,21 +155,20 @@ public class Tile {
       sprite = loadSprite();
 
       bounds = new ArrayList<Rectangle>();
+
       for (int i = 0; i < 9; i++) {
          boolean isPath = boxes[type.ordinal()][rotation.ordinal()][i];
          if (!isPath) {
             int xPos = i % 3;
             int yPos = 2 - i / 3;
-
-            bounds.add(new Rectangle(x + xPos * T, y + yPos * T, T, T));
+            bounds.add(new Rectangle(x + xPos * SIZE, y + yPos * SIZE, SIZE, SIZE));
          }
       }
 
       neighbors = new HashMap<Direction, Tile>();
    }
-   
-   private void updateBounds()
-   {
+
+   private void updateBounds() {
       int index = 0;
       for (int i = 0; i < 9; i++) {
          boolean isPath = boxes[type.ordinal()][rotation.ordinal()][i];
@@ -178,8 +176,8 @@ public class Tile {
             int xPos = i % 3;
             int yPos = 2 - i / 3;
             Rectangle rect = bounds.get(index);
-            rect.x = x + xPos;
-            rect.y = y + yPos;
+            rect.x = x + xPos * SIZE;
+            rect.y = y + yPos * SIZE;
             index++;
          }
       }
@@ -194,36 +192,6 @@ public class Tile {
       return sprite;
    }
 
-   private List<Rectangle> calculateBounds() {
-      List<Rectangle> tmp = new ArrayList<Rectangle>();
-
-      switch (type) {
-      case I:
-         tmp.add(new Rectangle(x + 0, y + 0, 9, 9));
-         tmp.add(new Rectangle(x + 0, y + 9, 9, 9));
-         tmp.add(new Rectangle(x + 0, y + 18, 9, 9));
-         tmp.add(new Rectangle(x + 18, y + 0, 9, 9));
-         tmp.add(new Rectangle(x + 18, y + 9, 9, 9));
-         tmp.add(new Rectangle(x + 18, y + 18, 9, 9));
-         break;
-      case L:
-         tmp.add(new Rectangle());
-         break;
-      case T:
-         tmp.add(new Rectangle());
-         break;
-      case X:
-         tmp.add(new Rectangle());
-         break;
-      default:
-         tmp.add(new Rectangle());
-      }
-
-      // todo rotate rectangles depending on rotation/orientation
-
-      return tmp;
-   }
-
    public MultiLayerSprite loadSprite() {
       Texture layer1tex = Textures.get("textures/tiles2.png");
       Texture layer2tex = Textures.get("textures/tiles3.png");
@@ -232,7 +200,7 @@ public class Tile {
       TextureRegion layer1reg = new TextureRegion(layer1tex, (int) rect.getX(), (int) rect.getY(), (int) rect.getWidth(), (int) rect.getHeight());
       TextureRegion layer2reg = new TextureRegion(layer2tex, (int) rect.getX(), (int) rect.getY(), (int) rect.getWidth(), (int) rect.getHeight());
       MultiLayerSprite sprite = new MultiLayerSprite(layer1reg, layer2reg);
-      sprite.setSize(27, 27);
+      sprite.setSize(1.0f, 1.0f);
       sprite.setPosition(x, y);
       return sprite;
    }
@@ -259,7 +227,7 @@ public class Tile {
 
    public void setX(float x) {
       this.x = x;
-      sprite.setPosition(x,  y);
+      sprite.setPosition(x, y);
       updateBounds();
    }
 
@@ -269,12 +237,17 @@ public class Tile {
 
    public void setY(float y) {
       this.y = y;
-      sprite.setPosition(x,  y);
+      sprite.setPosition(x, y);
       updateBounds();
    }
-   
+
    public Type getType() {
       return type;
+   }
+   
+   public boolean contains(float tx, float ty)
+   {
+      return !(tx < x || tx >= x + 1 || ty < y || ty >= y + 1);
    }
 
 }

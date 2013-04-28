@@ -14,6 +14,7 @@ public class LevelState extends GameState {
    private List<TileMove> movingTiles;
    private TileAnimator tileAnimator;
    public Tile toPop;
+   public Tile playerTile;
 
    public LevelState() {
       this.movingTiles = new ArrayList<TileMove>();

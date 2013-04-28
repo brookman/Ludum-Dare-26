@@ -12,8 +12,9 @@ import eu32k.ludumdare.ld26.level.Tile;
 
 public class Player extends GameObject {
 
-   public static final float WIDTH = 5, HEIGHT = 5;
-   public static final float SPEED = 30;
+   public static final float WIDTH = 0.2f, HEIGHT = 0.2f;
+   public static final float RADIUS = 0.1f;
+   public static final float SPEED = 0.7f;
    private Texture[] textures = new Texture[2];
 
    public Player(float x, float y) {
@@ -58,10 +59,10 @@ public class Player extends GameObject {
    }
 
    private boolean canMove(Vector2 newPos, List<Tile> tiles) {
-      Rectangle playerBounds = getBounds(newPos);
+      Vector2 posShifted = new Vector2(newPos.x - RADIUS / 2.0f, newPos.y - RADIUS / 2.0f);
       for (Tile tile : tiles) {
          for (Rectangle tileBound : tile.getBounds()) {
-            if (playerBounds.overlaps(tileBound)) {
+            if (intersects(posShifted, RADIUS, tileBound)) {
                return false;
             }
 
@@ -70,4 +71,25 @@ public class Player extends GameObject {
       return true;
    }
 
+   private boolean intersects(Vector2 circlePos, float radius, Rectangle rect) {
+      Vector2 circleDistance = new Vector2(Math.abs(circlePos.x - rect.x), Math.abs(circlePos.y - rect.y));
+
+      if (circleDistance.x > rect.width / 2 + radius) {
+         return false;
+      }
+      if (circleDistance.y > rect.height / 2 + radius) {
+         return false;
+      }
+
+      if (circleDistance.x <= rect.width / 2) {
+         return true;
+      }
+      if (circleDistance.y <= rect.height / 2) {
+         return true;
+      }
+
+      float cornerDistanceSq = (circleDistance.x - rect.width / 2) * (circleDistance.x - rect.width / 2) + (circleDistance.y - rect.height / 2) * (circleDistance.y - rect.height / 2);
+
+      return cornerDistanceSq <= radius * radius;
+   }
 }

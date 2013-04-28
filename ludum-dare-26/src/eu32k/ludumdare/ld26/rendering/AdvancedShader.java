@@ -36,8 +36,10 @@ public class AdvancedShader extends ShaderProgram {
       if (frameBuffer != null) {
          frameBuffer.begin();
          if (clear) {
-            Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+            Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
          }
       }
       if (flip) {

@@ -2,7 +2,6 @@ package eu32k.ludumdare.ld26;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -12,6 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 import eu32k.libgdx.SimpleGame;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.level.Level;
+import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.level.TileMove;
 import eu32k.ludumdare.ld26.level.TileSpawner;
 import eu32k.ludumdare.ld26.rendering.MainRenderer;
@@ -34,10 +34,11 @@ public class LudumDare26 extends SimpleGame {
 
    private LevelState levelState;
 
+   private PlayerState playerState;
+
    public LudumDare26() {
       super(false);
       StateMachine.instance().createState(new GlobalState());
-      StateMachine.instance().createState(new PlayerState());
       StateMachine.instance().createState(new MenuState());
       StateMachine.instance().createState(new LevelState());
       StateMachine.instance().createState(new LevelFinishedState());
@@ -53,27 +54,23 @@ public class LudumDare26 extends SimpleGame {
    public void init() {
       renderer = new MainRenderer();
 
-      player = new Player(13.5f, 13.5f);
+      StateMachine.instance().createState(new PlayerState());
+      playerState = StateMachine.instance().getState(PlayerState.class);
+      player = playerState.getPlayer();
+      playerState.initLevel(0.5f - Player.WIDTH / 2, 0.5f - Player.HEIGHT / 2);
+
       level = new Level(5, 5);
       level.generateRandomTiles();
 
       levelState.setLevel(level);
-
-      Random r = new Random();
-      
-//      for(Tile t : level.getTiles())
-//      {
-//         
-//         TileMove move = new TileMove();
-//         move.initMove(t, r.nextInt(2000) - 500, r.nextInt(2000) - 500, r.nextFloat() * 50f);
-//         levelState.getMovingTiles().add(move);
-//      //tileSpawner.init();
-//      }
       tileSpawner.init();
       effects.initBitbreak(0);
+      
+      renderer.getConsole().addLine("Hallo Velo");
+      renderer.getConsole().addLine("Hallo Tibau abuas");
    }
 
-   private float zoom = 130.0f;
+   private float zoom = 4.0f;
 
    @Override
    public void draw(float delta) {
@@ -87,6 +84,8 @@ public class LudumDare26 extends SimpleGame {
       boolean escapePressed = Gdx.input.isKeyPressed(Input.Keys.ESCAPE);
 
       // updates --------------------------------------
+      setPlayerTile();
+
       List<TileMove> moves = levelState.getMovingTiles();
       Iterator<TileMove> moveIterator = moves.iterator();
       while (moveIterator.hasNext()) {
@@ -130,15 +129,38 @@ public class LudumDare26 extends SimpleGame {
       }
       StateMachine.instance().getState(GlobalState.class).getEvents().tick(delta);
       tileSpawner.update(delta);
-//      tileAnimator.update(delta);
+      // tileAnimator.update(delta);
       effects.update(delta);
 
-      camera.position.x = 100;
-      camera.position.y = 60;
+      camera.position.x = 2.5f;
+      camera.position.y = 2.5f;
       camera.update();
 
       // rendering ------------------------------------
       renderer.render(delta, camera, level.getTiles(), player, effects.getCurrentColor());
+   }
+
+   private void setPlayerTile() {
+      float px = player.position.x;
+      float py = player.position.y;
+      if (levelState.playerTile != null && levelState.playerTile.contains(px, py))
+         return;
+      Tile t = findPlayerTile();
+      levelState.playerTile = t;
+      if(t != null)
+      {
+         renderer.getConsole().addLine("Player entered tile on position: " + Float.toString(t.getX()) + "/" + Float.toString(t.getY()));
+      }
+   }
+
+   private Tile findPlayerTile() {
+      List<Tile> tiles = levelState.getLevel().getTiles();
+      for (Tile tile : tiles) {
+         if (tile.contains(player.position.x, player.position.y)) {
+            return tile;
+         }
+      }
+      return null;
    }
 
    @Override

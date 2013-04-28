@@ -29,8 +29,6 @@ public class Level {
 
    private List<Tile> tiles;
 
-   public static final int TILE_WIDTH = 27;
-
    private Tile nextTile;
 
    public Level(int width, int height) {
@@ -45,7 +43,7 @@ public class Level {
    public void generateRandomTiles() {
       for (int i = 0; i < height; i++) {
          for (int j = 0; j < width; j++) {
-            Tile tile = createRandomTile(j * TILE_WIDTH, i * TILE_WIDTH);
+            Tile tile = createRandomTile(j, i);
             tiles.add(tile);
             tileMatrix[i][j] = tile;
          }
