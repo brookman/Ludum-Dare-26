@@ -1,7 +1,5 @@
 package eu32k.ludumdare.ld26;
 
-import java.awt.Toolkit;
-
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
@@ -17,18 +15,18 @@ public class Main {
       // cfg.resizable = false;
       // cfg.addIcon("textures/icon_small.png", FileType.Local);
 
-      int width = Toolkit.getDefaultToolkit().getScreenSize().width - 100;
-      int height = Toolkit.getDefaultToolkit().getScreenSize().height - 100;
-      if (args.length == 1 && args[0].equals("-fullscreen")) {
-         cfg.fullscreen = true;
-         width = Toolkit.getDefaultToolkit().getScreenSize().width;
-         height = Toolkit.getDefaultToolkit().getScreenSize().height;
-      }
-      cfg.width = width;
-      cfg.height = height;
+      // int width = Toolkit.getDefaultToolkit().getScreenSize().width - 100;
+      // int height = Toolkit.getDefaultToolkit().getScreenSize().height - 100;
+      // if (args.length == 1 && args[0].equals("-fullscreen")) {
+      // cfg.fullscreen = true;
+      // width = Toolkit.getDefaultToolkit().getScreenSize().width;
+      // height = Toolkit.getDefaultToolkit().getScreenSize().height;
+      // }
+      // cfg.width = width;
+      // cfg.height = height;
 
-      cfg.width = 800;
-      cfg.height = 600;
+      cfg.width = Config.X_RESOLUTION;
+      cfg.height = Config.Y_RESOLUTION;
 
       LwjglApplication app = new LwjglApplication(new LudumDare26(), cfg);
    }
