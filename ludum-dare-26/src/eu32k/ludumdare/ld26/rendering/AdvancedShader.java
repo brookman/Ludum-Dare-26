@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 
 import eu32k.libgdx.common.Time;
+import eu32k.ludumdare.ld26.Config;
 
 public class AdvancedShader extends ShaderProgram {
 
@@ -21,7 +22,7 @@ public class AdvancedShader extends ShaderProgram {
    }
 
    public void renderToQuad(FrameBuffer frameBuffer) {
-      renderToQuad(frameBuffer, true, new Vector2(800, 600));
+      renderToQuad(frameBuffer, true, new Vector2(Config.X_RESOLUTION, Config.Y_RESOLUTION));
    }
 
    public void renderToQuad(FrameBuffer frameBuffer, boolean flip, Vector2 resolution) {
