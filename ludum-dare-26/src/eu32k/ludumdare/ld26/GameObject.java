@@ -34,4 +34,8 @@ public abstract class GameObject {
    public MultiLayerSprite getSprite() {
       return sprite;
    }
+
+   public Vector2 getPosition() {
+      return position;
+   }
 }

@@ -2,7 +2,6 @@ package eu32k.ludumdare.ld26;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -10,7 +9,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import eu32k.libgdx.SimpleGame;
-import eu32k.ludumdare.ld26.animation.TileAnimator;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.level.Level;
 import eu32k.ludumdare.ld26.level.Tile;
@@ -36,10 +34,11 @@ public class LudumDare26 extends SimpleGame {
 
    private LevelState levelState;
 
+   private PlayerState playerState;
+   
    public LudumDare26() {
       super(false);
       StateMachine.instance().createState(new GlobalState());
-      StateMachine.instance().createState(new PlayerState());
       StateMachine.instance().createState(new MenuState());
       StateMachine.instance().createState(new LevelState());
       StateMachine.instance().createState(new LevelFinishedState());
@@ -54,8 +53,12 @@ public class LudumDare26 extends SimpleGame {
    @Override
    public void init() {
       renderer = new MainRenderer();
-
-      player = new Player(13.5f, 13.5f);
+      
+      StateMachine.instance().createState(new PlayerState());
+      playerState = StateMachine.instance().getState(PlayerState.class);      
+      player = playerState.getPlayer();
+      playerState.initLevel(13.5f, 13.5f);
+      
       level = new Level(5, 5);
       level.generateRandomTiles();
 
