@@ -24,9 +24,9 @@ public class LudumDare26 extends SimpleGame {
    private Player player;
    private Level level;
    private EffectsManager effects;
-   
+
    private TileSpawner tileSpawner;
-   
+
    private LevelState levelState;
 
    public LudumDare26() {
@@ -38,7 +38,7 @@ public class LudumDare26 extends SimpleGame {
       StateMachine.instance().createState(new LevelFinishedState());
       StateMachine.instance().createState(new PauseState());
       StateMachine.instance().enterState(LevelState.class);
-      
+
       effects = new EffectsManager();
       tileSpawner = new TileSpawner();
       levelState = StateMachine.instance().getState(LevelState.class);
@@ -51,14 +51,14 @@ public class LudumDare26 extends SimpleGame {
       player = new Player(13.5f, 13.5f);
       level = new Level(5, 5);
       level.generateRandomTiles();
-      
+
       levelState.setLevel(level);
 
       tileSpawner.init();
       effects.initBitbreak(0);
    }
 
-   private float zoom = 100.0f;
+   private float zoom = 130.0f;
 
    @Override
    public void draw(float delta) {
@@ -108,7 +108,7 @@ public class LudumDare26 extends SimpleGame {
       camera.update();
 
       // rendering ------------------------------------
-      renderer.render(delta, camera, level, level.getTiles(), player, effects.getCurrentColor());
+      renderer.render(delta, camera, level.getTiles(), player, effects.getCurrentColor());
    }
 
    @Override

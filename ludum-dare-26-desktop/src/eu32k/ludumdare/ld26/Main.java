@@ -27,6 +27,9 @@ public class Main {
       cfg.width = width;
       cfg.height = height;
 
+      cfg.width = 800;
+      cfg.height = 600;
+
       LwjglApplication app = new LwjglApplication(new LudumDare26(), cfg);
    }
 }

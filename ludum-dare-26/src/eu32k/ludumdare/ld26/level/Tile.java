@@ -5,25 +5,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
 import eu32k.libgdx.rendering.Textures;
 import eu32k.ludumdare.ld26.Direction;
+import eu32k.ludumdare.ld26.MultiLayerSprite;
 
 public class Tile {
 
-   public static final float S = 27;
+   public static final float S = 108;
    public static final float T = 9;
    public static final float WIDTH = S, HEIGHT = S;
-
-   public void draw(SpriteBatch batch) {
-      sprite.draw(batch);
-   }
 
    public enum Type {
       L, I, X, T // L Shape, I Shape, X Shape (+ Shape), T Shape
@@ -148,7 +142,7 @@ public class Tile {
 
    private float x, y;
 
-   private Sprite sprite;
+   private MultiLayerSprite sprite;
    private List<Rectangle> bounds;
    private boolean isMoving;
    private Map<Direction, Tile> neighbors;
@@ -179,7 +173,7 @@ public class Tile {
       return bounds;
    }
 
-   public Sprite getSprite() {
+   public MultiLayerSprite getSprite() {
       return sprite;
    }
 
@@ -213,13 +207,15 @@ public class Tile {
       return tmp;
    }
 
-   private static final Texture tex = new Texture(Gdx.files.internal("textures/tiles_round.png"));
+   public MultiLayerSprite loadSprite() {
+      Texture layer1tex = Textures.get("textures/tiles2.png");
+      Texture layer2tex = Textures.get("textures/tiles3.png");
 
-   public Sprite loadSprite() {
-      Texture tex = Textures.get("textures/tiles_round.png");
       Rectangle rect = rects[type.ordinal()][rotation.ordinal()]; // get texture position from 2D array
-      sprite = new Sprite(new TextureRegion(tex, (int) rect.getX(), (int) rect.getY(), (int) rect.getWidth(), (int) rect.getHeight()));
-      sprite.setSize(WIDTH, HEIGHT);
+      TextureRegion layer1reg = new TextureRegion(layer1tex, (int) rect.getX(), (int) rect.getY(), (int) rect.getWidth(), (int) rect.getHeight());
+      TextureRegion layer2reg = new TextureRegion(layer2tex, (int) rect.getX(), (int) rect.getY(), (int) rect.getWidth(), (int) rect.getHeight());
+      MultiLayerSprite sprite = new MultiLayerSprite(layer1reg, layer2reg);
+      sprite.setSize(27, 27);
       sprite.setPosition(x, y);
       return sprite;
    }
@@ -229,7 +225,7 @@ public class Tile {
    }
 
    public void setMoving(boolean isMoving) {
-      isMoving = isMoving;
+      this.isMoving = isMoving;
    }
 
    public Map<Direction, Tile> getNeighbors() {
@@ -237,7 +233,7 @@ public class Tile {
    }
 
    public void setNeighbors(Map<Direction, Tile> neighbors) {
-      neighbors = neighbors;
+      this.neighbors = neighbors;
    }
 
 }
