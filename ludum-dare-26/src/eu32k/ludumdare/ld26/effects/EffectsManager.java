@@ -40,11 +40,15 @@ public class EffectsManager implements IEventHandler {
 
    public EffectsManager() {
       colors = new ColorPulseManager();
-      addColor(121, 191, 29); // GREEN
-      addColor(85, 163, 215); // BLUE
-      addColor(173, 81, 185); // VIOLET
-      addColor(184, 152, 208); // Light VIOLET
-      colors.setColorIntensity(ColorPulseManager.TEST_03);
+      addColor(12, 255, 0); // GREEN
+      addColor(99, 255, 174); // Clear BLUE
+      addColor(20, 110, 255); //  BLUE
+      addColor(67, 25, 255); //  Dark BLUE
+      addColor(211, 20, 255); // VIOLET
+      addColor(255, 15, 83); // Light VIOLET
+      addColor(255, 21, 0); // Red
+      addColor(255, 153, 0); // Orange
+      colors.setColorIntensity(ColorPulseManager.INTENSITY_COLOR_01);
       state = StateMachine.instance().getState(GlobalState.class);
       state.getEvents().addHandler(this);
    }
@@ -140,6 +144,7 @@ public class EffectsManager implements IEventHandler {
          break;
       case PART_OTGY_BODY:
          colors.setBeatIntensity(ColorPulseManager.INTENSISTY_OTGY_BEAT_BODY);
+         colors.setBeatIntensity(ColorPulseManager.INTENSITY_EMPTY);
          colors.setSongIntensity(ColorPulseManager.INTENSITY_FULL);
          colors.init();
          play(TRACK_OTGY_BODY, false);

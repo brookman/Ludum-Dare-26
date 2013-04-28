@@ -31,15 +31,30 @@ public class ColorRange {
          result.set(colors.get(0));
          return;
       }
-      if (value <= 0f)
-         colors.get(0);
-      if (value > 1f)
-         colors.get(colors.size() - 1);
-      
-      
-      int part = (int) (value * colors.size() - 1);
+      if (value <= 0f) {
+         result.set(colors.get(0));
+         return;
+      }
+      if (value > 1f) {
+         result.set(colors.get(colors.size() - 1));
+         return;
+      }
+
+     
+      int L1 = colors.size();
+      float partSize = 1f / L1;
+      int part = (int)(L1*value);
+      if (part >=  L1 - 1) {
+         result.set(colors.get(colors.size() - 1));
+         return;
+      }
+      float newValue = (value-part * partSize)*L1;
       Color colorA = colors.get(part);
       Color colorB = colors.get(part + 1);
+      interpolateColors(result, newValue, colorA, colorB);
+   }
+
+   private void interpolateColors(Color result, float value, Color colorA, Color colorB) {
       result.r = Interpolation.linear.apply(colorA.r, colorB.r, value);
       result.g = Interpolation.linear.apply(colorA.g, colorB.g, value);
       result.b = Interpolation.linear.apply(colorA.b, colorB.b, value);
