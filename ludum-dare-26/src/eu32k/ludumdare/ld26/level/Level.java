@@ -33,7 +33,7 @@ public class Level {
       tileMatrix = new Tile[height][width];
       this.height = height;
       this.width = width;
-      this.dufficulty = 5;
+      dufficulty = 20;
       GlobalState globalState = StateMachine.instance().getState(GlobalState.class);
       tileRandom = globalState.createNewRandom("tiles");
       tiles = new ArrayList<Tile>();
@@ -139,7 +139,7 @@ public class Level {
       Tile nextTile = createRandomTile(x, y);
       nextTile.getNeighbors().put(Direction.getOpposite(dir), target);
       target.getNeighbors().put(dir, nextTile);
-      this.tiles.add(nextTile);
+      tiles.add(nextTile);
       return nextTile;
    }
 
@@ -184,7 +184,7 @@ public class Level {
    }
 
    public void setNextTile(Tile nextTile) {
-      this.tiles.add(nextTile);
+      tiles.add(nextTile);
       this.nextTile = nextTile;
    }
 
@@ -195,7 +195,6 @@ public class Level {
          Direction dirLeft = CCW(dir);
          Direction dirRight = CW(dir);
          Tile front = toShift.getNeighbors().get(dir);
-         
 
          if (front != null) {
             newRight = front.getNeighbors().get(dirRight);
@@ -208,10 +207,10 @@ public class Level {
                newLeft.getNeighbors().put(dirRight, toShift);
                toShift.getNeighbors().put(dirLeft, newLeft);
             }
-            if(front.getNeighbors().get(dir) == null) {
+            if (front.getNeighbors().get(dir) == null) {
                toShift.getNeighbors().remove(dir);
             }
-         } 
+         }
       } while ((toShift = toShift.getNeighbors().get(dir)) != null);
    }
 

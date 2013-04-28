@@ -7,6 +7,7 @@
 
 uniform vec2 resolution;
 uniform float time;
+uniform vec3 color;
 varying vec2 vTextureCoord;
 
 
@@ -100,7 +101,7 @@ void main(void)
 	}
 	
 	if(snoiseT(-uv, 0.5) < -0.8 && rand(blocked) < 0.01){
-		gl_FragColor = vec4(0.0, 0.2, 0.2, 1.0);
+		gl_FragColor = vec4(color, 1.0);
 	}else{
 		gl_FragColor = vec4(col2, col2, col2, 1.0);
 	}

@@ -111,7 +111,7 @@ public class MainRenderer {
       mixerShader.setUniformi("uTexture2", 0);
 
       mixerShader.setUniformf("uFactor1", 1.0f);
-      mixerShader.setUniformf("uFactor2", 1.2f);
+      mixerShader.setUniformf("uFactor2", 2.2f);
 
       mixerShader.renderToQuad(null, true, new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
       mixerShader.end();
@@ -144,9 +144,7 @@ public class MainRenderer {
       Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
       if (bg) {
-         background.begin();
-         background.renderToQuad(null, true, new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-         background.end();
+         Background.getInstance().draw(new Vector3(color.r, color.g, color.b));
       }
 
       batch.setProjectionMatrix(camera.combined);
