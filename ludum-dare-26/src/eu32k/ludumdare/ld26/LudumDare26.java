@@ -55,7 +55,7 @@ public class LudumDare26 extends SimpleGame {
       levelState.setLevel(level);
 
       tileSpawner.init();
-      effects.initBitbreak();
+      effects.initBitbreak(0);
    }
 
    private float zoom = 100.0f;
