@@ -10,9 +10,9 @@ public class PlayerState extends GameState {
       player = new Player(0, 0);
    }
 
-   public void initLevel(float x, float y)
+   public void initLevel(int tileX, int tileY)
    {
-      player.setPosition(x, y);
+      player.setPosition(tileX + 0.5f, tileY + 0.5f);
    }
    
    @Override
