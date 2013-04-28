@@ -14,7 +14,7 @@ public class Player extends GameObject {
 
    public static final float WIDTH = 0.2f, HEIGHT = 0.2f;
    public static final float RADIUS = 0.1f;
-   public static final float SPEED = 0.7f;
+   public static final float SPEED = 1.4f;
    private Texture[] textures = new Texture[2];
 
    public Player(float x, float y) {
