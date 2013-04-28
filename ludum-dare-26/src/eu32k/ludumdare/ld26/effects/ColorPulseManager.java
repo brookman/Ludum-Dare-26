@@ -230,36 +230,44 @@ public class ColorPulseManager {
    public final static IntensityData INTENSITY_EMPTY = new IntensityData(1, new float[] { 0f });
 
    private Color currentColor;
+   private ColorRange colorRange;
    private IntensityData beatIntensity;
    private IntensityData songIntensity;
-   private Color mainColor;
+   private IntensityData colorIntensity;
 
    private float minSongIntensity;
 
    public ColorPulseManager() {
       setMinSongIntensity(0f);
+      colorRange = new ColorRange();
       currentColor = new Color();
    }
 
-   public void setMainColor(Color mainColor) {
-      this.mainColor = mainColor;
+   public void addColor(Color color) {
+      colorRange.addColor(color);
    }
 
-   public void init(IntensityData beatIntensity, IntensityData songIntensity) {
+   public void init() {
       stop();
-      if (beatIntensity == null || songIntensity == null || mainColor == null)
+      if (beatIntensity == null || songIntensity == null)
          return;
-      this.beatIntensity = beatIntensity;
-      this.songIntensity = songIntensity;
-
       updateColor();
+   }
 
+   public void setBeatIntensity(IntensityData data) {
+      this.beatIntensity = data;
+   }
+
+   public void setSongIntensity(IntensityData data) {
+      this.songIntensity = data;
+   }
+
+   public void setColorIntensity(IntensityData data) {
+      this.colorIntensity = data;
    }
 
    public void stop() {
       currentColor.set(1f, 1f, 1f, 1f);
-      beatIntensity = null;
-      songIntensity = null;
    }
 
    public void update(float delta) {
@@ -290,6 +298,8 @@ public class ColorPulseManager {
       if (minSongIntensity > 0) {
          songValue = songValue * minimumOffset + minSongIntensity;
       }
+      float intensity = colorIntensity == null ? 0f : colorIntensity.getValue();
+      Color mainColor = colorRange.getColor(intensity);
       currentColor.r = mainColor.r * songValue;
       currentColor.g = mainColor.g * songValue;
       currentColor.b = mainColor.b * songValue;
