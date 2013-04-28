@@ -5,6 +5,7 @@ import java.util.List;
 
 import eu32k.ludumdare.ld26.animation.TileAnimator;
 import eu32k.ludumdare.ld26.level.Level;
+import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.level.TileMove;
 
 public class LevelState extends GameState {
@@ -12,6 +13,7 @@ public class LevelState extends GameState {
    private Level level;
    private List<TileMove> movingTiles;
    private TileAnimator tileAnimator;
+   public Tile playerTile;
 
    public LevelState() {
       this.movingTiles = new ArrayList<TileMove>();

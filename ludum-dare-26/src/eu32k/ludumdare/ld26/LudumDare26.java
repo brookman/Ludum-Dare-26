@@ -61,9 +61,8 @@ public class LudumDare26 extends SimpleGame {
 
       levelState.setLevel(level);
 
-      
       Tile t = level.getTiles().get(0);
-         
+
       TileMove move = new TileMove();
       move.initMove(t, 0, -100, 15f);
       levelState.getMovingTiles().add(move);
@@ -121,6 +120,10 @@ public class LudumDare26 extends SimpleGame {
       velocity.mul(delta);
       player.move(velocity, level.getTiles());
 
+      if (velocity.x != 0 || velocity.y != 0) {
+         setPlayerTile();
+      }
+
       setZoom(zoom);
 
       if (escapePressed) {
@@ -128,7 +131,7 @@ public class LudumDare26 extends SimpleGame {
       }
       StateMachine.instance().getState(GlobalState.class).getEvents().tick(delta);
       tileSpawner.update(delta);
-      //tileAnimator.update(delta);
+      // tileAnimator.update(delta);
       effects.update(delta);
 
       camera.position.x = 100;
@@ -137,6 +140,24 @@ public class LudumDare26 extends SimpleGame {
 
       // rendering ------------------------------------
       renderer.render(delta, camera, level.getTiles(), player, effects.getCurrentColor());
+   }
+
+   private void setPlayerTile() {
+      float px = player.position.x;
+      float py = player.position.y;
+      if(levelState.playerTile != null && levelState.playerTile.contains(px, py))
+         return;
+      levelState.playerTile = findPlayerTile();
+   }
+
+   private Tile findPlayerTile() {
+      List<Tile> tiles = levelState.getLevel().getTiles();
+      for (Tile tile : tiles) {
+         if (tile.contains(player.position.x, player.position.y)) {
+            return tile;
+         }
+      }
+      return null;
    }
 
    @Override
