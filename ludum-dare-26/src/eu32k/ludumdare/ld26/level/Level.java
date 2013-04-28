@@ -167,10 +167,7 @@ public class Level {
    public Tile spawnTile() {
       List<Tile> edgeTiles = new ArrayList<Tile>();
       for (Tile tile : tiles) {
-         if (tile.getX() == 0 || tile.getY() == 0) {
-            edgeTiles.add(tile);
-         } else if (tile.getX() == (width) * TILE_WIDTH 
-               || tile.getY() == (height) * TILE_WIDTH) {
+         if(tile.getNeighbors().size() < 4) {
             edgeTiles.add(tile);
          }
       }
@@ -196,25 +193,25 @@ public class Level {
       switch (dir) {
       case S:
          x = xRand;
-         y = yRand + TILE_WIDTH;
+         y = yRand + target.getSprite().getWidth();
          break;
       case W:
-         x = xRand - TILE_WIDTH;
+         x = xRand - target.getSprite().getWidth();
          y = yRand;
          break;
       case N:
          x = xRand;
-         y = yRand - TILE_WIDTH;
+         y = yRand - target.getSprite().getWidth();
          break;
       case E:
       default:
-         x = xRand - TILE_WIDTH;
+         x = xRand + target.getSprite().getWidth();
          y = yRand;
          break;
       }
       Tile nextTile = createRandomTile(x, y);
-      nextTile.getNeighbors().put(dir, target);
-      target.getNeighbors().put(Direction.getOpposite(dir), nextTile);
+      nextTile.getNeighbors().put(Direction.getOpposite(dir), target);
+      target.getNeighbors().put(dir, nextTile);
       return nextTile;
    }
 

@@ -36,7 +36,7 @@ public class TileSpawner implements IEventHandler {
             break;
          case TRIGGER_POP:
             levelState.getLevel().popTile(event.getTile());
-            globalState.getEvents().enqueue(new TileEvent(0, levelState.getLevel().spawnTile(), TileEventType.POPPED));
+            globalState.getEvents().enqueue(new TileEvent(0, event.getTile(), TileEventType.POPPED));
             break;
          case POPPED:
             globalState.getEvents().enqueue(new TileEvent(1, levelState.getLevel().spawnTile(), TileEventType.TRIGGER_SPAWN));

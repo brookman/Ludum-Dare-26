@@ -251,5 +251,9 @@ public class Tile {
    public void setY(float y) {
       this.y = y;
    }
+   
+   public Type getType() {
+      return type;
+   }
 
 }
