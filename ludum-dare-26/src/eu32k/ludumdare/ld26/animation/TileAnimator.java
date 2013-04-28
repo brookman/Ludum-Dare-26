@@ -9,7 +9,7 @@ import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class TileAnimator {
    
-   private float speed = 40f;
+   private float speed = 2.6f;
    
    private GlobalState globalState;
    
