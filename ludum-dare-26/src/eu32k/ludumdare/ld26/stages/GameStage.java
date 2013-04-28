@@ -14,6 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import eu32k.ludumdare.ld26.Player;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.effects.TileFade;
+import eu32k.ludumdare.ld26.gameplay.GameplayEvent;
+import eu32k.ludumdare.ld26.gameplay.GameplayEvent.GameplayEventType;
+import eu32k.ludumdare.ld26.gameplay.WinLoseConditionHandler;
 import eu32k.ludumdare.ld26.level.Level;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.level.TileMove;
@@ -38,10 +41,14 @@ public class GameStage extends Stage {
    private EffectsManager effects;
 
    private TileSpawner tileSpawner;
+   
+   private WinLoseConditionHandler winLose;
 
    private LevelState levelState;
 
    private PlayerState playerState;
+   
+   private GlobalState globalState;
 
    public GameStage() {
       float aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
@@ -49,7 +56,9 @@ public class GameStage extends Stage {
 
       effects = new EffectsManager();
       tileSpawner = new TileSpawner();
+      winLose = new WinLoseConditionHandler();
       levelState = StateMachine.instance().getState(LevelState.class);
+      globalState = StateMachine.instance().getState(GlobalState.class);
 
       renderer = new MainRenderer();
 
@@ -99,6 +108,15 @@ public class GameStage extends Stage {
       }
       
       fadeTiles(delta);
+      
+      if(levelState.playerTile == null) {
+         levelState.deathConditionTimer += delta;
+         if(levelState.deathConditionTimer > 0.05) {
+            globalState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE));
+         }
+      } else {
+         levelState.deathConditionTimer = 0;
+      }
 
       Vector2 velocity = new Vector2(0.0f, 0.0f);
       if (up) {

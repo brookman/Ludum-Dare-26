@@ -75,7 +75,7 @@ public class TileAnimator {
          break;
       }
       TileMove move = new TileMove();
-      move.initMove(spawned, targetX, targetY, 0.8f);
+      move.initMove(spawned, targetX, targetY, 2f);
       StateMachine.instance().getState(LevelState.class).getMovingTiles().add(move);
    }
 

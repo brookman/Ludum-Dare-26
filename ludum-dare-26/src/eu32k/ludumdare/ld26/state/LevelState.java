@@ -18,17 +18,20 @@ public class LevelState extends GameState {
    public Tile toPop;
    public Tile spawned;
    public Tile playerTile;
+   public float deathConditionTimer;
 
    public LevelState() {
       this.movingTiles = new ArrayList<TileMove>();
       fadingTiles = new ArrayList<TileFade>();
       tileAnimator = new TileAnimator();
+      deathConditionTimer = 0;
    }
 
    @Override
    public void init() {
       transitions.add(LevelFinishedState.class);
       transitions.add(PauseState.class);
+      transitions.add(LostState.class);
    }
 
    @Override

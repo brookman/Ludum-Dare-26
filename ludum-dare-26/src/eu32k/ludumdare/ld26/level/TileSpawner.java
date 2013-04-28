@@ -3,9 +3,12 @@ package eu32k.ludumdare.ld26.level;
 import eu32k.ludumdare.ld26.effects.FadeComplete;
 import eu32k.ludumdare.ld26.events.IEvent;
 import eu32k.ludumdare.ld26.events.IEventHandler;
+import eu32k.ludumdare.ld26.gameplay.GameplayEvent;
+import eu32k.ludumdare.ld26.gameplay.GameplayEvent.GameplayEventType;
 import eu32k.ludumdare.ld26.level.TileEvent.TileEventType;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelState;
+import eu32k.ludumdare.ld26.state.PlayerState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class TileSpawner implements IEventHandler {
@@ -30,13 +33,15 @@ public class TileSpawner implements IEventHandler {
          case TRIGGER_SPAWN:
             levelState.spawned = levelState.getLevel().spawnTile();
             levelState.getTileAnimator().animateSpawn(levelState.spawned);
-            // globalState.getEvents().enqueue(new TileEvent(1, levelState.spawned, TileEventType.SPAWNED));
             break;
          case SPAWNED:
             levelState.getTileAnimator().animateShift(event.getTile());
             break;
          case TRIGGER_POP:
             levelState.getLevel().popTile(event.getTile());
+            if(event.getTile().equals(levelState.playerTile)) {
+               levelState.playerTile = null;
+            }
             globalState.getEvents().enqueue(new TileEvent(0, event.getTile(), TileEventType.POPPED));
             break;
          case POPPED:
