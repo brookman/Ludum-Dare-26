@@ -24,7 +24,7 @@ public class Player extends GameObject {
    public MultiLayerSprite loadSprite() {
 
       Texture layer1tex = Textures.get("textures/circle.png");
-      Texture layer2tex = Textures.get("textures/circle.png");
+      Texture layer2tex = Textures.get("textures/circle2.png");
       TextureRegion layer1reg = new TextureRegion(layer1tex);
       TextureRegion layer2reg = new TextureRegion(layer2tex);
 

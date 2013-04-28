@@ -39,7 +39,7 @@ public class MainRenderer {
       batch = new SpriteBatch();
       hudBatch = new SpriteBatch();
       debugRenderer = new ShapeRenderer();
-      text = new RunText("Welcome to the super minimalistic labyrinth game!           yay! :D", 5.0f);
+      text = new RunText("Welcome to the super minimalistic labyrinth game! yay! :D", 5.0f);
       fps = new BitmapFont(Gdx.files.internal("fonts/calibri.fnt"), Gdx.files.internal("fonts/calibri.png"), false);
 
       mainBuffer = SomeRenderer.makeFrameBuffer();
@@ -157,7 +157,7 @@ public class MainRenderer {
       if (bg) {
          player.getSprite().activateLayer(0);
          player.getSprite().setColor(Color.WHITE);
-         player.getSprite().draw(batch);
+         player.draw(batch);
       }
 
       player.getSprite().activateLayer(1);
