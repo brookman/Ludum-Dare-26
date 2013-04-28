@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import eu32k.libgdx.SimpleGame;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
+import eu32k.ludumdare.ld26.effects.TileFade;
 import eu32k.ludumdare.ld26.level.Level;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.level.TileMove;
@@ -99,6 +100,8 @@ public class LudumDare26 extends SimpleGame {
             }
          }
       }
+      
+      fadeTiles(delta);
 
       Vector2 velocity = new Vector2(0.0f, 0.0f);
       if (up) {
@@ -138,6 +141,22 @@ public class LudumDare26 extends SimpleGame {
 
       // rendering ------------------------------------
       renderer.render(delta, camera, level.getTiles(), player, effects.getCurrentColor());
+   }
+
+   private void fadeTiles(float delta) {
+      List<TileFade> fades = levelState.getFadingTiles();
+      Iterator<TileFade> fadeIterator = fades.iterator();
+      while (fadeIterator.hasNext()) {
+         TileFade fade = fadeIterator.next();
+         if (fade.complete()) {
+            fadeIterator.remove();
+         } else {
+            fade.update(delta);
+            if (fade.complete()) {
+               fadeIterator.remove();
+            }
+         }
+      }
    }
 
    private void setPlayerTile() {

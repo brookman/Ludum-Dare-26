@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu32k.ludumdare.ld26.animation.TileAnimator;
+import eu32k.ludumdare.ld26.effects.TileFade;
 import eu32k.ludumdare.ld26.level.Level;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.level.TileMove;
@@ -13,12 +14,14 @@ public class LevelState extends GameState {
    private Level level;
    private List<TileMove> movingTiles;
    private TileAnimator tileAnimator;
+   private List<TileFade> fadingTiles;
    public Tile toPop;
    public Tile spawned;
    public Tile playerTile;
 
    public LevelState() {
       this.movingTiles = new ArrayList<TileMove>();
+      fadingTiles = new ArrayList<TileFade>();
       tileAnimator = new TileAnimator();
    }
 
@@ -58,4 +61,13 @@ public class LevelState extends GameState {
    public void setTileAnimator(TileAnimator tileAnimator) {
       this.tileAnimator = tileAnimator;
    }
+
+   public List<TileFade> getFadingTiles() {
+      return fadingTiles;
+   }
+
+   public void setFadingTiles(List<TileFade> fadingTiles) {
+      this.fadingTiles = fadingTiles;
+   }
+   
 }
