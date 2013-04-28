@@ -13,6 +13,7 @@ public class LevelState extends GameState {
    private Level level;
    private List<TileMove> movingTiles;
    private TileAnimator tileAnimator;
+   public Tile toPop;
    public Tile playerTile;
 
    public LevelState() {

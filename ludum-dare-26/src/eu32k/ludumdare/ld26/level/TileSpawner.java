@@ -10,8 +10,6 @@ import eu32k.ludumdare.ld26.state.StateMachine;
 public class TileSpawner implements IEventHandler {
 
    private GlobalState globalState;
-   
-   public Tile toPop;
 
    public TileSpawner() {
       globalState = StateMachine.instance().getState(GlobalState.class);
@@ -20,21 +18,20 @@ public class TileSpawner implements IEventHandler {
 
    public void init() {
       LevelState levelState = StateMachine.instance().getState(LevelState.class);
-      globalState.getEvents().enqueue(new TileEvent(2, levelState.getLevel().spawnTile(), TileEventType.TRIGGER_SPAWN));
+      globalState.getEvents().enqueue(new TileEvent(5, null, TileEventType.TRIGGER_SPAWN));
    }
 
    @Override
    public void handle(IEvent ev) {
+      LevelState levelState = StateMachine.instance().getState(LevelState.class);
       if (ev instanceof TileEvent) {
          TileEvent event = (TileEvent) ev;
-         LevelState levelState = StateMachine.instance().getState(LevelState.class);
          switch (event.getType()) {
          case TRIGGER_SPAWN:
-            levelState.getLevel().getTiles().add(event.getTile());
             globalState.getEvents().enqueue(new TileEvent(0, levelState.getLevel().spawnTile(), TileEventType.SPAWNED));
             break;
          case SPAWNED:
-            levelState.getLevel().setNextTile(event.getTile());
+            System.out.println("spawned");
             levelState.getTileAnimator().animateShift(event.getTile());
             break;
          case TRIGGER_POP:
@@ -42,13 +39,13 @@ public class TileSpawner implements IEventHandler {
             globalState.getEvents().enqueue(new TileEvent(0, event.getTile(), TileEventType.POPPED));
             break;
          case POPPED:
-            globalState.getEvents().enqueue(new TileEvent(1, levelState.getLevel().spawnTile(), TileEventType.TRIGGER_SPAWN));
+            globalState.getEvents().enqueue(new TileEvent(1, null, TileEventType.TRIGGER_SPAWN));
             break;
          }
-      } if(ev instanceof MoveComplete) {
+      } else if (ev instanceof MoveComplete) {
          MoveComplete event = (MoveComplete) ev;
          Tile moved = event.move.getTile();
-         if(moved.equals(toPop)) {
+         if (moved.equals(levelState.toPop)) {
             globalState.getEvents().enqueue(new TileEvent(1, moved, TileEventType.TRIGGER_POP));
          }
       }

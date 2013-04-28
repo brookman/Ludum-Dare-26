@@ -2,8 +2,10 @@ package eu32k.ludumdare.ld26.level;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -164,6 +166,7 @@ public class Level {
    // }
 
    public Tile spawnTile() {
+      System.out.println("spawn tile");
       List<Tile> edgeTiles = new ArrayList<Tile>();
       for (Tile tile : tiles) {
          if (tile.getNeighbors().size() < 4) {
@@ -211,6 +214,7 @@ public class Level {
       Tile nextTile = createRandomTile(x, y);
       nextTile.getNeighbors().put(Direction.getOpposite(dir), target);
       target.getNeighbors().put(dir, nextTile);
+      this.tiles.add(nextTile);
       return nextTile;
    }
 
@@ -255,7 +259,80 @@ public class Level {
    }
 
    public void setNextTile(Tile nextTile) {
+      this.tiles.add(nextTile);
       this.nextTile = nextTile;
    }
 
+   public void updateNeighbors(Tile spawned, Direction dir) {
+      Tile copy = spawned;
+      List<Tile> row = new ArrayList<Tile>();
+      // List<Tile> rowCopy = new ArrayList<Tile>();
+      do {
+         row.add(copy);
+      } while ((copy = copy.getNeighbors().get(dir)) != null);
+      // Collections.copy(rowCopy, row);
+      for (Tile toShift : row) {
+         Tile newLeft, newRight;
+         Direction dirLeft = CCW(dir);
+         Direction dirRight = CW(dir);
+         Tile currentLeft = toShift.getNeighbors().get(dirLeft);
+         Tile currentRight = toShift.getNeighbors().get(dirRight);
+         Tile front = toShift.getNeighbors().get(dir);
+         
+
+         if (front != null) {
+            newRight = front.getNeighbors().get(dirRight);
+            newLeft = front.getNeighbors().get(dirLeft);
+            if (newRight != null) {
+               newRight.getNeighbors().put(dirLeft, toShift);
+               toShift.getNeighbors().put(dirRight, newRight);
+            }
+            if (newLeft != null) {
+               newLeft.getNeighbors().put(dirRight, toShift);
+               toShift.getNeighbors().put(dirLeft, newLeft);
+            }
+            if(front.getNeighbors().get(dir) == null) {
+               toShift.getNeighbors().remove(dir);
+            }
+         }
+//         if(currentLeft != null) {
+//            currentLeft.getNeighbors().remove(dirRight);
+//         }
+//         if(currentRight != null) {
+//            currentRight.getNeighbors().remove(dirLeft);
+//         }
+
+      }
+
+   }
+
+   public Direction CW(Direction dir) {
+      switch (dir) {
+      case N:
+         return Direction.E;
+      case E:
+         return Direction.S;
+      case S:
+         return Direction.W;
+      case W:
+         return Direction.N;
+      default:
+         return null;
+      }
+   }
+
+   public Direction CCW(Direction dir) {
+      switch (dir) {
+      case N:
+         return Direction.W;
+      case W:
+         return Direction.S;
+      case S:
+         return Direction.E;
+      case E:
+         return Direction.N;
+      default:
+         return null;
+      }
+   }
 }
