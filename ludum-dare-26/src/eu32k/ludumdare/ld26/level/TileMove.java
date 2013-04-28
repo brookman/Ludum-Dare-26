@@ -58,8 +58,9 @@ public class TileMove {
       y += speedY * delta;
       if(player != null && levelState.playerTile != null && levelState.playerTile.equals(tile))
       {
-         Vector2 p = player.getPosition();
-         p.add(speedX * delta, speedY * delta);
+         float px = player.getX();
+         float py = player.getY();
+         player.setPosition(px + speedX * delta, py + speedY * delta);
       }
       if ((speedX > 0 && x >= targetX) || (speedX < 0 && x <= targetX) || (speedY > 0 && y >= targetY) || (speedY < 0 && y <= targetY)) {
          events.enqueue(new MoveComplete(this));

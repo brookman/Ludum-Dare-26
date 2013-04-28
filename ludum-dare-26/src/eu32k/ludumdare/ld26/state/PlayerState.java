@@ -7,12 +7,12 @@ public class PlayerState extends GameState {
    
    @Override
    public void init() {
-      player = new Player(13.5f, 13.5f);
+      player = new Player(0, 0);
    }
 
    public void initLevel(float x, float y)
    {
-      player.getPosition().set(x, y);
+      player.setPosition(x, y);
    }
    
    @Override
