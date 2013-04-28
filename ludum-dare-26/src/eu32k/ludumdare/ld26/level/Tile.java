@@ -242,6 +242,7 @@ public class Tile {
 
    public void setX(float x) {
       this.x = x;
+      sprite.setPosition(x,  y);
    }
 
    public float getY() {
@@ -250,6 +251,7 @@ public class Tile {
 
    public void setY(float y) {
       this.y = y;
+      sprite.setPosition(x,  y);
    }
    
    public Type getType() {
