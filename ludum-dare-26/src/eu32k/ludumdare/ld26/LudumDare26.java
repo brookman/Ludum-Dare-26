@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import eu32k.libgdx.SimpleGame;
+import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.stages.GameStage;
 import eu32k.ludumdare.ld26.stages.MenuStage;
 import eu32k.ludumdare.ld26.state.GlobalState;
@@ -15,9 +16,10 @@ import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class LudumDare26 extends SimpleGame {
 
+   private EffectsManager effects;
+
    private MenuStage menuStage;
    private GameStage gameStage;
-   private Stage currentStage;
 
    public LudumDare26() {
       super(false);
@@ -28,25 +30,23 @@ public class LudumDare26 extends SimpleGame {
       StateMachine.instance().createState(new PauseState());
    }
 
-   public void startGame() {
-      selectStage(gameStage);
-   }
-
-   private void selectStage(Stage stage) {
-      currentStage = stage;
-   }
-
    @Override
    public void init() {
-      menuStage = new MenuStage();
-      gameStage = new GameStage();
+      effects = new EffectsManager();
+      effects.initOtgy(0);
+
+      menuStage = new MenuStage(effects);
+      gameStage = new GameStage(effects);
       StateMachine.instance().getState(MenuState.class).setStage(menuStage);
       StateMachine.instance().getState(LevelState.class).setStage(gameStage);
       StateMachine.instance().enterState(MenuState.class);
+
    }
 
    @Override
    public void draw(float delta) {
+      StateMachine.instance().getState(GlobalState.class).getEvents().tick(delta);
+      effects.update(delta);
       // if (currentStage == null) {
       // selectStage(menuStage);
       // }
