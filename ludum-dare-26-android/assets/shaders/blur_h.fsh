@@ -9,7 +9,7 @@ uniform sampler2D uTexture;
 varying vec2 vTextureCoord;
 
 void main(void) {
-	float blurSize = 1.0 / 512.0;
+	float blurSize = 1.0 / 400.0;
 	vec4 sum = vec4(0.0);
 	
 	float factor = 1.0 / 21.0;
