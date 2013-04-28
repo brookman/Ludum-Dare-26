@@ -195,7 +195,7 @@ public class Level {
       switch (dir) {
       case S:
          x = xRand;
-         y = yRand + target.getSprite().getWidth();
+         y = yRand - target.getSprite().getWidth();
          break;
       case W:
          x = xRand - target.getSprite().getWidth();
@@ -203,7 +203,7 @@ public class Level {
          break;
       case N:
          x = xRand;
-         y = yRand - target.getSprite().getWidth();
+         y = yRand + target.getSprite().getWidth();
          break;
       case E:
       default:
