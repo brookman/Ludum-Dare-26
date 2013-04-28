@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import eu32k.libgdx.SimpleGame;
+import eu32k.ludumdare.ld26.animation.TileAnimator;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.level.Level;
 import eu32k.ludumdare.ld26.level.TileSpawner;
@@ -28,6 +29,8 @@ public class LudumDare26 extends SimpleGame {
    private TileSpawner tileSpawner;
 
    private LevelState levelState;
+   
+   private TileAnimator tileAnimator;
 
    public LudumDare26() {
       super(false);
@@ -42,6 +45,7 @@ public class LudumDare26 extends SimpleGame {
       effects = new EffectsManager();
       tileSpawner = new TileSpawner();
       levelState = StateMachine.instance().getState(LevelState.class);
+      tileAnimator = new TileAnimator();
    }
 
    @Override
@@ -101,6 +105,7 @@ public class LudumDare26 extends SimpleGame {
       }
       StateMachine.instance().getState(GlobalState.class).getEvents().tick(delta);
       tileSpawner.update(delta);
+      tileAnimator.update(delta);
       effects.update(delta);
 
       camera.position.x = 100;

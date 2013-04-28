@@ -25,12 +25,22 @@ public class TileSpawner implements IEventHandler {
    public void handle(IEvent ev) {
       if (ev instanceof TileEvent) {
          TileEvent event = (TileEvent) ev;
+         LevelState levelState = StateMachine.instance().getState(LevelState.class);
          switch (event.getType()) {
          case TRIGGER_SPAWN:
-            LevelState levelState = StateMachine.instance().getState(LevelState.class);
             levelState.getLevel().getTiles().add(event.getTile());
             globalState.getEvents().enqueue(new TileEvent(0, levelState.getLevel().spawnTile(), TileEventType.SPAWNED));
-            globalState.getEvents().enqueue(new TileEvent(2, levelState.getLevel().spawnTile(), TileEventType.TRIGGER_SPAWN));
+            break;
+         case SPAWNED:
+            levelState.getLevel().setNextTile(event.getTile());
+            break;
+         case TRIGGER_POP:
+            levelState.getLevel().popTile(event.getTile());
+            globalState.getEvents().enqueue(new TileEvent(0, event.getTile(), TileEventType.POPPED));
+            break;
+         case POPPED:
+            globalState.getEvents().enqueue(new TileEvent(1, levelState.getLevel().spawnTile(), TileEventType.TRIGGER_SPAWN));
+            break;
          }
       }
 
