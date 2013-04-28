@@ -23,6 +23,7 @@ public class MenuStage extends Stage {
 
    private EffectsManager effects;
 
+   private Image title;
    private TextButton challengeButton;
    private TextButton seedButton;
    private TextButton exitButton;
@@ -36,7 +37,7 @@ public class MenuStage extends Stage {
       table.setFillParent(true);
       table.center();
 
-      Image title = new Image(Textures.get("textures/title.png"));
+      title = new Image(Textures.get("textures/title.png"));
 
       challengeButton = new TextButton("Challenge mode", skin);
       challengeButton.setColor(Color.CYAN);
@@ -88,6 +89,7 @@ public class MenuStage extends Stage {
       challengeButton.setColor(color);
       seedButton.setColor(color);
       exitButton.setColor(color);
+      title.setColor(color);
 
       Background.getInstance().draw(new Vector3(color.r, color.g, color.b));
       super.draw();

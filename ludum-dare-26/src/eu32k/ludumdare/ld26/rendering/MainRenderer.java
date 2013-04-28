@@ -111,7 +111,7 @@ public class MainRenderer {
       mixerShader.setUniformi("uTexture2", 0);
 
       mixerShader.setUniformf("uFactor1", 1.0f);
-      mixerShader.setUniformf("uFactor2", 1.2f);
+      mixerShader.setUniformf("uFactor2", 2.2f);
 
       mixerShader.renderToQuad(null, true, new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
       mixerShader.end();
