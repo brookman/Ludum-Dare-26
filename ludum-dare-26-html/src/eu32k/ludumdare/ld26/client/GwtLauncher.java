@@ -1,20 +1,22 @@
 package eu32k.ludumdare.ld26.client;
 
-import eu32k.ludumdare.ld26.LudumDare26;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
 
-public class GwtLauncher extends GwtApplication {
-	@Override
-	public GwtApplicationConfiguration getConfig () {
-		GwtApplicationConfiguration cfg = new GwtApplicationConfiguration(800, 600);
-		
-		return cfg;
-	}
+import eu32k.ludumdare.ld26.Config;
+import eu32k.ludumdare.ld26.LudumDare26;
 
-	@Override
-	public ApplicationListener getApplicationListener () {
-		return new LudumDare26();
-	}
+public class GwtLauncher extends GwtApplication {
+   @Override
+   public GwtApplicationConfiguration getConfig() {
+      GwtApplicationConfiguration cfg = new GwtApplicationConfiguration(Config.X_RESOLUTION, Config.Y_RESOLUTION);
+
+      return cfg;
+   }
+
+   @Override
+   public ApplicationListener getApplicationListener() {
+      return new LudumDare26();
+   }
 }
