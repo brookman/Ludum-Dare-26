@@ -59,7 +59,7 @@ public class LudumDare26 extends SimpleGame {
       levelState.setLevel(level);
 
       tileSpawner.init();
-      effects.initBitbreak();
+      effects.initBitbreak(0);
    }
 
    private float zoom = 200.0f;
@@ -92,7 +92,7 @@ public class LudumDare26 extends SimpleGame {
       if (Gdx.input.isTouched()) {
          Vector3 touch = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0.0f);
          camera.unproject(touch);
-         velocity = new Vector2(touch.x, touch.y).sub(player.position);
+         velocity = new Vector2(touch.x - Player.WIDTH / 2, touch.y - Player.HEIGHT / 2).sub(player.position);
       }
       velocity.nor();
       velocity.mul(delta);

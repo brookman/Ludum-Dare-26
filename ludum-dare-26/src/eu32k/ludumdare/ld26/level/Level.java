@@ -8,9 +8,8 @@ import java.util.Random;
 import java.util.Set;
 
 import eu32k.ludumdare.ld26.Direction;
-import eu32k.ludumdare.ld26.Tile;
-import eu32k.ludumdare.ld26.Tile.Rotation;
-import eu32k.ludumdare.ld26.Tile.Type;
+import eu32k.ludumdare.ld26.level.Tile.Rotation;
+import eu32k.ludumdare.ld26.level.Tile.Type;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 

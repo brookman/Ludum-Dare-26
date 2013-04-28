@@ -25,11 +25,11 @@ public abstract class GameObject {
       sprite.draw(batch);
    }
 
-   public Vector2 moveHyp(Vector2 velocity) {
-      return position.cpy().add(velocity);
-   }
-
    public Rectangle getBounds(Vector2 position) {
       return new Rectangle(position.x, position.y, width, height);
+   }
+
+   public Sprite getSprite() {
+      return sprite;
    }
 }

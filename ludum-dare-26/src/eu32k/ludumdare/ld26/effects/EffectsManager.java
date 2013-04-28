@@ -35,14 +35,13 @@ public class EffectsManager implements IEventHandler {
       state.getEvents().addHandler(this);
    }
 
-   public void initBitbreak() {
-      state.getEvents().enqueue(new PlayPartEvent(0, SONG_BITBREAK, PART_BITBREAK_INTRO));
+   public void initBitbreak(int delay) {
+      state.getEvents().enqueue(new PlayPartEvent(1, SONG_BITBREAK, PART_BITBREAK_INTRO));
    }
 
    public void update(float delta) {
       if (music != null && music.isPlaying()) {
-
-         colors.setTime(music.getPosition());
+         colors.update(delta);
       }
    }
 

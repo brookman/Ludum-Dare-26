@@ -47,8 +47,8 @@ public class EventQueue {
       IEvent event = iterator.next();
       event.update(delta);
       if (event.timeLeft() <= 0) {
-         iterator.remove();
          notifyEvent(event);
+         iterator.remove();
       }
    }
 
