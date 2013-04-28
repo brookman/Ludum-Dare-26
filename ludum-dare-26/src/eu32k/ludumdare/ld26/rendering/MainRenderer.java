@@ -40,6 +40,8 @@ public class MainRenderer {
    private AdvancedShader mixerShader;
    private BitmapFont consolasFont;
 
+   private AdvancedShader background;
+
    public MainRenderer() {
       batch = new SpriteBatch();
       hudBatch = new SpriteBatch();
@@ -60,10 +62,12 @@ public class MainRenderer {
 
       blurBuffer2 = SomeRenderer.makeFrameBuffer(xScaleDown, yScaleDown);
       horizontalBlur = new AdvancedShader(Gdx.files.internal("shaders/simple.vsh").readString(), Gdx.files.internal("shaders/blur_h.fsh").readString());
+
+      background = new AdvancedShader(Gdx.files.internal("shaders/simple.vsh").readString(), Gdx.files.internal("shaders/background.fsh").readString());
+      System.out.println(background.getLog());
    }
 
    public void render(float delta, Camera camera, List<Tile> tiles, Player player, Color color) {
-
       mainBuffer.begin();
 
       render(true, camera, tiles, player, color);
@@ -138,6 +142,12 @@ public class MainRenderer {
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
       Gdx.gl.glEnable(GL20.GL_BLEND);
       Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+      if (bg) {
+         background.begin();
+         background.renderToQuad(null, true, new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+         background.end();
+      }
 
       batch.setProjectionMatrix(camera.combined);
       batch.begin();
