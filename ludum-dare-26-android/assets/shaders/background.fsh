@@ -79,6 +79,10 @@ float snoiseT(vec2 co){
     return snoise(co+vec2(time ,-time));
 }
 
+float rand(vec2 co) {
+	return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453 * time);
+}
+
 void main(void)
 {
 	vec2 normalized = vTextureCoord;
@@ -88,12 +92,17 @@ void main(void)
 	
 	vec2 uv = blocked / resolution.xy;
 	
-	float col2 = snoiseT(uv * 0.3, 0.05) * 0.5;
+	float col2 = snoiseT(uv * 0.3, 0.05) * 0.7;
 	col2 *= col2;
 	
 	if(mod(pixels.x,15.0) <= 1.0 || mod(pixels.y,15.0) <= 1.0){
 		col2 += 0.02;
 	}
 	
-	gl_FragColor = vec4(col2, col2, col2, 1.0);
+	if(snoiseT(-uv, 0.5) < -0.8 && rand(blocked) < 0.01){
+		gl_FragColor = vec4(0.0, 0.2, 0.2, 1.0);
+	}else{
+		gl_FragColor = vec4(col2, col2, col2, 1.0);
+	}
+	
 }
