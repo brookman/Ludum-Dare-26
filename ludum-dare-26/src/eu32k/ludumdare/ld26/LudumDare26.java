@@ -2,6 +2,7 @@ package eu32k.ludumdare.ld26;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -60,10 +61,15 @@ public class LudumDare26 extends SimpleGame {
 
       levelState.setLevel(level);
 
-      for (Tile t : level.getTiles()) {
+      Random r = new Random();
+      
+      for(Tile t : level.getTiles())
+      {
+         
          TileMove move = new TileMove();
-         move.initMove(t, 0, 0, 10f);
+         move.initMove(t, r.nextInt(2000) - 500, r.nextInt(2000) - 500, r.nextFloat() * 50f);
          levelState.getMovingTiles().add(move);
+      //tileSpawner.init();
       }
       tileSpawner.init();
       effects.initBitbreak(0);
