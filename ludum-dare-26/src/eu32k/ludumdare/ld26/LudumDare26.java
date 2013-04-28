@@ -1,5 +1,8 @@
 package eu32k.ludumdare.ld26;
 
+import java.util.Iterator;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
@@ -9,6 +12,8 @@ import eu32k.libgdx.SimpleGame;
 import eu32k.ludumdare.ld26.animation.TileAnimator;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.level.Level;
+import eu32k.ludumdare.ld26.level.Tile;
+import eu32k.ludumdare.ld26.level.TileMove;
 import eu32k.ludumdare.ld26.level.TileSpawner;
 import eu32k.ludumdare.ld26.rendering.MainRenderer;
 import eu32k.ludumdare.ld26.state.GlobalState;
@@ -29,7 +34,7 @@ public class LudumDare26 extends SimpleGame {
    private TileSpawner tileSpawner;
 
    private LevelState levelState;
-   
+
    private TileAnimator tileAnimator;
 
    public LudumDare26() {
@@ -58,7 +63,14 @@ public class LudumDare26 extends SimpleGame {
 
       levelState.setLevel(level);
 
-      tileSpawner.init();
+      
+      for(Tile t : level.getTiles())
+      {
+      TileMove move = new TileMove();
+      move.initMove(t, 0, 0, 10f);
+      levelState.getMovingTiles().add(move);
+      //tileSpawner.init();
+      }
       effects.initBitbreak(0);
    }
 
@@ -76,6 +88,20 @@ public class LudumDare26 extends SimpleGame {
       boolean escapePressed = Gdx.input.isKeyPressed(Input.Keys.ESCAPE);
 
       // updates --------------------------------------
+      List<TileMove> moves = levelState.getMovingTiles();
+      Iterator<TileMove> moveIterator = moves.iterator();
+      while (moveIterator.hasNext()) {
+         TileMove move = moveIterator.next();
+         if (move.complete()) {
+            moveIterator.remove();
+         } else {
+            move.update(delta);
+            if (move.complete()) {
+               moveIterator.remove();
+            }
+         }
+      }
+
       Vector2 velocity = new Vector2(0.0f, 0.0f);
       if (up) {
          velocity.add(new Vector2(0.0f, 1.0f));
@@ -104,7 +130,7 @@ public class LudumDare26 extends SimpleGame {
          effects.stopSong(null);
       }
       StateMachine.instance().getState(GlobalState.class).getEvents().tick(delta);
-      tileSpawner.update(delta);
+      //tileSpawner.update(delta);
       tileAnimator.update(delta);
       effects.update(delta);
 

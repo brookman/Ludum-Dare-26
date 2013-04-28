@@ -1,0 +1,12 @@
+package eu32k.ludumdare.ld26.level;
+
+import eu32k.ludumdare.ld26.events.EventBase;
+
+public class MoveComplete extends EventBase {
+   public TileMove move;
+   
+   public MoveComplete(TileMove move)
+   {
+      this.move = move;
+   }
+}

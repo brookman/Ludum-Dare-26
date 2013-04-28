@@ -73,7 +73,7 @@ public class EffectsManager implements IEventHandler {
       case PART_BITBREAK_INTRO:
          colors.init(ColorPulseManager.INTENSITY_EMPTY, ColorPulseManager.INTENSITY_BITBREAK_INTRO);
          play(TRACK_BITBREAK_INTRO, false);
-         state.getEvents().enqueue(new PlayPartEvent(6.1f, SONG_BITBREAK, PART_BITBREAK_BODY));
+         state.getEvents().enqueue(new PlayPartEvent(6f, SONG_BITBREAK, PART_BITBREAK_BODY));
          colors.setMinSongIntensity(0f);
          break;
       case PART_BITBREAK_BODY:
