@@ -87,6 +87,8 @@ public class LudumDare26 extends SimpleGame {
       boolean escapePressed = Gdx.input.isKeyPressed(Input.Keys.ESCAPE);
 
       // updates --------------------------------------
+      setPlayerTile();
+
       List<TileMove> moves = levelState.getMovingTiles();
       Iterator<TileMove> moveIterator = moves.iterator();
       while (moveIterator.hasNext()) {
@@ -122,10 +124,6 @@ public class LudumDare26 extends SimpleGame {
       velocity.nor();
       velocity.mul(delta);
       player.move(velocity, level.getTiles());
-
-      if (velocity.x != 0 || velocity.y != 0) {
-         setPlayerTile();
-      }
 
       setZoom(zoom);
 
