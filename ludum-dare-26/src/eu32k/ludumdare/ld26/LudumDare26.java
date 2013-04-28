@@ -71,7 +71,7 @@ public class LudumDare26 extends SimpleGame {
       effects.initBitbreak(0);
    }
 
-   private float zoom = 130.0f;
+   private float zoom = 100.0f;
 
    @Override
    public void draw(float delta) {
