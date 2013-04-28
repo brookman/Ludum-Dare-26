@@ -79,6 +79,7 @@ public class MainRenderer {
          tile.getSprite().setColor(color);
          tile.draw(batch);
       }
+      player.getSprite().setColor(color);
       player.draw(batch);
 
       batch.end();
