@@ -65,21 +65,22 @@ public class Level {
             Tile tile = tileMatrix[i][j];
             Tile north, east, south, west;
             if (i > 0) {
-               north = tileMatrix[i - 1][j];
-               addNeighbor(tile, north, Direction.N);
+               south = tileMatrix[i - 1][j];
+               addNeighbor(tile, south, Direction.S);
             }
             if (j > 0) {
                west = tileMatrix[i][j - 1];
                addNeighbor(tile, west, Direction.W);
             }
             if (i < height - 1) {
-               south = tileMatrix[i + 1][j];
-               addNeighbor(tile, south, Direction.S);
+               north = tileMatrix[i + 1][j];
+               addNeighbor(tile, north, Direction.N);
             }
             if (j < width - 1) {
                east = tileMatrix[i][j + 1];
                addNeighbor(tile, east, Direction.E);
             }
+            System.out.println(tile.getType());
          }
       }
    }
