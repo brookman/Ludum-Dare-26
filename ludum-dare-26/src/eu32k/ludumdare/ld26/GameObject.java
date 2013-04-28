@@ -28,4 +28,8 @@ public abstract class GameObject {
    public Rectangle getBounds(Vector2 position) {
       return new Rectangle(position.x, position.y, width, height);
    }
+
+   public Sprite getSprite() {
+      return sprite;
+   }
 }
