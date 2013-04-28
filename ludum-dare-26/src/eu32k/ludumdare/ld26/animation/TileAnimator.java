@@ -9,9 +9,7 @@ import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class TileAnimator {
    
-   private float speed = 50f;
-   
-   private float animatedPixels = 0;
+   private float speed = 40f;
    
    private GlobalState globalState;
    
@@ -23,30 +21,38 @@ public class TileAnimator {
       Tile toShift = spawned;
       LevelState levelState = StateMachine.instance().getState(LevelState.class);
       Direction dir = toShift.getNeighbors().keySet().iterator().next();
+      Tile last = toShift;
+      System.out.println("=========");
       do {
          float targetX, targetY;
          switch(dir) {
          case N:
             targetX = toShift.getX();
-            targetY = levelState.getLevel().getHeight() * toShift.getSprite().getHeight();
+            targetY = toShift.getY() + toShift.getSprite().getHeight();
             break;
          case E:
-            targetX = levelState.getLevel().getWidth() * toShift.getSprite().getWidth();
+            targetX = toShift.getX() + toShift.getSprite().getWidth();
             targetY = toShift.getY();
             break;
          case S:
             targetX = toShift.getX();
-            targetY = -1 * toShift.getSprite().getHeight();
+            targetY = toShift.getY() - toShift.getSprite().getHeight();
             break;
          case W:
          default:
-            targetX = -1 * toShift.getSprite().getWidth();
+            targetX = toShift.getX() - toShift.getSprite().getWidth();
             targetY = toShift.getY();
             break;
          }
          TileMove move = new TileMove();
          move.initMove(toShift, targetX, targetY, speed);
+         levelState.getMovingTiles().add(move);
+         last = toShift;
+         System.out.println(dir);
       } while((toShift = toShift.getNeighbors().get(dir))!=null);
+      levelState.getLevel().updateNeighbors(spawned, dir);
+      System.out.println("=========");
+      levelState.toPop = last;
    }
    
 //   public void update(float delta) {

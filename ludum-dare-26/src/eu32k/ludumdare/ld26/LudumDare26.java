@@ -10,10 +10,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import eu32k.libgdx.SimpleGame;
-import eu32k.ludumdare.ld26.animation.TileAnimator;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.level.Level;
-import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.level.TileMove;
 import eu32k.ludumdare.ld26.level.TileSpawner;
 import eu32k.ludumdare.ld26.rendering.MainRenderer;
@@ -63,14 +61,14 @@ public class LudumDare26 extends SimpleGame {
 
       Random r = new Random();
       
-      for(Tile t : level.getTiles())
-      {
-         
-         TileMove move = new TileMove();
-         move.initMove(t, r.nextInt(2000) - 500, r.nextInt(2000) - 500, r.nextFloat() * 50f);
-         levelState.getMovingTiles().add(move);
-      //tileSpawner.init();
-      }
+//      for(Tile t : level.getTiles())
+//      {
+//         
+//         TileMove move = new TileMove();
+//         move.initMove(t, r.nextInt(2000) - 500, r.nextInt(2000) - 500, r.nextFloat() * 50f);
+//         levelState.getMovingTiles().add(move);
+//      //tileSpawner.init();
+//      }
       tileSpawner.init();
       effects.initBitbreak(0);
    }
