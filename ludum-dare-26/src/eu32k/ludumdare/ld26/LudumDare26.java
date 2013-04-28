@@ -35,7 +35,7 @@ public class LudumDare26 extends SimpleGame {
    private LevelState levelState;
 
    private PlayerState playerState;
-   
+
    public LudumDare26() {
       super(false);
       StateMachine.instance().createState(new GlobalState());
@@ -53,27 +53,21 @@ public class LudumDare26 extends SimpleGame {
    @Override
    public void init() {
       renderer = new MainRenderer();
-      
+
       StateMachine.instance().createState(new PlayerState());
-      playerState = StateMachine.instance().getState(PlayerState.class);      
+      playerState = StateMachine.instance().getState(PlayerState.class);
       player = playerState.getPlayer();
       playerState.initLevel(0.5f - Player.WIDTH / 2, 0.5f - Player.HEIGHT / 2);
-      
+
       level = new Level(5, 5);
       level.generateRandomTiles();
 
       levelState.setLevel(level);
-
-      /*
-      for(Tile t : level.getTiles())
-      {
-         TileMove move = new TileMove();
-         move.initMove(t, 32, 32, 0.1f);
-         levelState.getMovingTiles().add(move);
-      }
-*/
       tileSpawner.init();
       effects.initBitbreak(0);
+      
+      renderer.getConsole().addLine("Hallo Velo");
+      renderer.getConsole().addLine("Hallo Tibau abuas");
    }
 
    private float zoom = 5.55555555f;
@@ -149,9 +143,14 @@ public class LudumDare26 extends SimpleGame {
    private void setPlayerTile() {
       float px = player.position.x;
       float py = player.position.y;
-      if(levelState.playerTile != null && levelState.playerTile.contains(px, py))
+      if (levelState.playerTile != null && levelState.playerTile.contains(px, py))
          return;
-      levelState.playerTile = findPlayerTile();
+      Tile t = findPlayerTile();
+      levelState.playerTile = t;
+      if(t != null)
+      {
+         renderer.getConsole().addLine("Player entered tile on position: " + Float.toString(t.getX()) + "/" + Float.toString(t.getY()));
+      }
    }
 
    private Tile findPlayerTile() {

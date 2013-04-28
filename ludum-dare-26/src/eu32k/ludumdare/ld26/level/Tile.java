@@ -192,36 +192,6 @@ public class Tile {
       return sprite;
    }
 
-   private List<Rectangle> calculateBounds() {
-      List<Rectangle> tmp = new ArrayList<Rectangle>();
-
-      switch (type) {
-      case I:
-         tmp.add(new Rectangle(x + 0, y + 0, 9, 9));
-         tmp.add(new Rectangle(x + 0, y + 9, 9, 9));
-         tmp.add(new Rectangle(x + 0, y + 18, 9, 9));
-         tmp.add(new Rectangle(x + 18, y + 0, 9, 9));
-         tmp.add(new Rectangle(x + 18, y + 9, 9, 9));
-         tmp.add(new Rectangle(x + 18, y + 18, 9, 9));
-         break;
-      case L:
-         tmp.add(new Rectangle());
-         break;
-      case T:
-         tmp.add(new Rectangle());
-         break;
-      case X:
-         tmp.add(new Rectangle());
-         break;
-      default:
-         tmp.add(new Rectangle());
-      }
-
-      // todo rotate rectangles depending on rotation/orientation
-
-      return tmp;
-   }
-
    public MultiLayerSprite loadSprite() {
       Texture layer1tex = Textures.get("textures/tiles2.png");
       Texture layer2tex = Textures.get("textures/tiles3.png");

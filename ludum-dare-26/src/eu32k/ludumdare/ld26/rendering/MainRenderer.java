@@ -36,8 +36,9 @@ public class MainRenderer {
 
    private FrameBuffer blurBuffer2;
    private AdvancedShader horizontalBlur;
-
+   private TextConsole console;
    private AdvancedShader mixerShader;
+   private BitmapFont consolasFont;
 
    public MainRenderer() {
       batch = new SpriteBatch();
@@ -45,7 +46,8 @@ public class MainRenderer {
       debugRenderer = new ShapeRenderer();
       text = new RunText("Welcome to the super minimalistic labyrinth game! yay! :D", 5.0f);
       fps = new BitmapFont(Gdx.files.internal("fonts/calibri.fnt"), Gdx.files.internal("fonts/calibri.png"), false);
-
+      consolasFont = new BitmapFont(Gdx.files.internal("fonts/consolas.fnt"), Gdx.files.internal("fonts/consolas.png"), false);
+      console = new TextConsole(consolasFont, 160.0f, Gdx.graphics.getHeight() - 10.0f, 15f, 5, Color.WHITE);
       int xScaleDown = Config.X_RESOLUTION / 4;
       int yScaleDown = Config.Y_RESOLUTION / 4;
 
@@ -65,12 +67,13 @@ public class MainRenderer {
       mainBuffer.begin();
 
       render(true, camera, tiles, player, color);
-      //renderDebug(camera, tiles);
+      // renderDebug(camera, tiles);
 
       hudBatch.begin();
       text.draw(hudBatch, 30.0f, 50.0f);
       fps.draw(hudBatch, "fps: " + Gdx.graphics.getFramesPerSecond(), 30.0f, Gdx.graphics.getHeight() - 30.0f);
       fps.draw(hudBatch, DebugText.text == null ? "null" : DebugText.text, 30.0f, Gdx.graphics.getHeight() - 60.0f);
+      console.draw(hudBatch);
       hudBatch.end();
 
       mainBuffer.end();
@@ -115,9 +118,9 @@ public class MainRenderer {
       debugRenderer.begin(ShapeType.FilledRectangle);
       debugRenderer.setColor(new Color(1.0f, 1.0f, 1.0f, 0.05f));
       for (Tile tile : tiles) {
-      for (Rectangle rect : tile.getBounds()) {
-      debugRenderer.filledRect(rect.x, rect.y, rect.width, rect.height);
-      }
+         for (Rectangle rect : tile.getBounds()) {
+            debugRenderer.filledRect(rect.x, rect.y, rect.width, rect.height);
+         }
       }
       debugRenderer.end();
 
@@ -181,6 +184,10 @@ public class MainRenderer {
       // camera.unproject(p);
       // debugRenderer.filledRect(p.x, p.y, 10.0f, 10.0f);
       // debugRenderer.end();
+   }
+
+   public TextConsole getConsole() {
+      return console;
    }
 
    public void dispose() {
