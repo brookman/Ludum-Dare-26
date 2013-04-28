@@ -38,6 +38,7 @@ public class MainRenderer {
    private AdvancedShader horizontalBlur;
    private TextConsole console;
    private AdvancedShader mixerShader;
+   private BitmapFont consolasFont;
 
    public MainRenderer() {
       batch = new SpriteBatch();
@@ -45,7 +46,8 @@ public class MainRenderer {
       debugRenderer = new ShapeRenderer();
       text = new RunText("Welcome to the super minimalistic labyrinth game! yay! :D", 5.0f);
       fps = new BitmapFont(Gdx.files.internal("fonts/calibri.fnt"), Gdx.files.internal("fonts/calibri.png"), false);
-      console = new TextConsole(fps, 30.0f, Gdx.graphics.getHeight() - 150.0f, 35f, 5, Color.WHITE);
+      consolasFont = new BitmapFont(Gdx.files.internal("fonts/consolas.fnt"), Gdx.files.internal("fonts/consolas.png"), false);
+      console = new TextConsole(consolasFont, 160.0f, Gdx.graphics.getHeight() - 10.0f, 15f, 5, Color.WHITE);
       int xScaleDown = Config.X_RESOLUTION / 4;
       int yScaleDown = Config.Y_RESOLUTION / 4;
 

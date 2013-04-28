@@ -64,6 +64,7 @@ public class TextConsole {
          }
          TextBoxLine line = linesArray[lineIndex];
          if (line != null) {
+            font.setColor(line.color);
             font.draw(batch, line.text, x, y - index * lineHeight);
          }
       }
