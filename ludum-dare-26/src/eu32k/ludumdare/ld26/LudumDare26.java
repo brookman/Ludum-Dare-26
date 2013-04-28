@@ -64,7 +64,7 @@ public class LudumDare26 extends SimpleGame {
 
       levelState.setLevel(level);
       tileSpawner.init();
-      effects.initBitbreak(0);
+      effects.initOtgy(0);
       
       renderer.getConsole().addLine("Hallo Velo");
       renderer.getConsole().addLine("Hallo Tibau abuas");

@@ -12,6 +12,8 @@ import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class EffectsManager implements IEventHandler {
    public final static int SONG_BITBREAK = 1;
+   public static final int SONG_OTGY = 2;
+
    public final static int PART_BITBREAK_INTRO = 0;
    public final static int PART_BITBREAK_BODY = 1;
    public final static int PART_BITBREAK_OUTRO = 2;
@@ -19,6 +21,14 @@ public class EffectsManager implements IEventHandler {
    public final static String TRACK_BITBREAK_INTRO = "sound/bitbreak_intro.ogg";
    public final static String TRACK_BITBREAK_BODY = "sound/bitbreak_body.ogg";
    public final static String TRACK_BITBREAK_OUTRO = "sound/bitbreak_outro.ogg";
+
+   public static final int PART_OTGY_INTRO = 0;
+   public static final int PART_OTGY_BODY = 1;
+   public static final int PART_OTGY_OUTRO = 2;
+
+   public final static String TRACK_OTGY_INTRO = "sound/otgy_intro.ogg";
+   public final static String TRACK_OTGY_BODY = "sound/otgy_body.ogg";
+   public final static String TRACK_OTGY_OUTRO = "sound/otgy_outro.ogg";
 
    private ColorPulseManager colors;
    private Music music;
@@ -37,6 +47,10 @@ public class EffectsManager implements IEventHandler {
 
    public void initBitbreak(int delay) {
       state.getEvents().enqueue(new PlayPartEvent(1, SONG_BITBREAK, PART_BITBREAK_INTRO));
+   }
+
+   public void initOtgy(int delay) {
+      state.getEvents().enqueue(new PlayPartEvent(1, SONG_OTGY, PART_OTGY_INTRO));
    }
 
    public void update(float delta) {
@@ -62,6 +76,9 @@ public class EffectsManager implements IEventHandler {
       case SONG_BITBREAK:
          playBitbreakPart(ev);
          break;
+      case SONG_OTGY:
+         playOtgyPart(ev);
+         break;
       }
    }
 
@@ -86,7 +103,30 @@ public class EffectsManager implements IEventHandler {
          colors.init(ColorPulseManager.INTENSITY_BEAT, ColorPulseManager.INTENSITY_BITBREAK_OUTRO);
          play(TRACK_BITBREAK_OUTRO, false);
          colors.setMinSongIntensity(0f);
-         state.getEvents().enqueue(new PlayPartEvent(72, 0, 0));
+         break;
+      }
+   }
+   private void playOtgyPart(PlayPartEvent ev) {
+      switch (ev.part) {
+      default:
+         stop();
+         break;
+      case PART_OTGY_INTRO:
+         colors.init(ColorPulseManager.INTENSITY_EMPTY, ColorPulseManager.INTENSITY_FULL);
+         play(TRACK_OTGY_INTRO, false);
+         state.getEvents().enqueue(new PlayPartEvent(12f, SONG_OTGY, PART_OTGY_BODY));
+         colors.setMinSongIntensity(0f);
+         break;
+      case PART_OTGY_BODY:
+         colors.init(ColorPulseManager.INTENSITY_BEAT, ColorPulseManager.INTENSITY_FULL);
+         play(TRACK_OTGY_BODY, false);
+         colors.setMinSongIntensity(0.5f);
+         state.getEvents().enqueue(new PlayPartEvent(144f, SONG_OTGY, PART_OTGY_BODY));
+         break;
+      case PART_OTGY_OUTRO:
+         colors.init(ColorPulseManager.INTENSITY_BEAT, ColorPulseManager.INTENSITY_FULL);
+         play(TRACK_OTGY_OUTRO, false);
+         colors.setMinSongIntensity(0f);
          break;
       }
    }
@@ -105,7 +145,8 @@ public class EffectsManager implements IEventHandler {
    private void stop() {
       colors.stop();
       colors.init(ColorPulseManager.INTENSITY_EMPTY, ColorPulseManager.INTENSITY_EMPTY);
-      music.stop();
+      
+      if(music != null) music.stop();
       currentSong = 0;
       currentPart = 0;
    }
@@ -135,6 +176,8 @@ public class EffectsManager implements IEventHandler {
          return -1;
       case SONG_BITBREAK:
          return PART_BITBREAK_OUTRO;
+      case SONG_OTGY:
+         return PART_OTGY_OUTRO;
       }
    }
 
@@ -144,6 +187,8 @@ public class EffectsManager implements IEventHandler {
          return 0;
       case SONG_BITBREAK:
          return 6;
+      case SONG_OTGY:
+         return 15;
       }
    }
 
