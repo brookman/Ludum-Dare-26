@@ -276,5 +276,10 @@ public class Tile {
    public Type getType() {
       return type;
    }
+   
+   public boolean contains(float tx, float ty)
+   {
+      return !(tx < x || tx >= x + WIDTH || ty < y || ty >= y + HEIGHT);
+   }
 
 }
