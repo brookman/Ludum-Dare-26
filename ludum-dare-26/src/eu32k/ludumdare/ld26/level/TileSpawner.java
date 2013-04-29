@@ -46,7 +46,7 @@ public class TileSpawner implements IEventHandler {
             levelState.getEvents().enqueue(new TileEvent(0, event.getTile(), TileEventType.POPPED));
             break;
          case POPPED:
-            levelState.getEvents().enqueue(new TileEvent((5 / levelState.getLevel().getDufficulty()), null, TileEventType.TRIGGER_SPAWN));
+            spawnTile((5f / levelState.getLevel().getDufficulty()));
             break;
          }
       } else if (ev instanceof MoveComplete) {
