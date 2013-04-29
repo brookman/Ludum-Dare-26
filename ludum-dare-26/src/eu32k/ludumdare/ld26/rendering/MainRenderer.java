@@ -191,6 +191,18 @@ public class MainRenderer {
       player.getSprite().activateLayer(1);
       player.getSprite().setColor(color);
       player.draw(batch);
+      player.getEffect().draw(batch, color, Gdx.graphics.getDeltaTime());
+
+      if (bg) {
+         goal.getSprite().activateLayer(0);
+         goal.getSprite().setColor(Color.WHITE);
+         goal.draw(batch);
+      }
+
+      goal.getSprite().activateLayer(1);
+      goal.getSprite().setColor(color);
+      goal.draw(batch);
+      goal.getEffect().draw(batch, color, Gdx.graphics.getDeltaTime());
 
       batch.end();
 

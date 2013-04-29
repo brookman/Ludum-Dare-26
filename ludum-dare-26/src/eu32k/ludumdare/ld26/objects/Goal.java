@@ -6,15 +6,18 @@ import com.badlogic.gdx.math.Vector2;
 
 import eu32k.libgdx.rendering.Textures;
 import eu32k.ludumdare.ld26.MultiLayerSprite;
+import eu32k.ludumdare.ld26.effects.particles.GameObjectParticleEffect;
 
 public class Goal extends GameObject {
 
    public static final float WIDTH = 0.4f, HEIGHT = 0.4f;
 
-   private Texture[] textures = new Texture[2];
+   private GameObjectParticleEffect particleEffect;
 
    public Goal(float x, float y) {
       super(new Vector2(x - WIDTH / 2.0f, y - WIDTH / 2.0f), WIDTH, HEIGHT);
+
+      particleEffect = new GameObjectParticleEffect(this, "particles/goal.txt");
    }
 
    @Override
@@ -29,4 +32,7 @@ public class Goal extends GameObject {
       return sprite;
    }
 
+   public GameObjectParticleEffect getEffect() {
+      return particleEffect;
+   }
 }
