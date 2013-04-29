@@ -17,13 +17,10 @@ import eu32k.ludumdare.ld26.gameplay.GameEventHandler;
 import eu32k.ludumdare.ld26.gameplay.GameplayEvent;
 import eu32k.ludumdare.ld26.gameplay.GameplayEvent.GameplayEventType;
 import eu32k.ludumdare.ld26.level.Level;
-import eu32k.ludumdare.ld26.level.LevelConfigSequence;
 import eu32k.ludumdare.ld26.level.Tile;
-import eu32k.ludumdare.ld26.level.TileSpawner;
 import eu32k.ludumdare.ld26.objects.Goal;
 import eu32k.ludumdare.ld26.objects.Player;
 import eu32k.ludumdare.ld26.rendering.MainRenderer;
-import eu32k.ludumdare.ld26.rendering.TextRenderer;
 import eu32k.ludumdare.ld26.state.GameState;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelLosingState;
@@ -85,6 +82,8 @@ public class GameStage extends Stage {
       pauseTimer -= delta;
 
       if (running) {
+         
+         renderer.getTextRenderer().removeText("paused");
 
          repositionGoal();
 
@@ -96,6 +95,7 @@ public class GameStage extends Stage {
 
          updatePlayerInput(delta);
       } else if (levelState.isPaused()) {
+         renderer.getTextRenderer().addText("paused", "Paused", Gdx.graphics.getWidth() / 2 - 48, Gdx.graphics.getHeight() / 2 + 10);
          if (pausedPressed()) {
             globalState.getEvents().enqueue(new GameplayEvent(GameplayEventType.RESUME));
             return;

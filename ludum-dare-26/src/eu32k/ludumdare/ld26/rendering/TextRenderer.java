@@ -49,4 +49,9 @@ public class TextRenderer {
       this.textPositions.put(textKey, new Vector2(x, y));
    }
 
+   public void removeText(String string) {
+      this.textLines.remove(string);
+      this.textPositions.remove(string);
+   }
+
 }
