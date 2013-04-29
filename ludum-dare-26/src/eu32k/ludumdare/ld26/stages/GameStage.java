@@ -255,17 +255,17 @@ public class GameStage extends Stage {
    }
 
    private void handleRetry(float delta, boolean retry) {
+      retryTimer += delta;
       if(retry) {
-         retryTimer += delta;
          retry();
          quickRetry = true;
          return;
       } else {
          if(retryTimer > 0.05f) {
             retryTimer = 0;
-            this.quickRetry = false;
          }
       }
+      this.quickRetry = false;
    }
 
    private boolean pausedPressed() {
@@ -329,6 +329,6 @@ public class GameStage extends Stage {
       levelState.events.clear();
       levelState.initLevel();
       levelState.addRetryStatistics();
-      StateMachine.instance().enterState(LevelState.class);
+      StateMachine.instance().enterState(LevelInitState.class);
    }
 }
