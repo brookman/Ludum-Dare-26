@@ -61,12 +61,8 @@ public class MenuStage extends Stage {
       seedButton.addListener(new InputListener() {
          @Override
          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            seedMode();
             try {
-               long seedValue = Long.parseLong(seed.getText());
-               int width = Integer.parseInt(size.getText().split("x")[0]);
-               int height = Integer.parseInt(size.getText().split("x")[1]);
-               System.out.println("start seed mode " + width + "x" + height + " with seed " + seedValue);
+               seedMode();
             } catch (Exception e) {
                // ignore
             }
@@ -131,7 +127,7 @@ public class MenuStage extends Stage {
       if (Gdx.input.isKeyPressed(Input.Keys.C)) {
          challengeMode();
       } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-         seedMode();
+//         seedMode();
       }
       Color color = effects.getCurrentColor();
       challengeButton.setColor(color);
@@ -146,19 +142,26 @@ public class MenuStage extends Stage {
       super.draw();
    }
 
-   private void seedMode() {
+   private void startGame(long seed, int minWidth, int minHeight, int maxWidth, int maxHeight, int levelCount) {
       // TODO Auto-generated method stub
-
-   }
-
-   private void challengeMode() {
       LevelState levelState = StateMachine.instance().getState(LevelState.class);
       LevelConfigSequence levels = new LevelConfigSequence();
-      LevelConfigSequence.addLevelsToSequence(levels, 23, 3, 3, 12, 8, 25);
+      LevelConfigSequence.addLevelsToSequence(levels, seed, minWidth, minHeight, maxWidth, maxHeight, levelCount);
       levelState.setLevels(levels);
       levelState.initGame();
       levelState.initLevel();
       StateMachine.instance().enterState(LevelInitState.class);
+   }
+
+   private void challengeMode() {
+      this.startGame(23, 3, 3, 12, 8, 25);
+   }
+
+   private void seedMode() {
+      long seedValue = Long.parseLong(seed.getText());
+      int width = Integer.parseInt(size.getText().split("x")[0]);
+      int height = Integer.parseInt(size.getText().split("x")[1]);
+      startGame(seedValue, width, height, width, height, 100);
    }
 
 }
