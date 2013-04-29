@@ -38,12 +38,14 @@ public class EffectsManager implements IEventHandler {
 
    private GlobalState state;
 
+   private float musicVolume = 0.5f;
+
    public EffectsManager() {
       colors = new ColorPulseManager();
       addColor(12, 255, 0); // GREEN
       addColor(99, 255, 174); // Clear BLUE
-      addColor(20, 110, 255); //  BLUE
-      addColor(67, 25, 255); //  Dark BLUE
+      addColor(20, 110, 255); // BLUE
+      addColor(67, 25, 255); // Dark BLUE
       addColor(211, 20, 255); // VIOLET
       addColor(255, 15, 83); // Light VIOLET
       addColor(255, 21, 0); // Red
@@ -79,12 +81,22 @@ public class EffectsManager implements IEventHandler {
    public void handle(IEvent ev) {
       if (ev instanceof PlayPartEvent) {
          handlePlayPartEvent((PlayPartEvent) ev);
+      } else if (ev instanceof MusicEvent) {
+         boolean playMusic = ((MusicEvent) ev).getPlayMusic();
+         if (playMusic) {
+            musicVolume = 0.5f;
+         } else {
+            musicVolume = 0.0f;
+         }
+         if (music != null) {
+            music.setVolume(musicVolume);
+         }
       }
    }
 
    private void handlePlayPartEvent(PlayPartEvent ev) {
-      this.currentSong = ev.song;
-      this.currentPart = ev.part;
+      currentSong = ev.song;
+      currentPart = ev.part;
       switch (ev.song) {
       default:
          stop();
@@ -106,7 +118,7 @@ public class EffectsManager implements IEventHandler {
       case PART_BITBREAK_INTRO:
          colors.setBeatIntensity(ColorPulseManager.INTENSITY_EMPTY);
          colors.setSongIntensity(ColorPulseManager.INTENSITY_BITBREAK_INTRO);
-         colors.init( );
+         colors.init();
          play(TRACK_BITBREAK_INTRO, false);
          state.getEvents().enqueue(new PlayPartEvent(6f, SONG_BITBREAK, PART_BITBREAK_BODY));
          colors.setMinSongIntensity(0f);
@@ -137,7 +149,7 @@ public class EffectsManager implements IEventHandler {
       case PART_OTGY_INTRO:
          colors.setBeatIntensity(ColorPulseManager.INTENSITY_EMPTY);
          colors.setSongIntensity(ColorPulseManager.INTENSITY_FULL);
-        colors.init();
+         colors.init();
          play(TRACK_OTGY_INTRO, false);
          state.getEvents().enqueue(new PlayPartEvent(12f, SONG_OTGY, PART_OTGY_BODY));
          colors.setMinSongIntensity(0f);
@@ -153,7 +165,7 @@ public class EffectsManager implements IEventHandler {
       case PART_OTGY_OUTRO:
          colors.setBeatIntensity(ColorPulseManager.INTENSITY_BEAT);
          colors.setSongIntensity(ColorPulseManager.INTENSITY_FULL);
-        colors.init();
+         colors.init();
          play(TRACK_OTGY_OUTRO, false);
          colors.setMinSongIntensity(0f);
          break;
@@ -166,7 +178,7 @@ public class EffectsManager implements IEventHandler {
       }
       music = Gdx.audio.newMusic(Gdx.files.getFileHandle(track, FileType.Internal));
       music.setLooping(loop);
-      music.setVolume(0.5f);
+      music.setVolume(musicVolume);
       music.play();
 
    }
@@ -177,8 +189,9 @@ public class EffectsManager implements IEventHandler {
       colors.setSongIntensity(ColorPulseManager.INTENSITY_EMPTY);
       colors.init();
 
-      if (music != null)
+      if (music != null) {
          music.stop();
+      }
       currentSong = 0;
       currentPart = 0;
    }
