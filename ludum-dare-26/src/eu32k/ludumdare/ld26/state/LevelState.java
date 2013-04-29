@@ -10,6 +10,7 @@ import eu32k.ludumdare.ld26.effects.IRunningEffect;
 import eu32k.ludumdare.ld26.events.EventQueue;
 import eu32k.ludumdare.ld26.level.Level;
 import eu32k.ludumdare.ld26.level.Tile;
+import eu32k.ludumdare.ld26.objects.Goal;
 import eu32k.ludumdare.ld26.rendering.TextConsole;
 
 public class LevelState extends GameState {
@@ -26,7 +27,9 @@ public class LevelState extends GameState {
    public Tile toPop;
    public Tile spawned;
    public Tile playerTile;
-
+   
+   private Goal goal;
+   
    public float deathConditionTimer;
 
    public EventQueue events;
@@ -70,6 +73,7 @@ public class LevelState extends GameState {
 
    public void setLevel(Level level) {
       this.level = level;
+      goal = new Goal(0, 0);
    }
 
    public List<IRunningEffect> getRunningEffects() {
@@ -126,5 +130,13 @@ public class LevelState extends GameState {
 
    public boolean isPaused() {
       return this.paused;
+   }
+
+   public Goal getGoal() {
+      return goal;
+   }
+
+   public void setGoal(Goal goal) {
+      this.goal = goal;
    }
 }

@@ -13,17 +13,17 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.effects.IRunningEffect;
-import eu32k.ludumdare.ld26.effects.TileFade;
-import eu32k.ludumdare.ld26.effects.TileMove;
+import eu32k.ludumdare.ld26.gameplay.GameEventHandler;
 import eu32k.ludumdare.ld26.gameplay.GameplayEvent;
 import eu32k.ludumdare.ld26.gameplay.GameplayEvent.GameplayEventType;
-import eu32k.ludumdare.ld26.gameplay.GameEventHandler;
 import eu32k.ludumdare.ld26.level.Level;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.level.TileSpawner;
 import eu32k.ludumdare.ld26.objects.Player;
 import eu32k.ludumdare.ld26.rendering.MainRenderer;
+import eu32k.ludumdare.ld26.state.GameState;
 import eu32k.ludumdare.ld26.state.GlobalState;
+import eu32k.ludumdare.ld26.state.LevelLosingState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.PlayerState;
 import eu32k.ludumdare.ld26.state.StateMachine;
@@ -107,6 +107,18 @@ public class GameStage extends Stage {
          }
 
       }
+      GameState currentState = StateMachine.instance().getCurrentState();
+      if(currentState instanceof LevelLosingState)
+      {
+         LevelLosingState lState = (LevelLosingState)currentState;
+         if(lState.handleKeys(delta)
+               && (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)
+                     || (Gdx.input.isTouched())))
+         {
+            globalState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, 0, GameplayEvent.PARAM_LOSE_TOLOST));
+            
+         }
+      }
       // tileAnimator.update(delta);
 
       camera.position.x = level.getWidth() / 2.0f;
@@ -114,7 +126,7 @@ public class GameStage extends Stage {
       camera.update();
 
       // rendering ------------------------------------
-      renderer.render(delta, camera, level.getTiles(), player, effects.getCurrentColor());
+      renderer.render(delta, camera, level.getTiles(), player, levelState.getGoal(), effects.getCurrentColor());
    }
 
    private void checkingGameConditions(float delta) {
@@ -131,7 +143,7 @@ public class GameStage extends Stage {
                }
             }
             if (movingTileInvolved && count > 1) {
-               levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, GameplayEvent.PARAM_LOSE_SQUASHED));
+               levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, 0, GameplayEvent.PARAM_LOSE_SQUASHED));
             }
          }
       }
@@ -139,7 +151,7 @@ public class GameStage extends Stage {
       if (levelState.playerTile == null) {
          levelState.deathConditionTimer += delta;
          if (levelState.deathConditionTimer > 0.05) {
-            levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, GameplayEvent.PARAM_LOSE_FALLOFFBOARD));
+            levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE,  0, GameplayEvent.PARAM_LOSE_FALLOFFBOARD));
          }
       } else {
          levelState.deathConditionTimer = 0;

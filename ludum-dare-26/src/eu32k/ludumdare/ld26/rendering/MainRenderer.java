@@ -18,6 +18,7 @@ import com.badlogic.gdx.math.Vector3;
 import eu32k.ludumdare.ld26.Config;
 import eu32k.ludumdare.ld26.MultiLayerSprite;
 import eu32k.ludumdare.ld26.level.Tile;
+import eu32k.ludumdare.ld26.objects.Goal;
 import eu32k.ludumdare.ld26.objects.Player;
 
 public class MainRenderer {
@@ -67,10 +68,10 @@ public class MainRenderer {
       // System.out.println(background.getLog());
    }
 
-   public void render(float delta, Camera camera, List<Tile> tiles, Player player, Color color) {
+   public void render(float delta, Camera camera, List<Tile> tiles, Player player, Goal goal, Color color) {
       mainBuffer.begin();
 
-      render(true, camera, tiles, player, color);
+      render(true, camera, tiles, player, goal, color);
       // renderDebug(camera, tiles);
 
       hudBatch.begin();
@@ -83,7 +84,7 @@ public class MainRenderer {
       mainBuffer.end();
 
       secondaryBuffer.begin();
-      render(false, camera, tiles, player, color);
+      render(false, camera, tiles, player, goal, color);
       secondaryBuffer.end();
 
       Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
@@ -136,7 +137,7 @@ public class MainRenderer {
       debugRenderer.end();
    }
 
-   private void render(boolean bg, Camera camera, List<Tile> tiles, Player player, Color color) {
+   private void render(boolean bg, Camera camera, List<Tile> tiles, Player player, Goal goal, Color color) {
 
       Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
@@ -180,6 +181,16 @@ public class MainRenderer {
       player.getSprite().activateLayer(1);
       player.getSprite().setColor(color);
       player.draw(batch);
+
+      if (bg) {
+         goal.getSprite().activateLayer(0);
+         goal.getSprite().setColor(Color.WHITE);
+         goal.draw(batch);
+      }
+
+      goal.getSprite().activateLayer(1);
+      goal.getSprite().setColor(color);
+      goal.draw(batch);
 
       batch.end();
 

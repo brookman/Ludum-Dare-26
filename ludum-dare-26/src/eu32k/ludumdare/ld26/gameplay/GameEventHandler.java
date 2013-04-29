@@ -4,6 +4,7 @@ import eu32k.ludumdare.ld26.events.IEvent;
 import eu32k.ludumdare.ld26.events.IEventHandler;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelLosingState;
+import eu32k.ludumdare.ld26.state.LevelLostState;
 import eu32k.ludumdare.ld26.state.LevelPauseState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.LevelWinningState;
@@ -41,6 +42,7 @@ public class GameEventHandler implements IEventHandler {
             StateMachine.instance().enterState(LevelWinningState.class);
             break;
          case LOSE:
+            
             String death = "LOST";
             switch(event.getParam())
             {
@@ -53,6 +55,9 @@ public class GameEventHandler implements IEventHandler {
             case GameplayEvent.PARAM_LOSE_TIMEOUT:
                death = "Time is up";
                break;
+            case GameplayEvent.PARAM_LOSE_TOLOST:
+               StateMachine.instance().enterState(LevelLostState.class);
+               return;
             }
             
             levelState.log(death);
