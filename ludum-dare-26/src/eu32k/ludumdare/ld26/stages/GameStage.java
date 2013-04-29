@@ -116,6 +116,7 @@ public class GameStage extends Stage {
             globalState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, 0, GameplayEvent.PARAM_LOSE_TOLOST));
 
          }
+         lState.update(delta);
       }
       else if(currentState instanceof LevelInitState){
          LevelInitState lis = (LevelInitState) currentState;

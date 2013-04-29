@@ -1,5 +1,7 @@
 package eu32k.ludumdare.ld26.effects;
 
+import com.badlogic.gdx.math.Interpolation;
+
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.StateMachine;
@@ -7,9 +9,10 @@ import eu32k.ludumdare.ld26.state.StateMachine;
 public class TileFade implements IRunningEffect {
    private boolean complete;
    private Tile tile;
-   private float speed;
+   private float timer;
    private LevelState levelState;
    private float currentAlpha;
+   private float fadeTime;
    
    /* (non-Javadoc)
     * @see eu32k.ludumdare.ld26.effects.IUpdateUntilComplete#complete()
@@ -25,11 +28,12 @@ public class TileFade implements IRunningEffect {
       this.currentAlpha = 1;
    }
    
-   public void initFade(Tile tile, float speed)
+   public void initFade(Tile tile, float fadeTime)
    {
+      timer = 0f;
       this.tile = tile;
       complete = false;
-      this.speed = speed;
+      this.fadeTime = fadeTime;
    }
    
    /* (non-Javadoc)
@@ -37,10 +41,14 @@ public class TileFade implements IRunningEffect {
     */
    @Override
    public void update(float delta) {
-      currentAlpha -= (delta);
+      timer += delta;
+      float value = (timer / fadeTime);
+      currentAlpha = Interpolation.linear.apply(1f, 0f, value);
+      System.out.println(Float.toString(currentAlpha));
       if(currentAlpha < 0) {
          currentAlpha = 0;
          complete = true;
+         
          tile.setDead(true);
          levelState.getEvents().enqueue(new FadeComplete(this));
       }
