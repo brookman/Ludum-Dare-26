@@ -36,7 +36,6 @@ public class TileFade {
    
    public void update(float delta) {
       currentAlpha -= (delta);
-      System.out.println(currentAlpha);
       if(currentAlpha < 0) {
          currentAlpha = 0;
          complete = true;

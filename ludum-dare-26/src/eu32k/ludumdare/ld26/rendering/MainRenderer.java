@@ -64,7 +64,7 @@ public class MainRenderer {
       horizontalBlur = new AdvancedShader(Gdx.files.internal("shaders/simple.vsh").readString(), Gdx.files.internal("shaders/blur_h.fsh").readString());
 
       background = new AdvancedShader(Gdx.files.internal("shaders/simple.vsh").readString(), Gdx.files.internal("shaders/background.fsh").readString());
-      System.out.println(background.getLog());
+      //System.out.println(background.getLog());
    }
 
    public void render(float delta, Camera camera, List<Tile> tiles, Player player, Color color) {

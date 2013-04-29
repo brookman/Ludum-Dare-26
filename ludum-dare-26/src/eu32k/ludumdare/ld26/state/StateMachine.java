@@ -44,7 +44,8 @@ public class StateMachine {
 			if (current.getTransitions().contains(stateClass)) {
 				changeCurrentState(stateClass);
 			} else {
-				System.out.println("State has no transition to "+stateClass.getName());
+				//TODO: Logging
+			   //System.out.println("State has no transition to "+stateClass.getName());
 			}
 		}
 		return (T) current;

@@ -48,7 +48,6 @@ public class Level {
          }
       }
       placeNeighbors();
-      System.out.println(tiles);
    }
 
    private Tile createRandomTile(float x, float y) {
@@ -79,7 +78,6 @@ public class Level {
                east = tileMatrix[i][j + 1];
                addNeighbor(tile, east, Direction.E);
             }
-            System.out.println(tile.getType());
          }
       }
    }
@@ -91,7 +89,6 @@ public class Level {
    }
 
    public Tile spawnTile() {
-      System.out.println("spawn tile");
       List<Tile> edgeTiles = new ArrayList<Tile>();
       for (Tile tile : tiles) {
          if (tile.getNeighbors().size() < 4) {
@@ -115,7 +112,6 @@ public class Level {
       }
       int dirRand = tileRandom.nextInt(freeDirs.size());
       Direction dir = freeDirs.get(dirRand);
-      System.out.println(dir);
       float x, y;
       switch (dir) {
       case S:
