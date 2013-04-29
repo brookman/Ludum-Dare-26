@@ -15,14 +15,16 @@ public class SoundButton {
    private static SpriteBatch batch;
    private static Sprite sprite;
 
+   private static final float size = 24.0f;
+
    public static void init() {
       batch = new SpriteBatch();
       sprite = new Sprite(Textures.get("textures/sound.png"));
-      sprite.setSize(20.0f, 20.0f);
+      sprite.setSize(size, size);
    }
 
    private static void check() {
-      if (Gdx.input.getX() > Gdx.graphics.getWidth() - 20 && Gdx.input.getY() < 20 && Gdx.input.isTouched()) {
+      if (Gdx.input.getX() > Gdx.graphics.getWidth() - size && Gdx.input.getY() < size && Gdx.input.isTouched()) {
          isPressed = true;
       } else {
          if (isPressed) {
@@ -35,7 +37,7 @@ public class SoundButton {
 
    public static void draw() {
       check();
-      sprite.setPosition(Gdx.graphics.getWidth() - 20, Gdx.graphics.getHeight() - 20);
+      sprite.setPosition(Gdx.graphics.getWidth() - size, Gdx.graphics.getHeight() - size);
       batch.begin();
       sprite.draw(batch);
       batch.end();
