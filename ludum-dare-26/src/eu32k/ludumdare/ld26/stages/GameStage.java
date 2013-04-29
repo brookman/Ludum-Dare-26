@@ -119,7 +119,7 @@ public class GameStage extends Stage {
       else if(currentState instanceof LevelInitState){
          LevelInitState lis = (LevelInitState) currentState;
          lis.update(delta);
-         
+         lis.setColors(mainColor, playerColor, inverseColor);
       }
       // tileAnimator.update(delta);
 
