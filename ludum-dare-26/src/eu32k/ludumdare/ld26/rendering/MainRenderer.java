@@ -200,9 +200,9 @@ public class MainRenderer {
 
       float deltaTime = paused ? 0 : Gdx.graphics.getDeltaTime();
       player.getSprite().activateLayer(1);
-      player.getSprite().setColor(color);
+      player.getSprite().setColor(inverseColor);
       player.draw(batch);
-      player.getEffect().draw(batch, color, deltaTime);
+      player.getEffect().draw(batch, inverseColor, deltaTime);
 
       if (bg) {
          goal.getSprite().activateLayer(0);
