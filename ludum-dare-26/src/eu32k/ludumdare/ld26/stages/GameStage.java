@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -17,14 +18,13 @@ import eu32k.ludumdare.ld26.gameplay.GameEventHandler;
 import eu32k.ludumdare.ld26.gameplay.GameplayEvent;
 import eu32k.ludumdare.ld26.gameplay.GameplayEvent.GameplayEventType;
 import eu32k.ludumdare.ld26.level.Level;
-import eu32k.ludumdare.ld26.level.LevelConfigSequence;
 import eu32k.ludumdare.ld26.level.Tile;
-import eu32k.ludumdare.ld26.level.TileSpawner;
 import eu32k.ludumdare.ld26.objects.Goal;
 import eu32k.ludumdare.ld26.objects.Player;
 import eu32k.ludumdare.ld26.rendering.MainRenderer;
 import eu32k.ludumdare.ld26.state.GameState;
 import eu32k.ludumdare.ld26.state.GlobalState;
+import eu32k.ludumdare.ld26.state.LevelInitState;
 import eu32k.ludumdare.ld26.state.LevelLosingState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.PlayerState;
@@ -101,6 +101,13 @@ public class GameStage extends Stage {
          }
 
       }
+      Color mainColor = effects.getCurrentColor();
+      Color inverseColor = new Color();
+      inverseColor.r = 1f - mainColor.r;
+      inverseColor.g = 1f - mainColor.g;
+      inverseColor.b = 1f- mainColor.b;
+      inverseColor.a = 1f;
+      Color playerColor = new Color(inverseColor);
       GameState currentState = StateMachine.instance().getCurrentState();
       if (currentState instanceof LevelLosingState) {
          LevelLosingState lState = (LevelLosingState) currentState;
@@ -108,6 +115,11 @@ public class GameStage extends Stage {
             globalState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, 0, GameplayEvent.PARAM_LOSE_TOLOST));
 
          }
+      }
+      else if(currentState instanceof LevelInitState){
+         LevelInitState lis = (LevelInitState) currentState;
+         lis.update(delta);
+         
       }
       // tileAnimator.update(delta);
 
@@ -117,7 +129,7 @@ public class GameStage extends Stage {
 
       renderer.setPaused(levelState.isPaused());
       // rendering ------------------------------------
-      renderer.render(delta, camera, level.getTiles(), player, levelState.getGoal(), effects.getCurrentColor());
+      renderer.render(delta, camera, level.getTiles(), player, levelState.getGoal(), mainColor, playerColor, inverseColor);
    }
 
    private void repositionGoal() {

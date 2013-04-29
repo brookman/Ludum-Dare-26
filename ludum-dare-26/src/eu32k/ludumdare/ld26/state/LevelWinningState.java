@@ -10,6 +10,7 @@ public class LevelWinningState extends GameState {
       transitions.add(LevelWonState.class);
       transitions.add(LevelState.class);
       transitions.add(MenuState.class);      
+      transitions.add(LevelInitState.class);
    }
 
    

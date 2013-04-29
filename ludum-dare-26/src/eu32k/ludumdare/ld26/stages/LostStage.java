@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import eu32k.libgdx.rendering.Textures;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.rendering.Background;
+import eu32k.ludumdare.ld26.state.LevelInitState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.MenuState;
 import eu32k.ludumdare.ld26.state.StateMachine;
@@ -50,7 +51,7 @@ public class LostStage extends Stage {
             levelState.events.clear();
             levelState.initLevel();
             levelState.addRetryStatistics();
-            StateMachine.instance().enterState(LevelState.class);
+            StateMachine.instance().enterState(LevelInitState.class);
             return false;
          }
       });

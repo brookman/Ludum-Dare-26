@@ -16,6 +16,7 @@ import eu32k.libgdx.rendering.Textures;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.level.LevelConfigSequence;
 import eu32k.ludumdare.ld26.rendering.Background;
+import eu32k.ludumdare.ld26.state.LevelInitState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
@@ -49,11 +50,11 @@ public class MenuStage extends Stage {
             //TODO: Move this shit into levelstate
             LevelState levelState = StateMachine.instance().getState(LevelState.class);
             LevelConfigSequence levels = new LevelConfigSequence();
-            LevelConfigSequence.addLevelsToSequence(levels, 49034324, 3, 3, 12, 8, 25);
+            LevelConfigSequence.addLevelsToSequence(levels, 92309, 3, 3, 12, 8, 25);
             levelState.setLevels(levels);
             levelState.initGame();
             levelState.initLevel();
-            StateMachine.instance().enterState(LevelState.class);
+            StateMachine.instance().enterState(LevelInitState.class);
             return false;
          }
       });

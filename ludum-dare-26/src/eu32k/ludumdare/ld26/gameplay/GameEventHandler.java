@@ -6,6 +6,7 @@ import eu32k.ludumdare.ld26.events.IEventHandler;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.state.GameState;
 import eu32k.ludumdare.ld26.state.GlobalState;
+import eu32k.ludumdare.ld26.state.LevelInitState;
 import eu32k.ludumdare.ld26.state.LevelLosingState;
 import eu32k.ludumdare.ld26.state.LevelLostState;
 import eu32k.ludumdare.ld26.state.LevelPauseState;
@@ -75,7 +76,7 @@ public class GameEventHandler implements IEventHandler {
                {
                   System.out.println(statistic + ": " + Integer.toString(ps.genericStatistics.get(statistic)));
                }
-               StateMachine.instance().enterState(LevelState.class);
+               StateMachine.instance().enterState(LevelInitState.class);
             } else {
                StateMachine.instance().enterState(MenuState.class);
             }
@@ -103,6 +104,9 @@ public class GameEventHandler implements IEventHandler {
             }
             return;
          }
+         break;
+      case START_GAME:
+         StateMachine.instance().enterState(LevelState.class);
          break;
       }
    }

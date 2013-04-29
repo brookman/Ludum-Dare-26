@@ -6,6 +6,7 @@ public class LevelLostState extends GameState {
    public void init() {
       transitions.add(LevelState.class);
       transitions.add(MenuState.class);
+      transitions.add(LevelInitState.class);
    }
 
    @Override
