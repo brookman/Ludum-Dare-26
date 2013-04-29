@@ -8,6 +8,8 @@ import eu32k.ludumdare.ld26.MultiLayerSprite;
 
 public class Tile {
 
+   private boolean dead;
+   
    public enum Type {
       L, I, X, T // L Shape, I Shape, X Shape (+ Shape), T Shape
    }
@@ -98,5 +100,13 @@ public class Tile {
 
    public Bounds getBounds() {
       return TileBoundingBoxes.getNormalizedBounds(type, rotation);
+   }
+
+   public boolean isDead() {
+      return dead;
+   }
+
+   public void setDead(boolean dead) {
+      this.dead = dead;
    }
 }

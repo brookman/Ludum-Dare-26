@@ -6,7 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 import eu32k.ludumdare.ld26.MultiLayerSprite;
 
 public abstract class GameObject {
-
+   private boolean freeMovement;
+   
    public Vector2 position;
    private float width, height;
    private MultiLayerSprite sprite;
@@ -40,5 +41,13 @@ public abstract class GameObject {
 
    public float getY() {
       return position.y + height / 2f;
+   }
+
+   public boolean isFreeMovement() {
+      return freeMovement;
+   }
+
+   public void setFreeMovement(boolean freeMovement) {
+      this.freeMovement = freeMovement;
    }
 }

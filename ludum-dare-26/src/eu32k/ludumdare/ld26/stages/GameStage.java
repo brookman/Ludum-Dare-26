@@ -90,6 +90,8 @@ public class GameStage extends Stage {
 
       if (running) {
 
+         repositionGoal();
+
          levelState.getEvents().tick(delta);
 
          tileSpawner.update(delta);
@@ -122,6 +124,13 @@ public class GameStage extends Stage {
 
       // rendering ------------------------------------
       renderer.render(delta, camera, level.getTiles(), player, levelState.getGoal(), effects.getCurrentColor());
+   }
+
+   private void repositionGoal() {
+      Goal goal = levelState.getGoal();
+      if (goal != null && !goal.isFreeMovement() && levelState.goalTile == null) {
+         levelState.repositionGoal();
+      }
    }
 
    private void checkingGameConditions(float delta) {
@@ -224,40 +233,42 @@ public class GameStage extends Stage {
    private void setPlayerAndGoalTile() {
       float px = player.position.x;
       float py = player.position.y;
+      Goal g = levelState.getGoal();
       boolean setPlayerTile = !(levelState.playerTile != null && levelState.playerTile.contains(px, py));
-      boolean setGoalTile = !(levelState.goalTile != null && levelState.goalTile.contains(px, py));
-
-      if (setPlayerTile ) {
+      boolean setGoalTile = !(levelState.goalTile != null && levelState.playerTile.contains(g.getX(), g.getY()));
+      
+      if (setPlayerTile) {
          Tile t = findPlayerTile();
          levelState.playerTile = t;
          if (t != null) {
             renderer.getConsole().addLine("Player entered tile on position: " + Float.toString(t.getX()) + "/" + Float.toString(t.getY()));
          }
       }
-      if(setGoalTile){
+      if (setGoalTile) {
          Tile t = findGoalTile();
          levelState.goalTile = t;
          if (t != null) {
             renderer.getConsole().addLine("Goal entered tile on position: " + Float.toString(t.getX()) + "/" + Float.toString(t.getY()));
          }
-         
+
       }
    }
 
    private Tile findPlayerTile() {
       List<Tile> tiles = levelState.getLevel().getTiles();
       for (Tile tile : tiles) {
-         if (tile.contains(player.position.x, player.position.y)) {
+         if (!tile.isDead() && tile.contains(player.position.x, player.position.y)) {
             return tile;
          }
       }
       return null;
    }
+
    private Tile findGoalTile() {
       Goal goal = levelState.getGoal();
       List<Tile> tiles = levelState.getLevel().getTiles();
       for (Tile tile : tiles) {
-         if (tile.contains(goal.position.x, goal.position.y)) {
+         if (!tile.isDead() && tile.contains(goal.position.x, goal.position.y)) {
             return tile;
          }
       }

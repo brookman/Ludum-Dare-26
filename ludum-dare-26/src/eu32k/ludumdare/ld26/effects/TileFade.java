@@ -1,8 +1,6 @@
 package eu32k.ludumdare.ld26.effects;
 
-import eu32k.ludumdare.ld26.events.EventQueue;
 import eu32k.ludumdare.ld26.level.Tile;
-import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
@@ -43,6 +41,7 @@ public class TileFade implements IRunningEffect {
       if(currentAlpha < 0) {
          currentAlpha = 0;
          complete = true;
+         tile.setDead(true);
          levelState.getEvents().enqueue(new FadeComplete(this));
       }
       tile.setAlpha(currentAlpha);
