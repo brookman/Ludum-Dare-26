@@ -116,7 +116,7 @@ public class GameStage extends Stage {
             }
             if(count > 1)
             {
-               globalState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE));               
+               globalState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, GameplayEvent.PARAM_LOSE_SQUASHED));               
             }
          }
       }
@@ -126,7 +126,7 @@ public class GameStage extends Stage {
       if(levelState.playerTile == null) {
          levelState.deathConditionTimer += delta;
          if(levelState.deathConditionTimer > 0.05) {
-            globalState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE));
+            globalState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, GameplayEvent.PARAM_LOSE_SQUASHED));
          }
       } else {
          levelState.deathConditionTimer = 0;
