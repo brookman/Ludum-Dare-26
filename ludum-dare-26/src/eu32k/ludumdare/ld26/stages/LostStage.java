@@ -2,6 +2,7 @@ package eu32k.ludumdare.ld26.stages;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -38,7 +39,7 @@ public class LostStage extends Stage {
       table.setFillParent(true);
       table.center();
 
-      title = new Image(Textures.get("textures/title.png"));
+      title = new Image(new TextureRegion(Textures.get("textures/title.png"), 256, 64));
 
       challengeButton = new TextButton("Retry", skin);
       challengeButton.setColor(Color.CYAN);
