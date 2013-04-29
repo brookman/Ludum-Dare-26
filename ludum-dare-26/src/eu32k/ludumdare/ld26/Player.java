@@ -17,6 +17,8 @@ public class Player extends GameObject {
    public static final float SPEED = 1.4f;
    private Texture[] textures = new Texture[2];
 
+   private boolean movingWithTile = false;
+   
    public Player(float x, float y) {
       super(new Vector2(x - WIDTH / 2.0f, y - WIDTH / 2.0f), WIDTH, HEIGHT);
    }
@@ -58,14 +60,21 @@ public class Player extends GameObject {
       }
    }
 
-   private boolean canMove(Vector2 newPos, List<Tile> tiles) {
+   public boolean canMove(Vector2 newPos, List<Tile> tiles) {
       Vector2 posShifted = new Vector2(newPos.x - RADIUS / 2.0f, newPos.y - RADIUS / 2.0f);
-      for (Tile tile : tiles) {
-         for (Rectangle tileBound : tile.getBounds()) {
-            if (intersects(posShifted, RADIUS, tileBound)) {
-               return false;
-            }
 
+
+      for (Tile tile : tiles) {
+         if(!canMoveIntoTile(posShifted, tile))
+            return false;
+      }
+      return true;
+   }
+
+   public boolean canMoveIntoTile(Vector2 posShifted, Tile tile) {
+      for (Rectangle tileBound : tile.getBounds()) {
+         if (intersects(posShifted, RADIUS, tileBound)) {
+            return false;
          }
       }
       return true;
@@ -91,5 +100,18 @@ public class Player extends GameObject {
       float cornerDistanceSq = (circleDistance.x - rect.width / 2) * (circleDistance.x - rect.width / 2) + (circleDistance.y - rect.height / 2) * (circleDistance.y - rect.height / 2);
 
       return cornerDistanceSq <= radius * radius;
+   }
+
+   public boolean isMovingWithTile() {
+      return movingWithTile;
+   }
+
+   public void setMovingWithTile(boolean movingWithTile) {
+      this.movingWithTile = movingWithTile;
+   }
+   
+   public Vector2 getShiftedPosition()
+   {
+      return position;
    }
 }
