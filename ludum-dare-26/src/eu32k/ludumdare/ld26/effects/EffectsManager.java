@@ -148,7 +148,7 @@ public class EffectsManager implements IEventHandler {
          break;
       case PART_OTGY_INTRO:
          colors.setBeatIntensity(ColorPulseManager.INTENSITY_EMPTY);
-         colors.setSongIntensity(ColorPulseManager.INTENSITY_FULL);
+         colors.setSongIntensity(ColorPulseManager.INTENSITY_OTGY_INTRO);
          colors.init();
          play(TRACK_OTGY_INTRO, false);
          state.getEvents().enqueue(new PlayPartEvent(12f, SONG_OTGY, PART_OTGY_BODY));

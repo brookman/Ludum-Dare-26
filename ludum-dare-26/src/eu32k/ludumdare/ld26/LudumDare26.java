@@ -48,7 +48,7 @@ public class LudumDare26 extends SimpleGame {
       SoundButton.init();
 
       effects = new EffectsManager();
-      effects.initOtgy(0);
+      effects.initOtgy(1000);
 
       menuStage = new MenuStage(effects);
       gameStage = new GameStage(effects);
