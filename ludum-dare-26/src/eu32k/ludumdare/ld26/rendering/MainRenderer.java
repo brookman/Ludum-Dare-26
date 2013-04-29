@@ -64,7 +64,7 @@ public class MainRenderer {
       horizontalBlur = new AdvancedShader(Gdx.files.internal("shaders/simple.vsh").readString(), Gdx.files.internal("shaders/blur_h.fsh").readString());
 
       background = new AdvancedShader(Gdx.files.internal("shaders/simple.vsh").readString(), Gdx.files.internal("shaders/background.fsh").readString());
-      //System.out.println(background.getLog());
+      // System.out.println(background.getLog());
    }
 
    public void render(float delta, Camera camera, List<Tile> tiles, Player player, Color color) {
@@ -122,7 +122,7 @@ public class MainRenderer {
       debugRenderer.begin(ShapeType.FilledRectangle);
       debugRenderer.setColor(new Color(1.0f, 1.0f, 1.0f, 0.05f));
       for (Tile tile : tiles) {
-         for (Rectangle rect : tile.getBounds()) {
+         for (Rectangle rect : tile.getBounds().boundingBoxes) {
             debugRenderer.filledRect(rect.x, rect.y, rect.width, rect.height);
          }
       }
@@ -168,7 +168,7 @@ public class MainRenderer {
          sprite.setColor(color);
          sprite.draw(batch);
          color.a = oldAlpha;
-         
+
       }
 
       if (bg) {

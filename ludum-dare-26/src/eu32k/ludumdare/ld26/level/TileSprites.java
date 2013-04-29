@@ -17,10 +17,6 @@ public class TileSprites {
       return sprites[type.ordinal()][rotation.ordinal()];
    }
 
-   // public static List<Rectangle> getBounds(Sprite sprite, float x, float y) {
-   // return sprites[type.ordinal()][rotation.ordinal()];
-   // }
-
    // ------------------------------------------------------------
 
    private static final float S = 108;
@@ -33,11 +29,6 @@ public class TileSprites {
    };
 
    public static void init() {
-      initSprites();
-      initBoundingBoxes();
-   }
-
-   private static void initSprites() {
       Texture layer1tex = Textures.get("textures/tiles2.png");
       Texture layer2tex = Textures.get("textures/tiles3.png");
 
@@ -53,9 +44,4 @@ public class TileSprites {
          }
       }
    }
-
-   private static void initBoundingBoxes() {
-
-   }
-
 }

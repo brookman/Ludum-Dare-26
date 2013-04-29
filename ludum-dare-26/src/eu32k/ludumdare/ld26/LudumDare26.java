@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import eu32k.libgdx.SimpleGame;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
+import eu32k.ludumdare.ld26.level.TileBoundingBoxes;
 import eu32k.ludumdare.ld26.level.TileSprites;
 import eu32k.ludumdare.ld26.stages.GameStage;
 import eu32k.ludumdare.ld26.stages.LostStage;
@@ -26,7 +27,6 @@ public class LudumDare26 extends SimpleGame {
    private MenuStage menuStage;
    private GameStage gameStage;
    private LostStage lostStage;
-   private Stage currentStage;
 
    public LudumDare26() {
       super(false);
@@ -42,6 +42,9 @@ public class LudumDare26 extends SimpleGame {
 
    @Override
    public void init() {
+      TileSprites.init();
+      TileBoundingBoxes.init();
+
       effects = new EffectsManager();
       effects.initOtgy(0);
 
@@ -55,16 +58,13 @@ public class LudumDare26 extends SimpleGame {
       StateMachine.instance().getState(LevelLostState.class).setStage(lostStage);
       StateMachine.instance().enterState(MenuState.class);
 
-      TileSprites.init();
    }
 
    @Override
    public void draw(float delta) {
       StateMachine.instance().getState(GlobalState.class).getEvents().tick(delta);
       effects.update(delta);
-      // if (currentStage == null) {
-      // selectStage(menuStage);
-      // }
+
       Stage current = StateMachine.instance().getCurrentState().getStage();
       if (current != null) {
          Gdx.input.setInputProcessor(current);
