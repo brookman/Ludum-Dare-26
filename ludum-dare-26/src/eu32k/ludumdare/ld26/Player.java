@@ -19,8 +19,6 @@ public class Player extends GameObject {
 
    public static final float WIDTH = RADIUS * 2.0f, HEIGHT = RADIUS * 2.0f;
 
-   private Texture[] textures = new Texture[2];
-
    private boolean movingWithTile = false;
 
    public Player(float x, float y) {
@@ -38,11 +36,6 @@ public class Player extends GameObject {
       MultiLayerSprite sprite = new MultiLayerSprite(layer1reg, layer2reg);
       sprite.setSize(WIDTH, HEIGHT);
       return sprite;
-   }
-
-   @Override
-   public Texture[] getTextures() {
-      return textures;
    }
 
    public void move(Vector2 velocity, List<Tile> tiles) {

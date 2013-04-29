@@ -1,6 +1,5 @@
 package eu32k.ludumdare.ld26;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
@@ -16,8 +15,6 @@ public abstract class GameObject {
       this.height = height;
       sprite = loadSprite();
    }
-
-   public abstract Texture[] getTextures();
 
    public abstract MultiLayerSprite loadSprite();
 
