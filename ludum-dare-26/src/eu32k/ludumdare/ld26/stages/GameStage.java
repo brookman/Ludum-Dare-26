@@ -77,15 +77,9 @@ public class GameStage extends Stage {
 
    @Override
    public void draw() {
+      boolean running = levelState.isRunning();
       float delta = Gdx.graphics.getDeltaTime();
 
-      // player inputs --------------------------------
-      boolean up = Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP);
-      boolean down = Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN);
-      boolean left = Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT);
-      boolean right = Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT);
-
-      boolean escapePressed = Gdx.input.isKeyPressed(Input.Keys.ESCAPE);
 
       // updates --------------------------------------
       setPlayerTile();
@@ -132,6 +126,28 @@ public class GameStage extends Stage {
          levelState.deathConditionTimer = 0;
       }
 
+      updatePlayerInput(delta);
+
+      tileSpawner.update(delta);
+      // tileAnimator.update(delta);
+
+      camera.position.x = level.getWidth() / 2.0f;
+      camera.position.y = level.getHeight() / 2.0f;
+      camera.update();
+
+      // rendering ------------------------------------
+      renderer.render(delta, camera, level.getTiles(), player, effects.getCurrentColor());
+   }
+
+   private void updatePlayerInput(float delta) {
+      // player inputs --------------------------------
+      boolean up = Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP);
+      boolean down = Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN);
+      boolean left = Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT);
+      boolean right = Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT);
+
+      boolean escapePressed = Gdx.input.isKeyPressed(Input.Keys.ESCAPE);
+
       Vector2 velocity = new Vector2(0.0f, 0.0f);
       if (up) {
          velocity.add(new Vector2(0.0f, 1.0f));
@@ -157,16 +173,6 @@ public class GameStage extends Stage {
       if (escapePressed) {
          effects.stopSong(null);
       }
-
-      tileSpawner.update(delta);
-      // tileAnimator.update(delta);
-
-      camera.position.x = level.getWidth() / 2.0f;
-      camera.position.y = level.getHeight() / 2.0f;
-      camera.update();
-
-      // rendering ------------------------------------
-      renderer.render(delta, camera, level.getTiles(), player, effects.getCurrentColor());
    }
 
    private void fadeTiles(float delta) {
