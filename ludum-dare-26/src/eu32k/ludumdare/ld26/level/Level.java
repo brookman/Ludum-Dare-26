@@ -120,6 +120,14 @@ public class Level {
             edgeTiles.add(tile);
          }
       }
+      if(edgeTiles.size() == 0)
+      {
+         for (Tile tile : tiles) {
+            if (tile.getNeighbors().size() < 4) {
+               edgeTiles.add(tile);
+            }
+         }
+      }
       int randomTile = tileRandom.nextInt(edgeTiles.size());
       
       Tile target = edgeTiles.get(randomTile);

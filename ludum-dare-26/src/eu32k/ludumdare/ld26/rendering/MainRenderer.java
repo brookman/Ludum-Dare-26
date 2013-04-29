@@ -25,7 +25,7 @@ import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class MainRenderer {
-
+   private Color inverseColor;
    private SpriteBatch batch;
    private SpriteBatch hudBatch;
    private ShapeRenderer debugRenderer;
@@ -69,6 +69,8 @@ public class MainRenderer {
 
       background = new AdvancedShader(Gdx.files.internal("shaders/simple.vsh").readString(), Gdx.files.internal("shaders/background.fsh").readString());
       // System.out.println(background.getLog());
+      
+      inverseColor = new Color();
    }
 
    public void render(float delta, Camera camera, List<Tile> tiles, Player player, Goal goal, Color color) {
@@ -155,6 +157,10 @@ public class MainRenderer {
       batch.begin();
       float oldAlpha = 0f;
       LevelState ls = StateMachine.instance().getState(LevelState.class);
+      inverseColor.r = 1f - color.r;
+      inverseColor.g = 1f - color.g;
+      inverseColor.b = 1f- color.b;
+      inverseColor.a = 1f;
       for (Tile tile : tiles) {
          MultiLayerSprite sprite = tile.getSprite();
 
@@ -167,11 +173,11 @@ public class MainRenderer {
             sprite.draw(batch);
          }
 
-         boolean isPlayerTile = ls.playerTile == tile;
+         boolean isPlayerTile = ls.playerTile == tile || ls.goalTile == tile;
          sprite.activateLayer(1);
          oldAlpha = color.a;
          color.a = tile.getAlpha();
-         sprite.setColor(isPlayerTile ? Color.RED : color);
+         sprite.setColor(isPlayerTile ? inverseColor : color);
          sprite.draw(batch);
          color.a = oldAlpha;
 
