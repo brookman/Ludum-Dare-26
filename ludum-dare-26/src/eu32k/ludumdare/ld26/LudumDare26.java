@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import eu32k.libgdx.SimpleGame;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
+import eu32k.ludumdare.ld26.effects.SoundButton;
 import eu32k.ludumdare.ld26.level.TileBoundingBoxes;
 import eu32k.ludumdare.ld26.level.TileSprites;
 import eu32k.ludumdare.ld26.stages.GameStage;
@@ -13,11 +14,11 @@ import eu32k.ludumdare.ld26.stages.MenuStage;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelLosingState;
 import eu32k.ludumdare.ld26.state.LevelLostState;
+import eu32k.ludumdare.ld26.state.LevelPauseState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.LevelWinningState;
 import eu32k.ludumdare.ld26.state.LevelWonState;
 import eu32k.ludumdare.ld26.state.MenuState;
-import eu32k.ludumdare.ld26.state.LevelPauseState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class LudumDare26 extends SimpleGame {
@@ -44,6 +45,7 @@ public class LudumDare26 extends SimpleGame {
    public void init() {
       TileSprites.init();
       TileBoundingBoxes.init();
+      SoundButton.init();
 
       effects = new EffectsManager();
       effects.initOtgy(0);
@@ -71,6 +73,7 @@ public class LudumDare26 extends SimpleGame {
          Gdx.input.setInputProcessor(current);
          current.draw();
       }
+      SoundButton.draw();
    }
 
    @Override
