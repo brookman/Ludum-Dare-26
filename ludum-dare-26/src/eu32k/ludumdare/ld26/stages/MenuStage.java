@@ -79,7 +79,7 @@ public class MenuStage extends Stage {
          }
       });
 
-      size = new TextField("3x3", skin) {
+      size = new TextField("10x8", skin) {
          @Override
          public float getPrefWidth() {
             return 50;
@@ -127,7 +127,7 @@ public class MenuStage extends Stage {
       if (Gdx.input.isKeyPressed(Input.Keys.C)) {
          challengeMode();
       } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-//         seedMode();
+         // seedMode();
       }
       Color color = effects.getCurrentColor();
       challengeButton.setColor(color);
@@ -154,7 +154,7 @@ public class MenuStage extends Stage {
    }
 
    private void challengeMode() {
-      this.startGame(939, 3, 3, 12, 8, 25);
+      startGame(939, 3, 3, 12, 8, 25);
    }
 
    private void seedMode() {
