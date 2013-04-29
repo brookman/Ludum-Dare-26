@@ -1,6 +1,7 @@
 package eu32k.ludumdare.ld26.stages;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
@@ -47,13 +48,7 @@ public class MenuStage extends Stage {
          @Override
          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             //TODO: Move this shit into levelstate
-            LevelState levelState = StateMachine.instance().getState(LevelState.class);
-            LevelConfigSequence levels = new LevelConfigSequence();
-            LevelConfigSequence.addLevelsToSequence(levels, 49034324, 3, 3, 12, 8, 25);
-            levelState.setLevels(levels);
-            levelState.initGame();
-            levelState.initLevel();
-            StateMachine.instance().enterState(LevelState.class);
+            challengeMode();
             return false;
          }
       });
@@ -63,7 +58,7 @@ public class MenuStage extends Stage {
       seedButton.addListener(new InputListener() {
          @Override
          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-
+            seedMode();
             return false;
          }
       });
@@ -94,6 +89,11 @@ public class MenuStage extends Stage {
 
    @Override
    public void draw() {
+      if(Gdx.input.isKeyPressed(Input.Keys.C)) {
+         challengeMode();
+      } else if(Gdx.input.isKeyPressed(Input.Keys.S)) {
+         seedMode();
+      }
       Color color = effects.getCurrentColor();
       challengeButton.setColor(color);
       seedButton.setColor(color);
@@ -102,6 +102,21 @@ public class MenuStage extends Stage {
 
       Background.getInstance().draw(new Vector3(color.r, color.g, color.b), false);
       super.draw();
+   }
+
+   private void seedMode() {
+      // TODO Auto-generated method stub
+      
+   }
+
+   private void challengeMode() {
+      LevelState levelState = StateMachine.instance().getState(LevelState.class);
+      LevelConfigSequence levels = new LevelConfigSequence();
+      LevelConfigSequence.addLevelsToSequence(levels, 49034324, 3, 3, 12, 8, 25);
+      levelState.setLevels(levels);
+      levelState.initGame();
+      levelState.initLevel();
+      StateMachine.instance().enterState(LevelState.class);
    }
 
 }

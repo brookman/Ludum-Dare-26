@@ -83,7 +83,7 @@ public class GameStage extends Stage {
 
       if (running) {
          
-         renderer.getTextRenderer().removeText("paused");
+         clearPauseScreen();
 
          repositionGoal();
 
@@ -95,7 +95,7 @@ public class GameStage extends Stage {
 
          updatePlayerInput(delta);
       } else if (levelState.isPaused()) {
-         renderer.getTextRenderer().addText("paused", "Paused", Gdx.graphics.getWidth() / 2 - 48, Gdx.graphics.getHeight() / 2 + 10);
+         drawPauseScreen();
          if (pausedPressed()) {
             globalState.getEvents().enqueue(new GameplayEvent(GameplayEventType.RESUME));
             return;
@@ -119,6 +119,14 @@ public class GameStage extends Stage {
       renderer.setPaused(levelState.isPaused());
       // rendering ------------------------------------
       renderer.render(delta, camera, level.getTiles(), player, levelState.getGoal(), effects.getCurrentColor());
+   }
+
+   private void drawPauseScreen() {
+      renderer.getTextRenderer().addText("paused", "Paused", Gdx.graphics.getWidth() / 2 - 48, Gdx.graphics.getHeight() / 2 + 10);
+   }
+
+   private void clearPauseScreen() {
+      renderer.getTextRenderer().removeText("paused");
    }
 
    private void printLevelProgress() {
