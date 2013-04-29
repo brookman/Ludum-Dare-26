@@ -71,6 +71,7 @@ public class GameEventHandler implements IEventHandler {
                StateMachine.instance().enterState(MenuState.class);
             }
          }
+         break;
       case WIN:
          levelState.log("WON");
          levelState.getEvents().clear();
