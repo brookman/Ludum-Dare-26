@@ -63,17 +63,13 @@ public class GameEventHandler implements IEventHandler {
          break;
       case NEXTLEVEL:
          GameState state = StateMachine.instance().getCurrentState();
-         if(state instanceof LevelWinningState || state instanceof LevelWonState)
-         {
-         if(levelState.getLevels().nextLevel())
-         {
-            levelState.initLevel();
-            StateMachine.instance().enterState(LevelState.class);            
-         }
-         else
-         {
-            StateMachine.instance().enterState(MenuState.class);
-         }
+         if (state instanceof LevelWinningState || state instanceof LevelWonState) {
+            if (levelState.getLevels().nextLevel()) {
+               levelState.initLevel();
+               StateMachine.instance().enterState(LevelState.class);
+            } else {
+               StateMachine.instance().enterState(MenuState.class);
+            }
          }
       case WIN:
          levelState.log("WON");

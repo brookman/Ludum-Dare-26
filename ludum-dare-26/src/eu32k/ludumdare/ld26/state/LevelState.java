@@ -181,6 +181,7 @@ public class LevelState extends GameState {
          tileSpawner = new TileSpawner();
       }
       events.clear();
+      runningEffects.clear();
       spawned = null;
       toPop = null;
       playerTile = null;
