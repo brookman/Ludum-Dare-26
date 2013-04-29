@@ -15,7 +15,7 @@ public class LevelLosingState extends GameState {
 
    @Override
    public void enter() {
-      StateMachine.instance().getState(GlobalState.class).getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, 10, GameplayEvent.PARAM_LOSE_TOLOST));
+      StateMachine.instance().getState(GlobalState.class).getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, 1, GameplayEvent.PARAM_LOSE_TOLOST));
       this.timer = 0f;
    }
 

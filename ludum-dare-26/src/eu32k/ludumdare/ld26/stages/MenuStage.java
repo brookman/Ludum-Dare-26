@@ -49,7 +49,7 @@ public class MenuStage extends Stage {
             //TODO: Move this shit into levelstate
             LevelState levelState = StateMachine.instance().getState(LevelState.class);
             LevelConfigSequence levels = new LevelConfigSequence();
-            LevelConfigSequence.addLevelsToSequence(levels, 9388, 4, 4, 12, 8, 10);
+            LevelConfigSequence.addLevelsToSequence(levels, 939847878, 4, 4, 12, 8, 25);
             levelState.setLevels(levels);
             levelState.initLevel();
             StateMachine.instance().enterState(LevelState.class);
