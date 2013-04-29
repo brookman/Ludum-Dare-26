@@ -53,24 +53,37 @@ public class TileMove {
    public void update(float delta) {
       float x = tile.getX();
       float y = tile.getY();
+      
+      //Player offset to tile... used in case player is moved with a tile to put him in the exact same position
+      float poX = 0;
+      float poY = 0;
+      boolean movesPlayer = player != null && levelState.playerTile != null && levelState.playerTile.equals(tile);
+      if(movesPlayer)
+      {
+         poX = player.getX() - x;
+         poY = player.getY() - y;
+      }
 
       x += speedX * delta;
       y += speedY * delta;
-      if(player != null && levelState.playerTile != null && levelState.playerTile.equals(tile))
-      {
-         float px = player.getX();
-         float py = player.getY();
-         player.setPosition(px + speedX * delta, py + speedY * delta);
-      }
       if ((speedX > 0 && x >= targetX) || (speedX < 0 && x <= targetX) || (speedY > 0 && y >= targetY) || (speedY < 0 && y <= targetY)) {
          events.enqueue(new MoveComplete(this));
          tile.setX(targetX);
          tile.setY(targetY);
+         if(movesPlayer)
+         {
+            player.setPosition(tile.getX() + poX, tile.getY() + poY);
+         }         
+         
          complete = true;
          return;
       }
       tile.setX(x);
       tile.setY(y);
+      if(movesPlayer)
+      {
+         player.setPosition(tile.getX() + poX, tile.getY() + poY);
+      }         
    }
 
    public Tile getTile() {
