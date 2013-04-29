@@ -171,6 +171,16 @@ public class MainRenderer {
          color.a = oldAlpha;
 
       }
+      if (bg) {
+         goal.getSprite().activateLayer(0);
+         goal.getSprite().setColor(Color.WHITE);
+         goal.draw(batch);
+      }
+
+      goal.getSprite().activateLayer(1);
+      goal.getSprite().setColor(color);
+      goal.draw(batch);
+
 
       if (bg) {
          player.getSprite().activateLayer(0);
@@ -181,16 +191,6 @@ public class MainRenderer {
       player.getSprite().activateLayer(1);
       player.getSprite().setColor(color);
       player.draw(batch);
-
-      if (bg) {
-         goal.getSprite().activateLayer(0);
-         goal.getSprite().setColor(Color.WHITE);
-         goal.draw(batch);
-      }
-
-      goal.getSprite().activateLayer(1);
-      goal.getSprite().setColor(color);
-      goal.draw(batch);
 
       batch.end();
 
