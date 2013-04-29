@@ -69,12 +69,6 @@ public class GameEventHandler implements IEventHandler {
                levelState.addSuccessStatistic();
                levelState.initLevel();
                PlayerState ps = StateMachine.instance().getState(PlayerState.class);
-               System.out.println();
-               System.out.println("Levels done: " + Integer.toString(levelState.getCurrentLevelIndex()));
-               for(String statistic : ps.genericStatistics.keySet())
-               {
-                  System.out.println(statistic + ": " + Integer.toString(ps.genericStatistics.get(statistic)));
-               }
                StateMachine.instance().enterState(LevelInitState.class);
             } else {
                StateMachine.instance().enterState(MenuState.class);
