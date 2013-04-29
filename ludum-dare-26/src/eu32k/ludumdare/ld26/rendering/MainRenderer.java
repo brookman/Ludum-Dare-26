@@ -169,6 +169,7 @@ public class MainRenderer {
             sprite.activateLayer(0);
             Color c = Color.WHITE;
             oldAlpha = c.a;
+            c.a = tile.getAlpha();
             sprite.setColor(c);
             c.a = oldAlpha;
             sprite.draw(batch);
@@ -177,10 +178,13 @@ public class MainRenderer {
          boolean isPlayerTile = ls.playerTile == tile || ls.goalTile == tile;
          sprite.activateLayer(1);
          oldAlpha = playerColor.a;
+         float oldMainAlpha = mainColor.a;
          playerColor.a = tile.getAlpha();
+         mainColor.a = tile.getAlpha();
          sprite.setColor(isPlayerTile ? playerColor : mainColor);
          sprite.draw(batch);
          playerColor.a = oldAlpha;
+         mainColor.a = oldMainAlpha;
 
       }
       if (bg) {

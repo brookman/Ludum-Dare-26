@@ -110,7 +110,7 @@ public class LostStage extends Stage {
       levelState.events.clear();
       levelState.initLevel();
       levelState.addRetryStatistics();
-      StateMachine.instance().enterState(LevelState.class);
+      StateMachine.instance().enterState(LevelInitState.class);
    }
 
 }
