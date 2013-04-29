@@ -13,7 +13,7 @@ public class GameplayEvent extends EventBase {
    public static final int PARAM_LOSE_TOLOST = 4;
    
    public enum GameplayEventType {
-      START_GAME,PAUSE,RESUME,WIN,LOSE,EXIT;
+      START_GAME,PAUSE,RESUME,WIN,LOSE,EXIT, NEXTLEVEL;
    }
       
    private GameplayEventType type;

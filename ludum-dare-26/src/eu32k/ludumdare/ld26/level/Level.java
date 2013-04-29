@@ -239,4 +239,8 @@ public class Level {
          return null;
       }
    }
+
+   public void setRandom(Random random) {
+      this.tileRandom = random;
+   }
 }

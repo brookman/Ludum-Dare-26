@@ -40,8 +40,6 @@ public class GameStage extends Stage {
    private Level level;
    private EffectsManager effects;
 
-   private TileSpawner tileSpawner;
-
    private GameEventHandler eventHandler;
 
    private LevelState levelState;
@@ -57,7 +55,6 @@ public class GameStage extends Stage {
       float aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
       camera = new OrthographicCamera(2.0f * aspectRatio * ZOOM, 2.0f * ZOOM);
 
-      tileSpawner = new TileSpawner();
       eventHandler = new GameEventHandler();
       levelState = StateMachine.instance().getState(LevelState.class);
       globalState = StateMachine.instance().getState(GlobalState.class);
@@ -67,7 +64,6 @@ public class GameStage extends Stage {
       StateMachine.instance().createState(new PlayerState());
       playerState = StateMachine.instance().getState(PlayerState.class);
       player = playerState.getPlayer();
-      tileSpawner.init();
 
       renderer.getConsole().addLine("Hallo Velo");
       renderer.getConsole().addLine("Hallo Tibau abuas");
@@ -91,10 +87,8 @@ public class GameStage extends Stage {
 
          repositionGoal();
 
-         levelState.getEvents().tick(delta);
-
-         tileSpawner.update(delta);
-
+         levelState.update(delta);
+         
          updateRunningEffects(delta);
 
          checkGameConditions(delta);

@@ -15,6 +15,7 @@ import eu32k.ludumdare.ld26.level.Level;
 import eu32k.ludumdare.ld26.level.LevelConfig;
 import eu32k.ludumdare.ld26.level.LevelConfigSequence;
 import eu32k.ludumdare.ld26.level.Tile;
+import eu32k.ludumdare.ld26.level.TileSpawner;
 import eu32k.ludumdare.ld26.objects.GameObject;
 import eu32k.ludumdare.ld26.objects.Goal;
 import eu32k.ludumdare.ld26.objects.Player;
@@ -23,7 +24,7 @@ import eu32k.ludumdare.ld26.rendering.TextConsole;
 public class LevelState extends GameState {
 
    private TextConsole console;
-
+   private boolean initializing;
    private boolean running;
    private int deathType;
 
@@ -51,6 +52,8 @@ public class LevelState extends GameState {
    private Random random;
 
    private LevelConfigSequence levels;
+
+   private TileSpawner tileSpawner;
 
    public LevelState() {
       this.runningEffects = new ArrayList<IRunningEffect>();
@@ -165,8 +168,7 @@ public class LevelState extends GameState {
    }
 
    public void initLevel() {
-      if(levels != null)
-      {
+      if (levels != null) {
          initLevel(levels.getCurrentConfig());
       }
    }
@@ -175,6 +177,14 @@ public class LevelState extends GameState {
       if (cfg == null) {
          return;
       }
+      if(tileSpawner == null){
+         tileSpawner = new TileSpawner();
+      }
+      events.clear();
+      spawned = null;
+      toPop = null;
+      playerTile = null;
+      goalTile = null;
       random = new Random(cfg.seed);
       this.width = cfg.width;
       this.height = cfg.height;
@@ -185,9 +195,16 @@ public class LevelState extends GameState {
          height = 3;
       }
       this.level = new Level(width, height);
-
+      level.setRandom(random);
       level.generateRandomTiles();
 
+      initPlacePlayerAndGoal();
+
+      tileSpawner.spawnTile(5f);
+
+   }
+
+   private void initPlacePlayerAndGoal() {
       Vector2 p = Vector2.tmp;
       Vector2 g = Vector2.tmp2;
       Vector2 tmp = Vector2.tmp3;
@@ -199,11 +216,15 @@ public class LevelState extends GameState {
       if (goal == null) {
          goal = new Goal(0, 0);
       }
-
+      goal.setFreeMovement(false);
       positionGameObject(goal, (int) g.x, (int) g.y);
 
       positionGameObject(player, (int) p.x, (int) p.y);
+   }
 
+   public void update(float delta) {
+      events.tick(delta);
+      tileSpawner.update(delta);
    }
 
    private void findSuitableGoalPosition(Vector2 p, Vector2 g, Vector2 tmp) {
@@ -222,7 +243,7 @@ public class LevelState extends GameState {
       p.set(player.getX(), player.getY());
       findSuitableGoalPosition(p, g, tmp);
       GameObjectMove move = new GameObjectMove();
-      System.out.println(Float.toString(g.x) + "/" + Float.toString(g.y));
+      // System.out.println(Float.toString(g.x) + "/" + Float.toString(g.y));
       move.initMove(goal, g.y + 0.5f, g.x + 0.5f, 5f);
       runningEffects.add(move);
    }
@@ -238,4 +259,9 @@ public class LevelState extends GameState {
    public void setLevels(LevelConfigSequence levels) {
       this.levels = levels;
    }
+
+   public boolean isInitializing() {
+      return initializing;
+   }
+
 }

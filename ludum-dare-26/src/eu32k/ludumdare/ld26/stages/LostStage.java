@@ -45,7 +45,9 @@ public class LostStage extends Stage {
       challengeButton.addListener(new InputListener() {
          @Override
          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            StateMachine.instance().getState(LevelState.class).initLevel();
+            LevelState levelState = StateMachine.instance().getState(LevelState.class);
+            levelState.events.clear();
+            levelState.initLevel();
             StateMachine.instance().enterState(LevelState.class);
             return false;
          }

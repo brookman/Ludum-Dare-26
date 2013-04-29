@@ -4,13 +4,15 @@ import eu32k.ludumdare.ld26.effects.FadeComplete;
 import eu32k.ludumdare.ld26.events.IEvent;
 import eu32k.ludumdare.ld26.events.IEventHandler;
 import eu32k.ludumdare.ld26.level.Tile;
-import eu32k.ludumdare.ld26.level.TileEvent;
+import eu32k.ludumdare.ld26.state.GameState;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelLosingState;
 import eu32k.ludumdare.ld26.state.LevelLostState;
 import eu32k.ludumdare.ld26.state.LevelPauseState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.LevelWinningState;
+import eu32k.ludumdare.ld26.state.LevelWonState;
+import eu32k.ludumdare.ld26.state.MenuState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class GameEventHandler implements IEventHandler {
@@ -59,13 +61,26 @@ public class GameEventHandler implements IEventHandler {
          levelState.log("Resumed");
          StateMachine.instance().enterState(LevelState.class);
          break;
+      case NEXTLEVEL:
+         GameState state = StateMachine.instance().getCurrentState();
+         if(state instanceof LevelWinningState || state instanceof LevelWonState)
+         {
+         if(levelState.getLevels().nextLevel())
+         {
+            levelState.initLevel();
+            StateMachine.instance().enterState(LevelState.class);            
+         }
+         else
+         {
+            StateMachine.instance().enterState(MenuState.class);
+         }
+         }
       case WIN:
          levelState.log("WON");
          levelState.getEvents().clear();
          StateMachine.instance().enterState(LevelWinningState.class);
          break;
       case LOSE:
-
          levelState.getEvents().clear();
          String death = "LOST";
          switch (event.getParam()) {
