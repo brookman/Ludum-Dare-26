@@ -59,7 +59,7 @@ public class GameStage extends Stage {
       globalState = StateMachine.instance().getState(GlobalState.class);
 
       renderer = new MainRenderer();
-
+      levelState.setTextConsole(renderer.getConsole());
       StateMachine.instance().createState(new PlayerState());
       playerState = StateMachine.instance().getState(PlayerState.class);
       player = playerState.getPlayer();

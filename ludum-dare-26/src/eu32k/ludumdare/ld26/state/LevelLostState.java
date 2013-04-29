@@ -1,6 +1,6 @@
 package eu32k.ludumdare.ld26.state;
 
-public class LostState extends GameState {
+public class LevelLostState extends GameState {
 
    @Override
    public void init() {

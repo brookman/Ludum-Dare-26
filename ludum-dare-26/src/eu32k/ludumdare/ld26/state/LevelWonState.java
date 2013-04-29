@@ -2,7 +2,7 @@ package eu32k.ludumdare.ld26.state;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-public class LevelFinishedState extends GameState {
+public class LevelWonState extends GameState {
 
    @Override
 	public void init() {

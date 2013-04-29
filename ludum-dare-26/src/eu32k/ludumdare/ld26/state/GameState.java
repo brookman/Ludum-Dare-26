@@ -45,6 +45,9 @@ public abstract class GameState {
    public void setStage(Stage stage) {
       this.stage = stage;
    }
+
+   public void leave() {      
+   }
 	
 
 }
