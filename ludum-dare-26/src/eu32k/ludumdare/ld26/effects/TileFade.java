@@ -44,7 +44,6 @@ public class TileFade implements IRunningEffect {
       timer += delta;
       float value = (timer / fadeTime);
       currentAlpha = Interpolation.linear.apply(1f, 0f, value);
-      System.out.println(Float.toString(currentAlpha));
       if(currentAlpha < 0) {
          currentAlpha = 0;
          complete = true;

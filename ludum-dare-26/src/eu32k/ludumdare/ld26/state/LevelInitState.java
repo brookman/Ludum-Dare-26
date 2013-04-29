@@ -35,11 +35,12 @@ public class LevelInitState extends GameState {
       LevelState ls = StateMachine.instance().getState(LevelState.class);
       List<Tile> tiles = ls.getLevel().getTiles();
       effects.clear();
+      timeSinceEnter = 0f;
+      System.out.println("Entered init");
       for(Tile t : tiles)
       {
          effects.add(new TileFadeIn(t, fadeInLength));
       }
-      timeSinceEnter = 0f;
    }
 
    public void update(float d) {
