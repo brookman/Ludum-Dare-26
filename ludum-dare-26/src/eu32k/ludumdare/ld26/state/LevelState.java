@@ -7,8 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 
 import eu32k.ludumdare.ld26.animation.TileAnimator;
 import eu32k.ludumdare.ld26.effects.IRunningEffect;
-import eu32k.ludumdare.ld26.effects.TileFade;
-import eu32k.ludumdare.ld26.effects.TileMove;
+import eu32k.ludumdare.ld26.events.EventQueue;
 import eu32k.ludumdare.ld26.level.Level;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.rendering.TextConsole;
@@ -30,10 +29,13 @@ public class LevelState extends GameState {
 
    public float deathConditionTimer;
 
+   public EventQueue events;
+   
    public LevelState() {
       this.runningEffects = new ArrayList<IRunningEffect>();
       tileAnimator = new TileAnimator();
       deathConditionTimer = 0;
+      this.events = new EventQueue();
    }
 
    @Override
@@ -113,4 +115,8 @@ public class LevelState extends GameState {
       this.running = running;
    }
 
+   public EventQueue getEvents()
+   {
+      return events;
+   }
 }

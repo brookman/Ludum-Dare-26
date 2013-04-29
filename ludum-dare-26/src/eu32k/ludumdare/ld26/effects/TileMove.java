@@ -18,7 +18,6 @@ public class TileMove implements IRunningEffect {
    private float targetY;
    private float speedX;
    private float speedY;
-   private EventQueue events;
    private LevelState levelState;
    private Player player;
    
@@ -28,7 +27,6 @@ public class TileMove implements IRunningEffect {
 
    public TileMove()
    {
-      this.events = StateMachine.instance().getState(GlobalState.class).getEvents();
       this.levelState = StateMachine.instance().getState(LevelState.class);
       PlayerState playerState = StateMachine.instance().getState(PlayerState.class);
       if(playerState != null)
@@ -69,7 +67,7 @@ public class TileMove implements IRunningEffect {
       x += speedX * delta;
       y += speedY * delta;
       if ((speedX > 0 && x >= targetX) || (speedX < 0 && x <= targetX) || (speedY > 0 && y >= targetY) || (speedY < 0 && y <= targetY)) {
-         events.enqueue(new MoveComplete(this));
+         levelState.getEvents().enqueue(new MoveComplete(this));
          tile.setX(targetX);
          tile.setY(targetY);
          if(movesPlayer)

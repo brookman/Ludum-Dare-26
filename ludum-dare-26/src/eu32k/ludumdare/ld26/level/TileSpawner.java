@@ -14,14 +14,17 @@ import eu32k.ludumdare.ld26.state.StateMachine;
 public class TileSpawner implements IEventHandler {
 
    private GlobalState globalState;
+   private LevelState levelState;
 
    public TileSpawner() {
       globalState = StateMachine.instance().getState(GlobalState.class);
-      globalState.getEvents().addHandler(this);
+      levelState = StateMachine.instance().getState(LevelState.class);
+      levelState.getEvents().addHandler(this);
    }
 
    public void init() {
-      globalState.getEvents().enqueue(new TileEvent(5, null, TileEventType.TRIGGER_SPAWN));
+      //TODO: This should be done by some external entity
+      levelState.getEvents().enqueue(new TileEvent(5, null, TileEventType.TRIGGER_SPAWN));
    }
 
    @Override
@@ -42,10 +45,10 @@ public class TileSpawner implements IEventHandler {
             if(event.getTile().equals(levelState.playerTile)) {
                levelState.playerTile = null;
             }
-            globalState.getEvents().enqueue(new TileEvent(0, event.getTile(), TileEventType.POPPED));
+            levelState.getEvents().enqueue(new TileEvent(0, event.getTile(), TileEventType.POPPED));
             break;
          case POPPED:
-            globalState.getEvents().enqueue(new TileEvent((5 / levelState.getLevel().getDufficulty()), null, TileEventType.TRIGGER_SPAWN));
+            levelState.getEvents().enqueue(new TileEvent((5 / levelState.getLevel().getDufficulty()), null, TileEventType.TRIGGER_SPAWN));
             break;
          }
       } else if (ev instanceof MoveComplete) {
@@ -54,12 +57,12 @@ public class TileSpawner implements IEventHandler {
          if (moved.equals(levelState.toPop)) {
             levelState.getTileAnimator().animatePop(moved);
          } else if (moved.equals(levelState.spawned)) {
-            globalState.getEvents().enqueue(new TileEvent((2 / levelState.getLevel().getDufficulty()) - 1, moved, TileEventType.SPAWNED));
+            levelState.getEvents().enqueue(new TileEvent((2 / levelState.getLevel().getDufficulty()) - 1, moved, TileEventType.SPAWNED));
             levelState.spawned = null;
          }
       } else if (ev instanceof FadeComplete) {
          FadeComplete event = (FadeComplete) ev;
-         globalState.getEvents().enqueue(new TileEvent(0, event.fade.getTile(), TileEventType.TRIGGER_POP));
+         levelState.getEvents().enqueue(new TileEvent(0, event.fade.getTile(), TileEventType.TRIGGER_POP));
       }
 
    }

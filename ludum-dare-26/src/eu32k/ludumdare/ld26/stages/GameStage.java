@@ -39,13 +39,13 @@ public class GameStage extends Stage {
    private EffectsManager effects;
 
    private TileSpawner tileSpawner;
-   
+
    private WinLoseConditionHandler winLose;
 
    private LevelState levelState;
 
    private PlayerState playerState;
-   
+
    private GlobalState globalState;
 
    public GameStage(EffectsManager effects) {
@@ -81,43 +81,21 @@ public class GameStage extends Stage {
       boolean running = levelState.isRunning();
       float delta = Gdx.graphics.getDeltaTime();
 
-
       // updates --------------------------------------
       setPlayerTile();
 
-      updateRunningEffects(delta);
-      
-      List<IRunningEffect> runningEffects = levelState.getRunningEffects();
-      if(runningEffects.size() > 0)
-      {
-         int count = 0;
-         for(Tile t : levelState.getLevel().getTiles())
-         {
-            Vector2 shiftedPosition = player.getShiftedPosition();
-            if(!player.canMoveIntoTile(shiftedPosition, t))
-            {
-               count++;
-            }
-            if(count > 1)
-            {
-               globalState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, GameplayEvent.PARAM_LOSE_SQUASHED));               
-            }
-         }
+      if (running) {
+
+         levelState.getEvents().tick(delta);
+         
+         tileSpawner.update(delta);
+
+         updateRunningEffects(delta);
+
+         checkingGameConditions(delta);
+
+         updatePlayerInput(delta);
       }
-
-      
-      if(levelState.playerTile == null) {
-         levelState.deathConditionTimer += delta;
-         if(levelState.deathConditionTimer > 0.05) {
-            globalState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, GameplayEvent.PARAM_LOSE_SQUASHED));
-         }
-      } else {
-         levelState.deathConditionTimer = 0;
-      }
-
-      updatePlayerInput(delta);
-
-      tileSpawner.update(delta);
       // tileAnimator.update(delta);
 
       camera.position.x = level.getWidth() / 2.0f;
@@ -126,6 +104,31 @@ public class GameStage extends Stage {
 
       // rendering ------------------------------------
       renderer.render(delta, camera, level.getTiles(), player, effects.getCurrentColor());
+   }
+
+   private void checkingGameConditions(float delta) {
+      List<IRunningEffect> runningEffects = levelState.getRunningEffects();
+      if (runningEffects.size() > 0) {
+         int count = 0;
+         for (Tile t : levelState.getLevel().getTiles()) {
+            Vector2 shiftedPosition = player.getShiftedPosition();
+            if (!player.canMoveIntoTile(shiftedPosition, t)) {
+               count++;
+            }
+            if (count > 1) {
+               levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, GameplayEvent.PARAM_LOSE_SQUASHED));
+            }
+         }
+      }
+
+      if (levelState.playerTile == null) {
+         levelState.deathConditionTimer += delta;
+         if (levelState.deathConditionTimer > 0.05) {
+            levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, GameplayEvent.PARAM_LOSE_FALLOFFBOARD));
+         }
+      } else {
+         levelState.deathConditionTimer = 0;
+      }
    }
 
    private void updateRunningEffects(float delta) {

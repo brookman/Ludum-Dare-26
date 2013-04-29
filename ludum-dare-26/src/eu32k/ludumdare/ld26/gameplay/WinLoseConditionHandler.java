@@ -11,10 +11,12 @@ import eu32k.ludumdare.ld26.state.StateMachine;
 public class WinLoseConditionHandler implements IEventHandler {
    
    private GlobalState globalState;
+   private LevelState levelState;
    
    public WinLoseConditionHandler() {
       globalState = StateMachine.instance().getState(GlobalState.class);
-      globalState.getEvents().addHandler(this);
+      levelState = StateMachine.instance().getState(LevelState.class);
+      levelState.getEvents().addHandler(this);
    }
 
    @Override

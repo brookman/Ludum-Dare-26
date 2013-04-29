@@ -10,7 +10,6 @@ public class TileFade implements IRunningEffect {
    private boolean complete;
    private Tile tile;
    private float speed;
-   private EventQueue events;
    private LevelState levelState;
    private float currentAlpha;
    
@@ -24,7 +23,6 @@ public class TileFade implements IRunningEffect {
 
    public TileFade()
    {
-      this.events = StateMachine.instance().getState(GlobalState.class).getEvents();
       this.levelState = StateMachine.instance().getState(LevelState.class);
       this.currentAlpha = 1;
    }
@@ -45,7 +43,7 @@ public class TileFade implements IRunningEffect {
       if(currentAlpha < 0) {
          currentAlpha = 0;
          complete = true;
-         events.enqueue(new FadeComplete(this));
+         levelState.getEvents().enqueue(new FadeComplete(this));
       }
       tile.setAlpha(currentAlpha);
    }
