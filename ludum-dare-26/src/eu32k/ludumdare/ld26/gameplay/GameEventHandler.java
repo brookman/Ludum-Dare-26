@@ -50,6 +50,7 @@ public class GameEventHandler implements IEventHandler {
    }
 
    private void handleGameplayEvent(GameplayEvent event) {
+      GameState state = StateMachine.instance().getCurrentState();
       switch (event.getType()) {
       case PAUSE:
          levelState.setPaused(true);
@@ -62,7 +63,6 @@ public class GameEventHandler implements IEventHandler {
          StateMachine.instance().enterState(LevelState.class);
          break;
       case NEXTLEVEL:
-         GameState state = StateMachine.instance().getCurrentState();
          if (state instanceof LevelWinningState || state instanceof LevelWonState) {
             if (levelState.getLevels().nextLevel()) {
                levelState.initLevel();
@@ -78,26 +78,33 @@ public class GameEventHandler implements IEventHandler {
          StateMachine.instance().enterState(LevelWinningState.class);
          break;
       case LOSE:
-         levelState.getEvents().clear();
          String death = "LOST";
          switch (event.getParam()) {
          case GameplayEvent.PARAM_LOSE_FALLOFFBOARD:
+            levelState.getEvents().clear();
             death = "Player has fallen off the board";
+            levelState.log(death);
+            StateMachine.instance().enterState(LevelLosingState.class);
             break;
          case GameplayEvent.PARAM_LOSE_SQUASHED:
+            levelState.getEvents().clear();
             death = "Player has been squashed to death";
+            levelState.log(death);
+            StateMachine.instance().enterState(LevelLosingState.class);
             break;
          case GameplayEvent.PARAM_LOSE_TIMEOUT:
+            levelState.getEvents().clear();
             death = "Time is up";
+            levelState.log(death);
+            StateMachine.instance().enterState(LevelLosingState.class);
             break;
          case GameplayEvent.PARAM_LOSE_TOLOST:
-            StateMachine.instance().enterState(LevelLostState.class);
+            if (state instanceof LevelLosingState) {
+               StateMachine.instance().enterState(LevelLostState.class);
+            }
             return;
          }
 
-         levelState.log(death);
-
-         StateMachine.instance().enterState(LevelLosingState.class);
          // StateMachine.instance().createState(new LevelState());
          // StateMachine.instance().getState(LevelState.class).setStage(new GameStage());
          break;
