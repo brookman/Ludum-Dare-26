@@ -31,6 +31,7 @@ public class LevelState extends GameState {
    public Tile toPop;
    public Tile spawned;
    public Tile playerTile;
+   public Tile goalTile;
 
    private Goal goal;
 

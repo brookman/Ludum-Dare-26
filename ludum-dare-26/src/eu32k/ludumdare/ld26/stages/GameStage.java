@@ -19,6 +19,7 @@ import eu32k.ludumdare.ld26.gameplay.GameplayEvent.GameplayEventType;
 import eu32k.ludumdare.ld26.level.Level;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.level.TileSpawner;
+import eu32k.ludumdare.ld26.objects.Goal;
 import eu32k.ludumdare.ld26.objects.Player;
 import eu32k.ludumdare.ld26.rendering.MainRenderer;
 import eu32k.ludumdare.ld26.state.GameState;
@@ -83,7 +84,7 @@ public class GameStage extends Stage {
       }
       this.level = levelState.getLevel();
       // updates --------------------------------------
-      setPlayerTile();
+      setPlayerAndGoalTile();
 
       pauseTimer -= delta;
 
@@ -220,16 +221,26 @@ public class GameStage extends Stage {
       return false;
    }
 
-   private void setPlayerTile() {
+   private void setPlayerAndGoalTile() {
       float px = player.position.x;
       float py = player.position.y;
-      if (levelState.playerTile != null && levelState.playerTile.contains(px, py)) {
-         return;
+      boolean setPlayerTile = !(levelState.playerTile != null && levelState.playerTile.contains(px, py));
+      boolean setGoalTile = !(levelState.goalTile != null && levelState.goalTile.contains(px, py));
+
+      if (setPlayerTile ) {
+         Tile t = findPlayerTile();
+         levelState.playerTile = t;
+         if (t != null) {
+            renderer.getConsole().addLine("Player entered tile on position: " + Float.toString(t.getX()) + "/" + Float.toString(t.getY()));
+         }
       }
-      Tile t = findPlayerTile();
-      levelState.playerTile = t;
-      if (t != null) {
-         renderer.getConsole().addLine("Player entered tile on position: " + Float.toString(t.getX()) + "/" + Float.toString(t.getY()));
+      if(setGoalTile){
+         Tile t = findGoalTile();
+         levelState.goalTile = t;
+         if (t != null) {
+            renderer.getConsole().addLine("Goal entered tile on position: " + Float.toString(t.getX()) + "/" + Float.toString(t.getY()));
+         }
+         
       }
    }
 
@@ -237,6 +248,16 @@ public class GameStage extends Stage {
       List<Tile> tiles = levelState.getLevel().getTiles();
       for (Tile tile : tiles) {
          if (tile.contains(player.position.x, player.position.y)) {
+            return tile;
+         }
+      }
+      return null;
+   }
+   private Tile findGoalTile() {
+      Goal goal = levelState.getGoal();
+      List<Tile> tiles = levelState.getLevel().getTiles();
+      for (Tile tile : tiles) {
+         if (tile.contains(goal.position.x, goal.position.y)) {
             return tile;
          }
       }
