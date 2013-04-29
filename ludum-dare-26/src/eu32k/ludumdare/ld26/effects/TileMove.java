@@ -2,11 +2,10 @@ package eu32k.ludumdare.ld26.effects;
 
 import com.badlogic.gdx.math.Vector2;
 
-import eu32k.ludumdare.ld26.events.EventQueue;
 import eu32k.ludumdare.ld26.level.MoveComplete;
 import eu32k.ludumdare.ld26.level.Tile;
+import eu32k.ludumdare.ld26.objects.Goal;
 import eu32k.ludumdare.ld26.objects.Player;
-import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.PlayerState;
 import eu32k.ludumdare.ld26.state.StateMachine;
@@ -57,11 +56,21 @@ public class TileMove implements IRunningEffect {
       //Player offset to tile... used in case player is moved with a tile to put him in the exact same position
       float poX = 0;
       float poY = 0;
+      float goX = 0;
+      float goY = 0;
+      Goal goal = levelState.getGoal();
       boolean movesPlayer = player != null && levelState.playerTile != null && levelState.playerTile.equals(tile);
+      boolean movesGoal = goal != null && levelState.goalTile != null && levelState.goalTile.equals(tile);
       if(movesPlayer)
       {
          poX = player.getX() - x;
          poY = player.getY() - y;
+      }
+
+      if(movesGoal)
+      {
+         goX = goal.getX() - x;
+         goY = goal.getY() - y;
       }
 
       x += speedX * delta;
@@ -75,6 +84,10 @@ public class TileMove implements IRunningEffect {
             player.setMovingWithTile(true);
             player.setPosition(tile.getX() + poX, tile.getY() + poY);
          }         
+         if(movesGoal)
+         {
+            goal.setPosition(tile.getX() + goX, tile.getY() + goY);
+         }         
          
          complete = true;
          return;
@@ -85,6 +98,10 @@ public class TileMove implements IRunningEffect {
       {
          player.setMovingWithTile(false);
          player.setPosition(tile.getX() + poX, tile.getY() + poY);
+      }         
+      if(movesGoal)
+      {
+         goal.setPosition(tile.getX() + goX, tile.getY() + goY);
       }         
    }
 
