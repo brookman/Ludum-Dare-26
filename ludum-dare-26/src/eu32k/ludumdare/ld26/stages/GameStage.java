@@ -103,6 +103,23 @@ public class GameStage extends Stage {
             }
          }
       }
+      
+      if(moves.size() > 0)
+      {
+         int count = 0;
+         for(Tile t : levelState.getLevel().getTiles())
+         {
+            Vector2 shiftedPosition = player.getShiftedPosition();
+            if(!player.canMoveIntoTile(shiftedPosition, t))
+            {
+               count++;
+            }
+            if(count > 1)
+            {
+               globalState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE));               
+            }
+         }
+      }
 
       fadeTiles(delta);
       

@@ -72,6 +72,7 @@ public class TileMove {
          tile.setY(targetY);
          if(movesPlayer)
          {
+            player.setMovingWithTile(true);
             player.setPosition(tile.getX() + poX, tile.getY() + poY);
          }         
          
@@ -82,6 +83,7 @@ public class TileMove {
       tile.setY(y);
       if(movesPlayer)
       {
+         player.setMovingWithTile(false);
          player.setPosition(tile.getX() + poX, tile.getY() + poY);
       }         
    }
