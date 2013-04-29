@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
+import eu32k.libgdx.common.Time;
 import eu32k.ludumdare.ld26.Config;
 import eu32k.ludumdare.ld26.MultiLayerSprite;
 import eu32k.ludumdare.ld26.level.Tile;
@@ -71,7 +72,9 @@ public class MainRenderer {
    public void render(float delta, Camera camera, List<Tile> tiles, Player player, Goal goal, Color color) {
       mainBuffer.begin();
 
-      render(true, camera, tiles, player, goal, color);
+      float time = Time.getTime();
+
+      render(true, camera, tiles, player, goal, color, time);
       // renderDebug(camera, tiles);
 
       hudBatch.begin();
@@ -84,7 +87,7 @@ public class MainRenderer {
       mainBuffer.end();
 
       secondaryBuffer.begin();
-      render(false, camera, tiles, player, goal, color);
+      render(false, camera, tiles, player, goal, color, time);
       secondaryBuffer.end();
 
       Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
@@ -137,16 +140,14 @@ public class MainRenderer {
       debugRenderer.end();
    }
 
-   private void render(boolean bg, Camera camera, List<Tile> tiles, Player player, Goal goal, Color color) {
+   private void render(boolean bg, Camera camera, List<Tile> tiles, Player player, Goal goal, Color color, float time) {
 
       Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
       Gdx.gl.glEnable(GL20.GL_BLEND);
       Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-      if (bg) {
-         Background.getInstance().draw(new Vector3(color.r, color.g, color.b));
-      }
+      Background.getInstance().draw(new Vector3(color.r, color.g, color.b), true, time);
 
       batch.setProjectionMatrix(camera.combined);
       batch.begin();
@@ -180,7 +181,6 @@ public class MainRenderer {
       goal.getSprite().activateLayer(1);
       goal.getSprite().setColor(color);
       goal.draw(batch);
-
 
       if (bg) {
          player.getSprite().activateLayer(0);

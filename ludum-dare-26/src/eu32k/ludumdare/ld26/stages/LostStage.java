@@ -93,7 +93,7 @@ public class LostStage extends Stage {
       exitButton.setColor(color);
       title.setColor(color);
 
-      Background.getInstance().draw(new Vector3(color.r, color.g, color.b));
+      Background.getInstance().draw(new Vector3(color.r, color.g, color.b), false);
       super.draw();
    }
 
