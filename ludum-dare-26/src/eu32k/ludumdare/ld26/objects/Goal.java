@@ -18,12 +18,6 @@ public class Goal extends GameObject {
    }
 
    @Override
-   public Texture[] getTextures() {
-      // TODO Auto-generated method stub
-      return textures;
-   }
-
-   @Override
    public MultiLayerSprite loadSprite() {
       Texture layer1tex = Textures.get("textures/square.png");
       Texture layer2tex = Textures.get("textures/square2.png");
