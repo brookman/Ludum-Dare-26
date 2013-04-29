@@ -1,5 +1,6 @@
 package eu32k.ludumdare.ld26;
 
+import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
@@ -7,13 +8,13 @@ public class Main {
    public static void main(String[] args) {
 
       LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-      cfg.title = "Ludum Dare 26";
+      cfg.title = "IMBARINTH";
       cfg.useGL20 = true;
       cfg.useCPUSynch = true;
       cfg.samples = 4;
       cfg.vSyncEnabled = true;
       // cfg.resizable = false;
-      // cfg.addIcon("textures/icon_small.png", FileType.Local);
+      cfg.addIcon("textures/icon.png", FileType.Local);
 
       // int width = Toolkit.getDefaultToolkit().getScreenSize().width - 100;
       // int height = Toolkit.getDefaultToolkit().getScreenSize().height - 100;

@@ -25,5 +25,5 @@ void main(void) {
 	
 	vec4 result = color1 + color2;
 	
-	gl_FragColor = result + rand(vTextureCoord) * 0.08 - 0.04;
+	gl_FragColor = result;
 }
