@@ -2,10 +2,10 @@ package eu32k.ludumdare.ld26.effects;
 
 import com.badlogic.gdx.math.Vector2;
 
-import eu32k.ludumdare.ld26.Player;
 import eu32k.ludumdare.ld26.events.EventQueue;
 import eu32k.ludumdare.ld26.level.MoveComplete;
 import eu32k.ludumdare.ld26.level.Tile;
+import eu32k.ludumdare.ld26.objects.Player;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.PlayerState;

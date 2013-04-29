@@ -1,4 +1,4 @@
-package eu32k.ludumdare.ld26;
+package eu32k.ludumdare.ld26.objects;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import eu32k.libgdx.rendering.Textures;
+import eu32k.ludumdare.ld26.MultiLayerSprite;
 import eu32k.ludumdare.ld26.level.Bounds;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.level.TileBoundingBoxes;

@@ -17,8 +17,8 @@ import com.badlogic.gdx.math.Vector3;
 
 import eu32k.ludumdare.ld26.Config;
 import eu32k.ludumdare.ld26.MultiLayerSprite;
-import eu32k.ludumdare.ld26.Player;
 import eu32k.ludumdare.ld26.level.Tile;
+import eu32k.ludumdare.ld26.objects.Player;
 
 public class MainRenderer {
 

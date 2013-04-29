@@ -1,9 +1,11 @@
-package eu32k.ludumdare.ld26;
+package eu32k.ludumdare.ld26.objects;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+
+import eu32k.ludumdare.ld26.MultiLayerSprite;
 
 public abstract class GameObject {
 
