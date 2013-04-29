@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import eu32k.libgdx.rendering.Textures;
 import eu32k.ludumdare.ld26.MultiLayerSprite;
+import eu32k.ludumdare.ld26.effects.particles.GameObjectParticleEffect;
 import eu32k.ludumdare.ld26.level.Bounds;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.level.TileBoundingBoxes;
@@ -22,8 +23,11 @@ public class Player extends GameObject {
 
    private boolean movingWithTile = false;
 
+   private GameObjectParticleEffect particleEffect;
+
    public Player(float x, float y) {
       super(new Vector2(x - WIDTH / 2.0f, y - WIDTH / 2.0f), WIDTH, HEIGHT);
+      particleEffect = new GameObjectParticleEffect(this, "particles/player.txt");
    }
 
    @Override
@@ -113,5 +117,9 @@ public class Player extends GameObject {
 
    public Vector2 getShiftedPosition() {
       return position;
+   }
+
+   public GameObjectParticleEffect getEffect() {
+      return particleEffect;
    }
 }
