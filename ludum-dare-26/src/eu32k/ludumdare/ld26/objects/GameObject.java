@@ -50,4 +50,21 @@ public abstract class GameObject {
    public void setFreeMovement(boolean freeMovement) {
       this.freeMovement = freeMovement;
    }
+   
+   public abstract float radius();
+   
+   public boolean intersects(GameObject obj)
+   {
+      if(obj == null)
+         return false;
+      
+      return isCircleCollision(getX(), getY(), radius(), obj.getX(), obj.getY(), obj.radius());
+   }
+   private boolean isCircleCollision(float x1, float y1, float r1, float x2, float y2, float r2)
+   {
+       final double a = r1 + r2;
+       final double dx = x1 - x2;
+       final double dy = x1 - x2;
+       return a * a > (dx * dx + dy * dy);
+   }
 }

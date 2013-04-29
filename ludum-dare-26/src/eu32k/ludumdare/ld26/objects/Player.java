@@ -122,4 +122,9 @@ public class Player extends GameObject {
    public GameObjectParticleEffect getEffect() {
       return particleEffect;
    }
+
+   @Override
+   public float radius() {
+      return RADIUS;
+   }
 }

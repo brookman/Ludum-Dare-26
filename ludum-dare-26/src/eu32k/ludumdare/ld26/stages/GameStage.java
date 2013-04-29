@@ -98,7 +98,7 @@ public class GameStage extends Stage {
 
          updateRunningEffects(delta);
 
-         checkingGameConditions(delta);
+         checkGameConditions(delta);
 
          updatePlayerInput(delta);
       } else if (levelState.isPaused()) {
@@ -133,7 +133,7 @@ public class GameStage extends Stage {
       }
    }
 
-   private void checkingGameConditions(float delta) {
+   private void checkGameConditions(float delta) {
       List<IRunningEffect> runningEffects = levelState.getRunningEffects();
       if (runningEffects.size() > 0) {
          int count = 0;
@@ -159,6 +159,15 @@ public class GameStage extends Stage {
          }
       } else {
          levelState.deathConditionTimer = 0;
+      }
+      
+      if(levelState.playerTile != null && levelState.playerTile.equals(levelState.goalTile))
+      {
+         Goal g = levelState.getGoal();
+         if(g.intersects(player))
+         {
+            levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.WIN));         
+         }
       }
    }
 

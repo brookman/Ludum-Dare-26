@@ -35,4 +35,9 @@ public class Goal extends GameObject {
    public GameObjectParticleEffect getEffect() {
       return particleEffect;
    }
+
+   @Override
+   public float radius() {
+      return (WIDTH + HEIGHT) / 4;
+   }
 }
