@@ -58,7 +58,6 @@ public class TileSpawner implements IEventHandler {
             levelState.spawned = null;
          }
       } else if (ev instanceof FadeComplete) {
-         System.out.println("fade complete");
          FadeComplete event = (FadeComplete) ev;
          globalState.getEvents().enqueue(new TileEvent(0, event.fade.getTile(), TileEventType.TRIGGER_POP));
       }
