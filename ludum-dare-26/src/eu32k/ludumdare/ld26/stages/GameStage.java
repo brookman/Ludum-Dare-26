@@ -245,7 +245,7 @@ public class GameStage extends Stage {
       float py = player.position.y;
       Goal g = levelState.getGoal();
       boolean setPlayerTile = !(levelState.playerTile != null && levelState.playerTile.contains(px, py));
-      boolean setGoalTile = !(levelState.goalTile != null && levelState.playerTile.contains(g.getX(), g.getY()));
+      boolean setGoalTile = !(g != null && levelState.goalTile != null && levelState.goalTile.contains(g.getX(), g.getY()));
       
       if (setPlayerTile) {
          Tile t = findPlayerTile();
