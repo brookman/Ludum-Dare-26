@@ -56,6 +56,7 @@ public class TileAnimator {
    }
 
    public void animateSpawn(Tile spawned) {
+      LevelState levelState = StateMachine.instance().getState(LevelState.class);
       float targetX = spawned.getX();
       float targetY = spawned.getY();
       Direction dir = spawned.getNeighbors().keySet().iterator().next();
@@ -75,7 +76,7 @@ public class TileAnimator {
          break;
       }
       TileMove move = new TileMove();
-      move.initMove(spawned, targetX, targetY, 2f);
+      move.initMove(spawned, targetX, targetY, speed / 2 * levelState.getLevel().getDufficulty());
       StateMachine.instance().getState(LevelState.class).getRunningEffects().add(move);
    }
 
