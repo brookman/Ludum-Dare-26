@@ -62,7 +62,7 @@ public class Player extends GameObject {
       }
    }
 
-   public static boolean canMove(Vector2 newPos, List<Tile> tiles) {
+   public boolean canMove(Vector2 newPos, List<Tile> tiles) {
       Vector2 posShifted = new Vector2(newPos.x - RADIUS / 2.0f, newPos.y - RADIUS / 2.0f);
 
       for (Tile tile : tiles) {
@@ -73,7 +73,7 @@ public class Player extends GameObject {
       return true;
    }
 
-   public static boolean canMoveIntoTile(Vector2 posShifted, Tile tile) {
+   public boolean canMoveIntoTile(Vector2 posShifted, Tile tile) {
       Bounds bounds = TileBoundingBoxes.getNormalizedBounds(tile.getType(), tile.getRotation());
 
       for (Rectangle tileBound : bounds.boundingBoxes) {

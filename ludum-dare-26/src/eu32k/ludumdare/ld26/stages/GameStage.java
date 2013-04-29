@@ -87,7 +87,7 @@ public class GameStage extends Stage {
       if (running) {
 
          levelState.getEvents().tick(delta);
-         
+
          tileSpawner.update(delta);
 
          updateRunningEffects(delta);
@@ -110,12 +110,16 @@ public class GameStage extends Stage {
       List<IRunningEffect> runningEffects = levelState.getRunningEffects();
       if (runningEffects.size() > 0) {
          int count = 0;
+         boolean movingTileInvolved = false;
          for (Tile t : levelState.getLevel().getTiles()) {
             Vector2 shiftedPosition = player.getShiftedPosition();
             if (!player.canMoveIntoTile(shiftedPosition, t)) {
                count++;
+               if (t.isMoving()) {
+                  movingTileInvolved = true;
+               }
             }
-            if (count > 1) {
+            if (movingTileInvolved && count > 1) {
                levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, GameplayEvent.PARAM_LOSE_SQUASHED));
             }
          }
