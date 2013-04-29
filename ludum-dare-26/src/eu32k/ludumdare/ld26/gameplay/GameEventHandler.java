@@ -61,10 +61,12 @@ public class GameEventHandler implements IEventHandler {
          break;
       case WIN:
          levelState.log("WON");
+         levelState.getEvents().clear();
          StateMachine.instance().enterState(LevelWinningState.class);
          break;
       case LOSE:
 
+         levelState.getEvents().clear();
          String death = "LOST";
          switch (event.getParam()) {
          case GameplayEvent.PARAM_LOSE_FALLOFFBOARD:

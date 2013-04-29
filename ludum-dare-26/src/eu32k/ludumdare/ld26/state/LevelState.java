@@ -170,6 +170,9 @@ public class LevelState extends GameState {
       this.width = width;
       this.height = height;
       this.level = new Level(width, height);
+
+      level.generateRandomTiles();
+      
       random = new Random();
 
       Vector2 p = Vector2.tmp;
@@ -184,11 +187,10 @@ public class LevelState extends GameState {
          goal = new Goal(0, 0);
       }
 
-      positionGameObject(goal, (int) g.x, (int) 0);
+      positionGameObject(goal, (int) g.x, (int) g.y);
 
       positionGameObject(player, (int) p.x, (int) p.y);
 
-      level.generateRandomTiles();
 
    }
 
