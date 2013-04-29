@@ -15,10 +15,10 @@ import eu32k.ludumdare.ld26.level.TileBoundingBoxes;
 
 public class Player extends GameObject {
 
-   public static final float WIDTH = 0.2f, HEIGHT = 0.2f;
    public static final float RADIUS = 0.1f;
    public static final float SPEED = 1.4f;
-   private Texture[] textures = new Texture[2];
+
+   public static final float WIDTH = RADIUS * 2.0f, HEIGHT = RADIUS * 2.0f;
 
    private boolean movingWithTile = false;
 
@@ -37,11 +37,6 @@ public class Player extends GameObject {
       MultiLayerSprite sprite = new MultiLayerSprite(layer1reg, layer2reg);
       sprite.setSize(WIDTH, HEIGHT);
       return sprite;
-   }
-
-   @Override
-   public Texture[] getTextures() {
-      return textures;
    }
 
    public void move(Vector2 velocity, List<Tile> tiles) {
@@ -63,7 +58,7 @@ public class Player extends GameObject {
       }
    }
 
-   public boolean canMove(Vector2 newPos, List<Tile> tiles) {
+   public static boolean canMove(Vector2 newPos, List<Tile> tiles) {
       Vector2 posShifted = new Vector2(newPos.x - RADIUS / 2.0f, newPos.y - RADIUS / 2.0f);
 
       for (Tile tile : tiles) {
@@ -74,7 +69,7 @@ public class Player extends GameObject {
       return true;
    }
 
-   public boolean canMoveIntoTile(Vector2 posShifted, Tile tile) {
+   public static boolean canMoveIntoTile(Vector2 posShifted, Tile tile) {
       Bounds bounds = TileBoundingBoxes.getNormalizedBounds(tile.getType(), tile.getRotation());
 
       for (Rectangle tileBound : bounds.boundingBoxes) {

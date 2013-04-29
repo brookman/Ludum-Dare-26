@@ -1,8 +1,6 @@
 package eu32k.ludumdare.ld26.objects;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import eu32k.ludumdare.ld26.MultiLayerSprite;
@@ -20,17 +18,11 @@ public abstract class GameObject {
       sprite = loadSprite();
    }
 
-   public abstract Texture[] getTextures();
-
    public abstract MultiLayerSprite loadSprite();
 
    public void draw(SpriteBatch batch) {
       sprite.setPosition(position.x, position.y);
       sprite.draw(batch);
-   }
-
-   public Rectangle getBounds(Vector2 position) {
-      return new Rectangle(position.x, position.y, width, height);
    }
 
    public MultiLayerSprite getSprite() {
