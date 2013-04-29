@@ -79,8 +79,8 @@ public class GameStage extends Stage {
       this.level = levelState.getLevel();
       // updates --------------------------------------
       setPlayerAndGoalTile();
-      
-      renderer.getTextRenderer().addText("level", "Level " , 30, Gdx.graphics.getHeight() - 30);
+
+      printLevelProgress();
 
       pauseTimer -= delta;
 
@@ -89,7 +89,7 @@ public class GameStage extends Stage {
          repositionGoal();
 
          levelState.update(delta);
-         
+
          updateRunningEffects(delta);
 
          checkGameConditions(delta);
@@ -119,6 +119,10 @@ public class GameStage extends Stage {
       renderer.setPaused(levelState.isPaused());
       // rendering ------------------------------------
       renderer.render(delta, camera, level.getTiles(), player, levelState.getGoal(), effects.getCurrentColor());
+   }
+
+   private void printLevelProgress() {
+      renderer.getTextRenderer().addText("level", "Level " + (levelState.getCurrentLevelIndex() + 1) + " / " + levelState.getLevels().size(), 30, Gdx.graphics.getHeight() - 30);
    }
 
    private void repositionGoal() {
@@ -155,13 +159,11 @@ public class GameStage extends Stage {
       } else {
          levelState.deathConditionTimer = 0;
       }
-      
-      if(levelState.playerTile != null && levelState.playerTile.equals(levelState.goalTile))
-      {
+
+      if (levelState.playerTile != null && levelState.playerTile.equals(levelState.goalTile)) {
          Goal g = levelState.getGoal();
-         if(g.intersects(player))
-         {
-            levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.WIN));         
+         if (g.intersects(player)) {
+            levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.WIN));
          }
       }
    }
@@ -240,7 +242,7 @@ public class GameStage extends Stage {
       Goal g = levelState.getGoal();
       boolean setPlayerTile = !(levelState.playerTile != null && levelState.playerTile.contains(px, py));
       boolean setGoalTile = !(g != null && levelState.goalTile != null && levelState.goalTile.contains(g.getX(), g.getY()));
-      
+
       if (setPlayerTile) {
          Tile t = findPlayerTile();
          levelState.playerTile = t;
