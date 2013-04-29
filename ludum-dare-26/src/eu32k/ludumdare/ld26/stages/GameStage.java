@@ -65,7 +65,7 @@ public class GameStage extends Stage {
       player = playerState.getPlayer();
       playerState.initLevel(0, 0);
 
-      level = new Level(5, 5);
+      level = new Level(10, 6);
       level.generateRandomTiles();
 
       levelState.setLevel(level);
