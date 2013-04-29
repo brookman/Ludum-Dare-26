@@ -10,12 +10,13 @@ uniform sampler2D uTexture2;
 
 uniform float uFactor1;
 uniform float uFactor2;
+uniform float time;
 
 varying vec2 vTextureCoord;
 
-//float rand(vec2 co) {
-//	return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453 * uTime);
-//}
+float rand(vec2 co) {
+	return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453 * time);
+}
 
 void main(void) {
 
@@ -24,6 +25,5 @@ void main(void) {
 	
 	vec4 result = color1 + color2;
 	
-	
-	gl_FragColor = result;
+	gl_FragColor = result + rand(vTextureCoord) * 0.08 - 0.04;
 }

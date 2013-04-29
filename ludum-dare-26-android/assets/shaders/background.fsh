@@ -6,10 +6,10 @@
 #endif
 
 uniform vec2 resolution;
-uniform float time;
+uniform float timeFixed;
 uniform vec3 color;
+uniform float bg;
 varying vec2 vTextureCoord;
-
 
 vec3 mod289(vec3 x) {
   return x - floor(x * (1.0 / 289.0)) * 289.0;
@@ -73,15 +73,15 @@ float snoise(vec2 v)
 }
 
 float snoiseT(vec2 co, float speed){
-    return snoise(co+vec2(time * speed,-time * speed));
+    return snoise(co+vec2(timeFixed * speed, -timeFixed * speed));
 }
 
 float snoiseT(vec2 co){
-    return snoise(co+vec2(time ,-time));
+    return snoise(co+vec2(timeFixed ,-timeFixed));
 }
 
 float rand(vec2 co) {
-	return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453 * time);
+	return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453 * timeFixed);
 }
 
 void main(void)
@@ -103,7 +103,7 @@ void main(void)
 	if(snoiseT(-uv, 0.5) < -0.8 && rand(blocked) < 0.01){
 		gl_FragColor = vec4(color, 1.0);
 	}else{
-		gl_FragColor = vec4(col2, col2, col2, 1.0);
+		gl_FragColor = vec4(col2, col2, col2, 1.0) * bg;
 	}
 	
 }

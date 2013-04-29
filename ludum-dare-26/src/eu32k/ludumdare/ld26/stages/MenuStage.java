@@ -2,6 +2,7 @@ package eu32k.ludumdare.ld26.stages;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -38,7 +39,7 @@ public class MenuStage extends Stage {
       table.setFillParent(true);
       table.center();
 
-      title = new Image(Textures.get("textures/title.png"));
+      title = new Image(new TextureRegion(Textures.get("textures/title.png"), 256, 64));
 
       challengeButton = new TextButton("Challenge mode", skin);
       challengeButton.setColor(Color.CYAN);
@@ -98,7 +99,7 @@ public class MenuStage extends Stage {
       exitButton.setColor(color);
       title.setColor(color);
 
-      Background.getInstance().draw(new Vector3(color.r, color.g, color.b));
+      Background.getInstance().draw(new Vector3(color.r, color.g, color.b), false);
       super.draw();
    }
 
