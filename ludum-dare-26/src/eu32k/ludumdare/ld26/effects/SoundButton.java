@@ -1,6 +1,7 @@
 package eu32k.ludumdare.ld26.effects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -38,6 +39,7 @@ public class SoundButton {
    public static void draw() {
       check();
       sprite.setPosition(Gdx.graphics.getWidth() - size, Gdx.graphics.getHeight() - size);
+      sprite.setColor(soundPlaying?Color.WHITE:Color.RED);
       batch.begin();
       sprite.draw(batch);
       batch.end();
