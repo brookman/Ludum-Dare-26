@@ -149,19 +149,26 @@ public class MainRenderer {
 
       batch.setProjectionMatrix(camera.combined);
       batch.begin();
-
+      float oldAlpha = 0f;
       for (Tile tile : tiles) {
          MultiLayerSprite sprite = tile.getSprite();
 
          if (bg) {
             sprite.activateLayer(0);
-            sprite.setColor(Color.WHITE);
+            Color c = Color.WHITE;
+            oldAlpha = c.a;
+            sprite.setColor(c);
+            c.a = oldAlpha;
             sprite.draw(batch);
          }
 
          sprite.activateLayer(1);
+         oldAlpha = color.a;
+         color.a = tile.getAlpha();
          sprite.setColor(color);
          sprite.draw(batch);
+         color.a = oldAlpha;
+         
       }
 
       if (bg) {

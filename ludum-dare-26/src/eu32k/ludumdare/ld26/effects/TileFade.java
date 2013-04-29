@@ -42,9 +42,7 @@ public class TileFade {
          complete = true;
          events.enqueue(new FadeComplete(this));
       }
-      Color color = tile.getSprite().getColor();
-      color.a = currentAlpha;
-      tile.getSprite().setColor(color);
+      tile.setAlpha(currentAlpha);
    }
 
    public Tile getTile() {

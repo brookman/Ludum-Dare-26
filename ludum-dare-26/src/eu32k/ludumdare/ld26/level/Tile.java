@@ -146,12 +146,14 @@ public class Tile {
    private boolean isMoving;
    private Map<Direction, Tile> neighbors;
 
+   private float alpha;
+
    public Tile(float x, float y, Type type, Rotation rotation) {
       this.type = type;
       this.rotation = rotation;
       this.x = x;
       this.y = y;
-
+      alpha = 1f;
       sprite = loadSprite();
 
       bounds = new ArrayList<Rectangle>();
@@ -248,6 +250,15 @@ public class Tile {
    public boolean contains(float tx, float ty)
    {
       return !(tx < x || tx >= x + 1 || ty < y || ty >= y + 1);
+   }
+
+   public void setAlpha(float currentAlpha) {
+      this.alpha = currentAlpha;
+   }
+   
+   public float getAlpha()
+   {
+      return this.alpha;
    }
 
 }
