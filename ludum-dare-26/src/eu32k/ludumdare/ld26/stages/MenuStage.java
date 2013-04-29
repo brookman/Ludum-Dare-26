@@ -154,7 +154,7 @@ public class MenuStage extends Stage {
    private void challengeMode() {
       LevelState levelState = StateMachine.instance().getState(LevelState.class);
       LevelConfigSequence levels = new LevelConfigSequence();
-      LevelConfigSequence.addLevelsToSequence(levels, 23, 3, 3, 12, 8, 25);
+      LevelConfigSequence.addLevelsToSequence(levels, 2388, 3, 3, 12, 8, 25);
       levelState.setLevels(levels);
       levelState.initGame();
       levelState.initLevel();
