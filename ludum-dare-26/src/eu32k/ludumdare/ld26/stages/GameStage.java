@@ -48,6 +48,9 @@ public class GameStage extends Stage {
 
    private GlobalState globalState;
    private float pauseTimer;
+   
+   private boolean quickRetry;
+   private float retryTimer;
 
    public GameStage(EffectsManager effects) {
       this.effects = effects;
@@ -212,7 +215,10 @@ public class GameStage extends Stage {
       boolean down = Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN);
       boolean left = Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT);
       boolean right = Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT);
-
+      boolean retry = Gdx.input.isKeyPressed(Input.Keys.R) && !quickRetry;
+      
+      handleRetry(delta, retry);
+            
       if (pausedPressed()) {
          levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.PAUSE));
          return;
@@ -244,6 +250,20 @@ public class GameStage extends Stage {
 
       if (escapePressed) {
          effects.stopSong(null);
+      }
+   }
+
+   private void handleRetry(float delta, boolean retry) {
+      if(retry) {
+         retryTimer += delta;
+         retry();
+         quickRetry = true;
+         return;
+      } else {
+         if(retryTimer > 0.05f) {
+            retryTimer = 0;
+            this.quickRetry = false;
+         }
       }
    }
 
@@ -301,5 +321,13 @@ public class GameStage extends Stage {
          }
       }
       return null;
+   }
+   
+   private void retry() {
+      LevelState levelState = StateMachine.instance().getState(LevelState.class);
+      levelState.events.clear();
+      levelState.initLevel();
+      levelState.addRetryStatistics();
+      StateMachine.instance().enterState(LevelState.class);
    }
 }
