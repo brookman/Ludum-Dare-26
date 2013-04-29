@@ -122,6 +122,7 @@ public class GameStage extends Stage {
       camera.position.y = level.getHeight() / 2.0f;
       camera.update();
 
+      renderer.setPaused(levelState.isPaused());
       // rendering ------------------------------------
       renderer.render(delta, camera, level.getTiles(), player, levelState.getGoal(), effects.getCurrentColor());
    }

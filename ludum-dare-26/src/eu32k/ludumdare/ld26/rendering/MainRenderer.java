@@ -188,10 +188,11 @@ public class MainRenderer {
          player.draw(batch);
       }
 
+      float deltaTime = paused ? 0 : Gdx.graphics.getDeltaTime();
       player.getSprite().activateLayer(1);
       player.getSprite().setColor(color);
       player.draw(batch);
-      player.getEffect().draw(batch, color, Gdx.graphics.getDeltaTime());
+      player.getEffect().draw(batch, color, deltaTime);
 
       if (bg) {
          goal.getSprite().activateLayer(0);
@@ -202,7 +203,7 @@ public class MainRenderer {
       goal.getSprite().activateLayer(1);
       goal.getSprite().setColor(color);
       goal.draw(batch);
-      goal.getEffect().draw(batch, color, Gdx.graphics.getDeltaTime());
+      goal.getEffect().draw(batch, color, deltaTime);
 
       batch.end();
 
@@ -232,4 +233,13 @@ public class MainRenderer {
       batch.dispose();
    }
 
+   public boolean isPaused() {
+      return paused;
+   }
+
+   public void setPaused(boolean paused) {
+      this.paused = paused;
+   }
+
+   private boolean paused;
 }
