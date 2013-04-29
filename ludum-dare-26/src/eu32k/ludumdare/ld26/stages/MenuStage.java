@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import eu32k.libgdx.rendering.Textures;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
+import eu32k.ludumdare.ld26.level.LevelConfigSequence;
 import eu32k.ludumdare.ld26.rendering.Background;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.StateMachine;
@@ -44,6 +45,12 @@ public class MenuStage extends Stage {
       challengeButton.addListener(new InputListener() {
          @Override
          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            //TODO: Move this shit into levelstate
+            LevelState levelState = StateMachine.instance().getState(LevelState.class);
+            LevelConfigSequence levels = new LevelConfigSequence();
+            LevelConfigSequence.addLevelsToSequence(levels, 471342321, 4, 4, 12, 8, 10);
+            levelState.setLevels(levels);
+            levelState.initLevel();
             StateMachine.instance().enterState(LevelState.class);
             return false;
          }

@@ -17,6 +17,7 @@ import eu32k.ludumdare.ld26.gameplay.GameEventHandler;
 import eu32k.ludumdare.ld26.gameplay.GameplayEvent;
 import eu32k.ludumdare.ld26.gameplay.GameplayEvent.GameplayEventType;
 import eu32k.ludumdare.ld26.level.Level;
+import eu32k.ludumdare.ld26.level.LevelConfigSequence;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.level.TileSpawner;
 import eu32k.ludumdare.ld26.objects.Goal;
@@ -66,8 +67,6 @@ public class GameStage extends Stage {
       StateMachine.instance().createState(new PlayerState());
       playerState = StateMachine.instance().getState(PlayerState.class);
       player = playerState.getPlayer();
-
-      levelState.initLevel(5, 5);
       tileSpawner.init();
 
       renderer.getConsole().addLine("Hallo Velo");

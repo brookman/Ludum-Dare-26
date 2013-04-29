@@ -12,7 +12,8 @@ import eu32k.ludumdare.ld26.effects.GameObjectMove;
 import eu32k.ludumdare.ld26.effects.IRunningEffect;
 import eu32k.ludumdare.ld26.events.EventQueue;
 import eu32k.ludumdare.ld26.level.Level;
-import eu32k.ludumdare.ld26.level.ObjectMoveComplete;
+import eu32k.ludumdare.ld26.level.LevelConfig;
+import eu32k.ludumdare.ld26.level.LevelConfigSequence;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.objects.GameObject;
 import eu32k.ludumdare.ld26.objects.Goal;
@@ -49,11 +50,14 @@ public class LevelState extends GameState {
 
    private Random random;
 
+   private LevelConfigSequence levels;
+
    public LevelState() {
       this.runningEffects = new ArrayList<IRunningEffect>();
       tileAnimator = new TileAnimator();
       deathConditionTimer = 0;
       this.events = new EventQueue();
+      setLevels(new LevelConfigSequence());
    }
 
    @Override
@@ -160,20 +164,29 @@ public class LevelState extends GameState {
       this.goal = goal;
    }
 
-   public void initLevel(int width, int height) {
+   public void initLevel() {
+      if(levels != null)
+      {
+         initLevel(levels.getCurrentConfig());
+      }
+   }
+
+   public void initLevel(LevelConfig cfg) {
+      if (cfg == null) {
+         return;
+      }
+      random = new Random(cfg.seed);
+      this.width = cfg.width;
+      this.height = cfg.height;
       if (width < 3) {
          width = 3;
       }
       if (height < 3) {
          height = 3;
       }
-      this.width = width;
-      this.height = height;
       this.level = new Level(width, height);
 
       level.generateRandomTiles();
-      
-      random = new Random();
 
       Vector2 p = Vector2.tmp;
       Vector2 g = Vector2.tmp2;
@@ -190,7 +203,6 @@ public class LevelState extends GameState {
       positionGameObject(goal, (int) g.x, (int) g.y);
 
       positionGameObject(player, (int) p.x, (int) p.y);
-
 
    }
 
@@ -210,12 +222,20 @@ public class LevelState extends GameState {
       p.set(player.getX(), player.getY());
       findSuitableGoalPosition(p, g, tmp);
       GameObjectMove move = new GameObjectMove();
-      System.out.println(Float.toString(g.x) +"/" + Float.toString(g.y));
+      System.out.println(Float.toString(g.x) + "/" + Float.toString(g.y));
       move.initMove(goal, g.y + 0.5f, g.x + 0.5f, 5f);
       runningEffects.add(move);
    }
 
    public void positionGameObject(GameObject obj, int x, int y) {
       obj.setPosition(x + 0.5f, y + 0.5f);
+   }
+
+   public LevelConfigSequence getLevels() {
+      return levels;
+   }
+
+   public void setLevels(LevelConfigSequence levels) {
+      this.levels = levels;
    }
 }
