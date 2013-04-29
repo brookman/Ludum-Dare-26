@@ -119,17 +119,17 @@ public class LevelState extends GameState {
       this.console = console;
    }
 
-   public void log(String text) {
-      if (console != null) {
-         console.addLine(text);
-      }
-   }
-
-   public void log(String text, Color color) {
-      if (console != null) {
-         console.addLine(text, color);
-      }
-   }
+//   public void log(String text) {
+//      if (console != null) {
+//         console.addLine(text);
+//      }
+//   }
+//
+//   public void log(String text, Color color) {
+//      if (console != null) {
+//         console.addLine(text, color);
+//      }
+//   }
 
    public int getDeathType() {
       return deathType;
@@ -248,7 +248,7 @@ public class LevelState extends GameState {
    }
 
    public void repositionGoal() {
-      log("Repositioning goal");
+//      log("Repositioning goal");
       Vector2 p = Vector2.tmp;
       Vector2 g = Vector2.tmp2;
       Vector2 tmp = Vector2.tmp3;

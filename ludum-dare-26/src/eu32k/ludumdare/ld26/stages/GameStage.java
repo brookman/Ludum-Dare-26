@@ -22,6 +22,7 @@ import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.objects.Goal;
 import eu32k.ludumdare.ld26.objects.Player;
 import eu32k.ludumdare.ld26.rendering.MainRenderer;
+import eu32k.ludumdare.ld26.rendering.TextRenderer;
 import eu32k.ludumdare.ld26.state.GameState;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelInitState;
@@ -65,8 +66,6 @@ public class GameStage extends Stage {
       playerState = StateMachine.instance().getState(PlayerState.class);
       player = playerState.getPlayer();
 
-      renderer.getConsole().addLine("Hallo Velo");
-      renderer.getConsole().addLine("Hallo Tibau abuas");
    }
 
    @Override
@@ -81,6 +80,8 @@ public class GameStage extends Stage {
       // updates --------------------------------------
       setPlayerAndGoalTile();
 
+      printLevelProgress();
+
       pauseTimer -= delta;
 
       if (running) {
@@ -88,7 +89,7 @@ public class GameStage extends Stage {
          repositionGoal();
 
          levelState.update(delta);
-         
+
          updateRunningEffects(delta);
 
          checkGameConditions(delta);
@@ -132,6 +133,10 @@ public class GameStage extends Stage {
       renderer.render(delta, camera, level.getTiles(), player, levelState.getGoal(), mainColor, playerColor, inverseColor);
    }
 
+   private void printLevelProgress() {
+      renderer.getTextRenderer().addText("level", "Level " + (levelState.getCurrentLevelIndex() + 1) + " / " + levelState.getLevels().size(), 30, Gdx.graphics.getHeight() - 30);
+   }
+
    private void repositionGoal() {
       Goal goal = levelState.getGoal();
       if (goal != null && !goal.isFreeMovement() && levelState.goalTile == null) {
@@ -166,13 +171,11 @@ public class GameStage extends Stage {
       } else {
          levelState.deathConditionTimer = 0;
       }
-      
-      if(levelState.playerTile != null && levelState.playerTile.equals(levelState.goalTile))
-      {
+
+      if (levelState.playerTile != null && levelState.playerTile.equals(levelState.goalTile)) {
          Goal g = levelState.getGoal();
-         if(g.intersects(player))
-         {
-            levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.WIN));         
+         if (g.intersects(player)) {
+            levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.WIN));
          }
       }
    }
@@ -251,7 +254,7 @@ public class GameStage extends Stage {
       Goal g = levelState.getGoal();
       boolean setPlayerTile = !(levelState.playerTile != null && levelState.playerTile.contains(px, py));
       boolean setGoalTile = !(g != null && levelState.goalTile != null && levelState.goalTile.contains(g.getX(), g.getY()));
-      
+
       if (setPlayerTile) {
          Tile t = findPlayerTile();
          levelState.playerTile = t;
