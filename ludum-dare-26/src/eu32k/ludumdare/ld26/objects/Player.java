@@ -1,4 +1,4 @@
-package eu32k.ludumdare.ld26;
+package eu32k.ludumdare.ld26.objects;
 
 import java.util.List;
 
@@ -8,17 +8,26 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import eu32k.libgdx.rendering.Textures;
+import eu32k.ludumdare.ld26.MultiLayerSprite;
+import eu32k.ludumdare.ld26.effects.particles.GameObjectParticleEffect;
+import eu32k.ludumdare.ld26.level.Bounds;
 import eu32k.ludumdare.ld26.level.Tile;
+import eu32k.ludumdare.ld26.level.TileBoundingBoxes;
 
 public class Player extends GameObject {
 
-   public static final float WIDTH = 0.2f, HEIGHT = 0.2f;
    public static final float RADIUS = 0.1f;
    public static final float SPEED = 1.4f;
-   private Texture[] textures = new Texture[2];
+
+   public static final float WIDTH = RADIUS * 2.0f, HEIGHT = RADIUS * 2.0f;
+
+   private boolean movingWithTile = false;
+
+   private GameObjectParticleEffect particleEffect;
 
    public Player(float x, float y) {
       super(new Vector2(x - WIDTH / 2.0f, y - WIDTH / 2.0f), WIDTH, HEIGHT);
+      particleEffect = new GameObjectParticleEffect(this, "particles/player.txt");
    }
 
    @Override
@@ -32,11 +41,6 @@ public class Player extends GameObject {
       MultiLayerSprite sprite = new MultiLayerSprite(layer1reg, layer2reg);
       sprite.setSize(WIDTH, HEIGHT);
       return sprite;
-   }
-
-   @Override
-   public Texture[] getTextures() {
-      return textures;
    }
 
    public void move(Vector2 velocity, List<Tile> tiles) {
@@ -58,21 +62,31 @@ public class Player extends GameObject {
       }
    }
 
-   private boolean canMove(Vector2 newPos, List<Tile> tiles) {
+   public static boolean canMove(Vector2 newPos, List<Tile> tiles) {
       Vector2 posShifted = new Vector2(newPos.x - RADIUS / 2.0f, newPos.y - RADIUS / 2.0f);
-      for (Tile tile : tiles) {
-         for (Rectangle tileBound : tile.getBounds()) {
-            if (intersects(posShifted, RADIUS, tileBound)) {
-               return false;
-            }
 
+      for (Tile tile : tiles) {
+         if (!canMoveIntoTile(posShifted, tile)) {
+            return false;
          }
       }
       return true;
    }
 
-   private boolean intersects(Vector2 circlePos, float radius, Rectangle rect) {
-      Vector2 circleDistance = new Vector2(Math.abs(circlePos.x - rect.x), Math.abs(circlePos.y - rect.y));
+   public static boolean canMoveIntoTile(Vector2 posShifted, Tile tile) {
+      Bounds bounds = TileBoundingBoxes.getNormalizedBounds(tile.getType(), tile.getRotation());
+
+      for (Rectangle tileBound : bounds.boundingBoxes) {
+         if (intersects(posShifted, RADIUS, tileBound, tile)) {
+            return false;
+         }
+      }
+      return true;
+   }
+
+   private static boolean intersects(Vector2 circlePos, float radius, Rectangle rect, Tile tile) {
+
+      Vector2 circleDistance = new Vector2(Math.abs(circlePos.x - (rect.x + tile.getX())), Math.abs(circlePos.y - (rect.y + tile.getY())));
 
       if (circleDistance.x > rect.width / 2 + radius) {
          return false;
@@ -91,5 +105,26 @@ public class Player extends GameObject {
       float cornerDistanceSq = (circleDistance.x - rect.width / 2) * (circleDistance.x - rect.width / 2) + (circleDistance.y - rect.height / 2) * (circleDistance.y - rect.height / 2);
 
       return cornerDistanceSq <= radius * radius;
+   }
+
+   public boolean isMovingWithTile() {
+      return movingWithTile;
+   }
+
+   public void setMovingWithTile(boolean movingWithTile) {
+      this.movingWithTile = movingWithTile;
+   }
+
+   public Vector2 getShiftedPosition() {
+      return position;
+   }
+
+   public GameObjectParticleEffect getEffect() {
+      return particleEffect;
+   }
+
+   @Override
+   public float radius() {
+      return RADIUS;
    }
 }

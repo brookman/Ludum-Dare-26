@@ -9,6 +9,7 @@ public class EventQueue {
    private List<IEvent> events;
    private List<IEventHandler> handlers;
    private List<IEvent> tickEvents;
+   private boolean clearAfterIteration;
 
    public EventQueue() {
       isTicking = false;
@@ -35,10 +36,13 @@ public class EventQueue {
       while (iterator.hasNext()) {
          eventTick(delta, iterator);
       }
-      if(tickEvents.size() > 0)
-      {
+      if (tickEvents.size() > 0) {
          events.addAll(tickEvents);
          tickEvents.clear();
+      }
+      if (clearAfterIteration) {
+         events.clear();
+         clearAfterIteration = false;
       }
       isTicking = false;
    }
@@ -55,6 +59,14 @@ public class EventQueue {
    private void notifyEvent(IEvent event) {
       for (IEventHandler handler : handlers) {
          handler.handle(event);
+      }
+   }
+
+   public void clear() {
+      if (isTicking) {
+         this.clearAfterIteration = true;
+      } else {
+         events.clear();
       }
    }
 }

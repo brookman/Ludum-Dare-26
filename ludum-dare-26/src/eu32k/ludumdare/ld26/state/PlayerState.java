@@ -2,7 +2,7 @@ package eu32k.ludumdare.ld26.state;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-import eu32k.ludumdare.ld26.Player;
+import eu32k.ludumdare.ld26.objects.Player;
 
 public class PlayerState extends GameState {
    private Player player;

@@ -15,10 +15,12 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
+import eu32k.libgdx.common.Time;
 import eu32k.ludumdare.ld26.Config;
 import eu32k.ludumdare.ld26.MultiLayerSprite;
-import eu32k.ludumdare.ld26.Player;
 import eu32k.ludumdare.ld26.level.Tile;
+import eu32k.ludumdare.ld26.objects.Goal;
+import eu32k.ludumdare.ld26.objects.Player;
 
 public class MainRenderer {
 
@@ -64,13 +66,15 @@ public class MainRenderer {
       horizontalBlur = new AdvancedShader(Gdx.files.internal("shaders/simple.vsh").readString(), Gdx.files.internal("shaders/blur_h.fsh").readString());
 
       background = new AdvancedShader(Gdx.files.internal("shaders/simple.vsh").readString(), Gdx.files.internal("shaders/background.fsh").readString());
-      System.out.println(background.getLog());
+      // System.out.println(background.getLog());
    }
 
-   public void render(float delta, Camera camera, List<Tile> tiles, Player player, Color color) {
+   public void render(float delta, Camera camera, List<Tile> tiles, Player player, Goal goal, Color color) {
       mainBuffer.begin();
 
-      render(true, camera, tiles, player, color);
+      float time = Time.getTime();
+
+      render(true, camera, tiles, player, goal, color, time);
       // renderDebug(camera, tiles);
 
       hudBatch.begin();
@@ -83,7 +87,7 @@ public class MainRenderer {
       mainBuffer.end();
 
       secondaryBuffer.begin();
-      render(false, camera, tiles, player, color);
+      render(false, camera, tiles, player, goal, color, time);
       secondaryBuffer.end();
 
       Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
@@ -122,7 +126,7 @@ public class MainRenderer {
       debugRenderer.begin(ShapeType.FilledRectangle);
       debugRenderer.setColor(new Color(1.0f, 1.0f, 1.0f, 0.05f));
       for (Tile tile : tiles) {
-         for (Rectangle rect : tile.getBounds()) {
+         for (Rectangle rect : tile.getBounds().boundingBoxes) {
             debugRenderer.filledRect(rect.x, rect.y, rect.width, rect.height);
          }
       }
@@ -136,33 +140,47 @@ public class MainRenderer {
       debugRenderer.end();
    }
 
-   private void render(boolean bg, Camera camera, List<Tile> tiles, Player player, Color color) {
+   private void render(boolean bg, Camera camera, List<Tile> tiles, Player player, Goal goal, Color color, float time) {
 
       Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
       Gdx.gl.glEnable(GL20.GL_BLEND);
       Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-      if (bg) {
-         Background.getInstance().draw(new Vector3(color.r, color.g, color.b));
-      }
+      Background.getInstance().draw(new Vector3(color.r, color.g, color.b), true, time);
 
       batch.setProjectionMatrix(camera.combined);
       batch.begin();
-
+      float oldAlpha = 0f;
       for (Tile tile : tiles) {
          MultiLayerSprite sprite = tile.getSprite();
 
          if (bg) {
             sprite.activateLayer(0);
-            sprite.setColor(Color.WHITE);
+            Color c = Color.WHITE;
+            oldAlpha = c.a;
+            sprite.setColor(c);
+            c.a = oldAlpha;
             sprite.draw(batch);
          }
 
          sprite.activateLayer(1);
+         oldAlpha = color.a;
+         color.a = tile.getAlpha();
          sprite.setColor(color);
          sprite.draw(batch);
+         color.a = oldAlpha;
+
       }
+      if (bg) {
+         goal.getSprite().activateLayer(0);
+         goal.getSprite().setColor(Color.WHITE);
+         goal.draw(batch);
+      }
+
+      goal.getSprite().activateLayer(1);
+      goal.getSprite().setColor(color);
+      goal.draw(batch);
 
       if (bg) {
          player.getSprite().activateLayer(0);
@@ -170,9 +188,22 @@ public class MainRenderer {
          player.draw(batch);
       }
 
+      float deltaTime = paused ? 0 : Gdx.graphics.getDeltaTime();
       player.getSprite().activateLayer(1);
       player.getSprite().setColor(color);
       player.draw(batch);
+      player.getEffect().draw(batch, color, deltaTime);
+
+      if (bg) {
+         goal.getSprite().activateLayer(0);
+         goal.getSprite().setColor(Color.WHITE);
+         goal.draw(batch);
+      }
+
+      goal.getSprite().activateLayer(1);
+      goal.getSprite().setColor(color);
+      goal.draw(batch);
+      goal.getEffect().draw(batch, color, deltaTime);
 
       batch.end();
 
@@ -202,4 +233,13 @@ public class MainRenderer {
       batch.dispose();
    }
 
+   public boolean isPaused() {
+      return paused;
+   }
+
+   public void setPaused(boolean paused) {
+      this.paused = paused;
+   }
+
+   private boolean paused;
 }

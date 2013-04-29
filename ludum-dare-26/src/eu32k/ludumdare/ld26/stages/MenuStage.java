@@ -2,6 +2,7 @@ package eu32k.ludumdare.ld26.stages;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import eu32k.libgdx.rendering.Textures;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
+import eu32k.ludumdare.ld26.level.LevelConfigSequence;
 import eu32k.ludumdare.ld26.rendering.Background;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.StateMachine;
@@ -37,13 +39,19 @@ public class MenuStage extends Stage {
       table.setFillParent(true);
       table.center();
 
-      title = new Image(Textures.get("textures/title.png"));
+      title = new Image(new TextureRegion(Textures.get("textures/title.png"), 256, 64));
 
       challengeButton = new TextButton("Challenge mode", skin);
       challengeButton.setColor(Color.CYAN);
       challengeButton.addListener(new InputListener() {
          @Override
          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            //TODO: Move this shit into levelstate
+            LevelState levelState = StateMachine.instance().getState(LevelState.class);
+            LevelConfigSequence levels = new LevelConfigSequence();
+            LevelConfigSequence.addLevelsToSequence(levels, 471342321, 4, 4, 12, 8, 10);
+            levelState.setLevels(levels);
+            levelState.initLevel();
             StateMachine.instance().enterState(LevelState.class);
             return false;
          }
@@ -91,7 +99,7 @@ public class MenuStage extends Stage {
       exitButton.setColor(color);
       title.setColor(color);
 
-      Background.getInstance().draw(new Vector3(color.r, color.g, color.b));
+      Background.getInstance().draw(new Vector3(color.r, color.g, color.b), false);
       super.draw();
    }
 

@@ -2,9 +2,9 @@ package eu32k.ludumdare.ld26.animation;
 
 import eu32k.ludumdare.ld26.Direction;
 import eu32k.ludumdare.ld26.effects.TileFade;
+import eu32k.ludumdare.ld26.effects.TileMove;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.level.TileEvent;
-import eu32k.ludumdare.ld26.level.TileMove;
 import eu32k.ludumdare.ld26.level.TileEvent.TileEventType;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelState;
@@ -48,7 +48,7 @@ public class TileAnimator {
          }
          TileMove move = new TileMove();
          move.initMove(toShift, targetX, targetY, speed * levelState.getLevel().getDufficulty());
-         levelState.getMovingTiles().add(move);
+         levelState.getRunningEffects().add(move);
          last = toShift;
       } while ((toShift = toShift.getNeighbors().get(dir)) != null);
       levelState.getLevel().updateNeighbors(spawned, dir);
@@ -77,13 +77,13 @@ public class TileAnimator {
       }
       TileMove move = new TileMove();
       move.initMove(spawned, targetX, targetY, speed / 2 * levelState.getLevel().getDufficulty());
-      StateMachine.instance().getState(LevelState.class).getMovingTiles().add(move);
+      StateMachine.instance().getState(LevelState.class).getRunningEffects().add(move);
    }
 
    public void animatePop(Tile popped) {
       TileFade fade = new TileFade();
       fade.initFade(popped, 1f);
-      StateMachine.instance().getState(LevelState.class).getFadingTiles().add(fade);
+      StateMachine.instance().getState(LevelState.class).getRunningEffects().add(fade);
    }
 
 }

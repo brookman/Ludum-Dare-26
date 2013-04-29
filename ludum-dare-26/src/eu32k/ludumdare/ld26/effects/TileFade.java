@@ -1,28 +1,26 @@
 package eu32k.ludumdare.ld26.effects;
 
-import com.badlogic.gdx.graphics.Color;
-
-import eu32k.ludumdare.ld26.events.EventQueue;
 import eu32k.ludumdare.ld26.level.Tile;
-import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
-public class TileFade {
+public class TileFade implements IRunningEffect {
    private boolean complete;
    private Tile tile;
    private float speed;
-   private EventQueue events;
    private LevelState levelState;
    private float currentAlpha;
    
+   /* (non-Javadoc)
+    * @see eu32k.ludumdare.ld26.effects.IUpdateUntilComplete#complete()
+    */
+   @Override
    public boolean complete() {
       return complete;
    }
 
    public TileFade()
    {
-      this.events = StateMachine.instance().getState(GlobalState.class).getEvents();
       this.levelState = StateMachine.instance().getState(LevelState.class);
       this.currentAlpha = 1;
    }
@@ -34,17 +32,19 @@ public class TileFade {
       this.speed = speed;
    }
    
+   /* (non-Javadoc)
+    * @see eu32k.ludumdare.ld26.effects.IUpdateUntilComplete#update(float)
+    */
+   @Override
    public void update(float delta) {
       currentAlpha -= (delta);
-      System.out.println(currentAlpha);
       if(currentAlpha < 0) {
          currentAlpha = 0;
          complete = true;
-         events.enqueue(new FadeComplete(this));
+         tile.setDead(true);
+         levelState.getEvents().enqueue(new FadeComplete(this));
       }
-      Color color = tile.getSprite().getColor();
-      color.a = currentAlpha;
-      tile.getSprite().setColor(color);
+      tile.setAlpha(currentAlpha);
    }
 
    public Tile getTile() {
