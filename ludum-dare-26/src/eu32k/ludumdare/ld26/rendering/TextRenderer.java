@@ -23,6 +23,7 @@ public class TextRenderer {
       textBatch = new SpriteBatch();
       textLines = new HashMap<String, String>();
       textPositions = new HashMap<String, Vector2>();
+      font = new BitmapFont(Gdx.files.internal("fonts/calibri.fnt"), Gdx.files.internal("fonts/calibri.png"), false);
    }
    
    public void render() {
