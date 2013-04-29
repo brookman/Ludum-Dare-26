@@ -21,6 +21,8 @@ import eu32k.ludumdare.ld26.MultiLayerSprite;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.objects.Goal;
 import eu32k.ludumdare.ld26.objects.Player;
+import eu32k.ludumdare.ld26.state.LevelState;
+import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class MainRenderer {
 
@@ -152,6 +154,7 @@ public class MainRenderer {
       batch.setProjectionMatrix(camera.combined);
       batch.begin();
       float oldAlpha = 0f;
+      LevelState ls = StateMachine.instance().getState(LevelState.class);
       for (Tile tile : tiles) {
          MultiLayerSprite sprite = tile.getSprite();
 
@@ -164,10 +167,11 @@ public class MainRenderer {
             sprite.draw(batch);
          }
 
+         boolean isPlayerTile = ls.playerTile == tile;
          sprite.activateLayer(1);
          oldAlpha = color.a;
          color.a = tile.getAlpha();
-         sprite.setColor(color);
+         sprite.setColor(isPlayerTile ? Color.RED : color);
          sprite.draw(batch);
          color.a = oldAlpha;
 

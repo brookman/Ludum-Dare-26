@@ -260,7 +260,7 @@ public class GameStage extends Stage {
    private Tile findPlayerTile() {
       List<Tile> tiles = levelState.getLevel().getTiles();
       for (Tile tile : tiles) {
-         if (!tile.isDead() && tile.contains(player.position.x, player.position.y)) {
+         if (!tile.isDead() && tile.contains(player.getX(), player.getY())) {
             return tile;
          }
       }

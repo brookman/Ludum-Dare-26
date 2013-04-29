@@ -10,7 +10,12 @@ import java.util.Set;
 import eu32k.ludumdare.ld26.Direction;
 import eu32k.ludumdare.ld26.level.Tile.Rotation;
 import eu32k.ludumdare.ld26.level.Tile.Type;
+import eu32k.ludumdare.ld26.objects.GameObject;
+import eu32k.ludumdare.ld26.objects.Goal;
+import eu32k.ludumdare.ld26.objects.Player;
 import eu32k.ludumdare.ld26.state.GlobalState;
+import eu32k.ludumdare.ld26.state.LevelState;
+import eu32k.ludumdare.ld26.state.PlayerState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class Level {
@@ -88,14 +93,35 @@ public class Level {
       }
    }
 
+   public boolean isNearGameobject(GameObject object, Tile tile, int distance)
+   {
+      if(object == null || tile == null)
+         return false;
+      if(distance < 0)
+         distance = 0;
+      int ox = (int)object.getX();
+      int oy = (int)object.getY();
+      int tx = (int)tile.getX();
+      int ty = (int)tile.getY();
+      
+      int xDistance = Math.abs(ox - tx);
+      int yDistance = Math.abs(oy - ty);
+      return (xDistance <= distance || yDistance <= distance);
+   }
+   
    public Tile spawnTile() {
+      Player player = StateMachine.instance().getState(PlayerState.class).getPlayer();
+      Goal goal = StateMachine.instance().getState(LevelState.class).getGoal();
       List<Tile> edgeTiles = new ArrayList<Tile>();
       for (Tile tile : tiles) {
-         if (tile.getNeighbors().size() < 4) {
+         if (tile.getNeighbors().size() < 4 
+               && (isNearGameobject(player, tile, 0)
+               || isNearGameobject(goal, tile, 0))) {
             edgeTiles.add(tile);
          }
       }
       int randomTile = tileRandom.nextInt(edgeTiles.size());
+      
       Tile target = edgeTiles.get(randomTile);
       float xRand = target.getX();
       float yRand = target.getY();
