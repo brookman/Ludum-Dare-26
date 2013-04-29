@@ -1,9 +1,11 @@
 package eu32k.ludumdare.ld26.stages;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -11,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.Array;
 
 import eu32k.libgdx.rendering.Textures;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
@@ -47,11 +50,7 @@ public class LostStage extends Stage {
       challengeButton.addListener(new InputListener() {
          @Override
          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            LevelState levelState = StateMachine.instance().getState(LevelState.class);
-            levelState.events.clear();
-            levelState.initLevel();
-            levelState.addRetryStatistics();
-            StateMachine.instance().enterState(LevelInitState.class);
+            retry();
             return false;
          }
       });
@@ -92,6 +91,10 @@ public class LostStage extends Stage {
 
    @Override
    public void draw() {
+      if(Gdx.input.isKeyPressed(Input.Keys.R)) {
+         retry();
+         return;
+      }
       Color color = effects.getCurrentColor();
       challengeButton.setColor(color);
       seedButton.setColor(color);
@@ -100,6 +103,14 @@ public class LostStage extends Stage {
 
       Background.getInstance().draw(new Vector3(color.r, color.g, color.b), false);
       super.draw();
+   }
+
+   private void retry() {
+      LevelState levelState = StateMachine.instance().getState(LevelState.class);
+      levelState.events.clear();
+      levelState.initLevel();
+      levelState.addRetryStatistics();
+      StateMachine.instance().enterState(LevelState.class);
    }
 
 }
