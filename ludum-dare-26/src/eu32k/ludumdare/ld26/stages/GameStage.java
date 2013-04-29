@@ -13,13 +13,14 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import eu32k.ludumdare.ld26.Player;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
+import eu32k.ludumdare.ld26.effects.IRunningEffect;
 import eu32k.ludumdare.ld26.effects.TileFade;
+import eu32k.ludumdare.ld26.effects.TileMove;
 import eu32k.ludumdare.ld26.gameplay.GameplayEvent;
 import eu32k.ludumdare.ld26.gameplay.GameplayEvent.GameplayEventType;
 import eu32k.ludumdare.ld26.gameplay.WinLoseConditionHandler;
 import eu32k.ludumdare.ld26.level.Level;
 import eu32k.ludumdare.ld26.level.Tile;
-import eu32k.ludumdare.ld26.level.TileMove;
 import eu32k.ludumdare.ld26.level.TileSpawner;
 import eu32k.ludumdare.ld26.rendering.MainRenderer;
 import eu32k.ludumdare.ld26.state.GlobalState;
@@ -84,21 +85,10 @@ public class GameStage extends Stage {
       // updates --------------------------------------
       setPlayerTile();
 
-      List<TileMove> moves = levelState.getMovingTiles();
-      Iterator<TileMove> moveIterator = moves.iterator();
-      while (moveIterator.hasNext()) {
-         TileMove move = moveIterator.next();
-         if (move.complete()) {
-            moveIterator.remove();
-         } else {
-            move.update(delta);
-            if (move.complete()) {
-               moveIterator.remove();
-            }
-         }
-      }
+      updateRunningEffects(delta);
       
-      if(moves.size() > 0)
+      List<IRunningEffect> runningEffects = levelState.getRunningEffects();
+      if(runningEffects.size() > 0)
       {
          int count = 0;
          for(Tile t : levelState.getLevel().getTiles())
@@ -115,7 +105,6 @@ public class GameStage extends Stage {
          }
       }
 
-      fadeTiles(delta);
       
       if(levelState.playerTile == null) {
          levelState.deathConditionTimer += delta;
@@ -137,6 +126,22 @@ public class GameStage extends Stage {
 
       // rendering ------------------------------------
       renderer.render(delta, camera, level.getTiles(), player, effects.getCurrentColor());
+   }
+
+   private void updateRunningEffects(float delta) {
+      List<IRunningEffect> runningEffects = levelState.getRunningEffects();
+      Iterator<IRunningEffect> effectsIterator = runningEffects.iterator();
+      while (effectsIterator.hasNext()) {
+         IRunningEffect effect = effectsIterator.next();
+         if (effect.complete()) {
+            effectsIterator.remove();
+         } else {
+            effect.update(delta);
+            if (effect.complete()) {
+               effectsIterator.remove();
+            }
+         }
+      }
    }
 
    private void updatePlayerInput(float delta) {
@@ -172,22 +177,6 @@ public class GameStage extends Stage {
 
       if (escapePressed) {
          effects.stopSong(null);
-      }
-   }
-
-   private void fadeTiles(float delta) {
-      List<TileFade> fades = levelState.getFadingTiles();
-      Iterator<TileFade> fadeIterator = fades.iterator();
-      while (fadeIterator.hasNext()) {
-         TileFade fade = fadeIterator.next();
-         if (fade.complete()) {
-            fadeIterator.remove();
-         } else {
-            fade.update(delta);
-            if (fade.complete()) {
-               fadeIterator.remove();
-            }
-         }
       }
    }
 

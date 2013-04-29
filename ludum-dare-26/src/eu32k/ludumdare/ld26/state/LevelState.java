@@ -6,10 +6,11 @@ import java.util.List;
 import com.badlogic.gdx.graphics.Color;
 
 import eu32k.ludumdare.ld26.animation.TileAnimator;
+import eu32k.ludumdare.ld26.effects.IRunningEffect;
 import eu32k.ludumdare.ld26.effects.TileFade;
+import eu32k.ludumdare.ld26.effects.TileMove;
 import eu32k.ludumdare.ld26.level.Level;
 import eu32k.ludumdare.ld26.level.Tile;
-import eu32k.ludumdare.ld26.level.TileMove;
 import eu32k.ludumdare.ld26.rendering.TextConsole;
 
 public class LevelState extends GameState {
@@ -20,9 +21,8 @@ public class LevelState extends GameState {
    private int deathType;
 
    private Level level;
-   private List<TileMove> movingTiles;
+   private List<IRunningEffect> runningEffects;
    private TileAnimator tileAnimator;
-   private List<TileFade> fadingTiles;
 
    public Tile toPop;
    public Tile spawned;
@@ -31,8 +31,7 @@ public class LevelState extends GameState {
    public float deathConditionTimer;
 
    public LevelState() {
-      this.movingTiles = new ArrayList<TileMove>();
-      fadingTiles = new ArrayList<TileFade>();
+      this.runningEffects = new ArrayList<IRunningEffect>();
       tileAnimator = new TileAnimator();
       deathConditionTimer = 0;
    }
@@ -69,8 +68,8 @@ public class LevelState extends GameState {
       this.level = level;
    }
 
-   public List<TileMove> getMovingTiles() {
-      return movingTiles;
+   public List<IRunningEffect> getRunningEffects() {
+      return runningEffects;
    }
 
    public TileAnimator getTileAnimator() {
@@ -81,13 +80,6 @@ public class LevelState extends GameState {
       this.tileAnimator = tileAnimator;
    }
 
-   public List<TileFade> getFadingTiles() {
-      return fadingTiles;
-   }
-
-   public void setFadingTiles(List<TileFade> fadingTiles) {
-      this.fadingTiles = fadingTiles;
-   }
 
    public void setTextConsole(TextConsole console) {
       this.console = console;
