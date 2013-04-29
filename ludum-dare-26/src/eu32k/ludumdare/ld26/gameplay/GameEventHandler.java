@@ -13,6 +13,7 @@ import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.LevelWinningState;
 import eu32k.ludumdare.ld26.state.LevelWonState;
 import eu32k.ludumdare.ld26.state.MenuState;
+import eu32k.ludumdare.ld26.state.PlayerState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class GameEventHandler implements IEventHandler {
@@ -65,7 +66,15 @@ public class GameEventHandler implements IEventHandler {
       case NEXTLEVEL:
          if (state instanceof LevelWinningState || state instanceof LevelWonState) {
             if (levelState.getLevels().nextLevel()) {
+               levelState.addSuccessStatistic();
                levelState.initLevel();
+               PlayerState ps = StateMachine.instance().getState(PlayerState.class);
+               System.out.println();
+               System.out.println("Levels done: " + Integer.toString(levelState.getCurrentLevelIndex()));
+               for(String statistic : ps.genericStatistics.keySet())
+               {
+                  System.out.println(statistic + ": " + Integer.toString(ps.genericStatistics.get(statistic)));
+               }
                StateMachine.instance().enterState(LevelState.class);
             } else {
                StateMachine.instance().enterState(MenuState.class);
@@ -78,25 +87,15 @@ public class GameEventHandler implements IEventHandler {
          StateMachine.instance().enterState(LevelWinningState.class);
          break;
       case LOSE:
-         String death = "LOST";
          switch (event.getParam()) {
          case GameplayEvent.PARAM_LOSE_FALLOFFBOARD:
-            levelState.getEvents().clear();
-            death = "Player has fallen off the board";
-            levelState.log(death);
-            StateMachine.instance().enterState(LevelLosingState.class);
+            lose("Player has fallen off the board");
             break;
          case GameplayEvent.PARAM_LOSE_SQUASHED:
-            levelState.getEvents().clear();
-            death = "Player has been squashed to death";
-            levelState.log(death);
-            StateMachine.instance().enterState(LevelLosingState.class);
+            lose("Player has been squashed to death");
             break;
          case GameplayEvent.PARAM_LOSE_TIMEOUT:
-            levelState.getEvents().clear();
-            death = "Time is up";
-            levelState.log(death);
-            StateMachine.instance().enterState(LevelLosingState.class);
+            lose("Time is up");
             break;
          case GameplayEvent.PARAM_LOSE_TOLOST:
             if (state instanceof LevelLosingState) {
@@ -104,11 +103,15 @@ public class GameEventHandler implements IEventHandler {
             }
             return;
          }
-
-         // StateMachine.instance().createState(new LevelState());
-         // StateMachine.instance().getState(LevelState.class).setStage(new GameStage());
          break;
       }
+   }
+
+   private void lose(String death) {
+      levelState.getEvents().clear();
+      levelState.log(death);
+      levelState.addDeathStatistics();
+      StateMachine.instance().enterState(LevelLosingState.class);
    }
 
 }
