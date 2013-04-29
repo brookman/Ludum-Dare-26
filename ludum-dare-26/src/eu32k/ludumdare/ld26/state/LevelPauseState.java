@@ -1,8 +1,7 @@
 package eu32k.ludumdare.ld26.state;
 
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
-public class PauseState extends GameState {
+public class LevelPauseState extends GameState {
 
    @Override
 	public void init() {

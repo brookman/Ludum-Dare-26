@@ -18,7 +18,7 @@ import eu32k.ludumdare.ld26.effects.TileFade;
 import eu32k.ludumdare.ld26.effects.TileMove;
 import eu32k.ludumdare.ld26.gameplay.GameplayEvent;
 import eu32k.ludumdare.ld26.gameplay.GameplayEvent.GameplayEventType;
-import eu32k.ludumdare.ld26.gameplay.WinLoseConditionHandler;
+import eu32k.ludumdare.ld26.gameplay.GameEventHandler;
 import eu32k.ludumdare.ld26.level.Level;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.level.TileSpawner;
@@ -40,13 +40,14 @@ public class GameStage extends Stage {
 
    private TileSpawner tileSpawner;
 
-   private WinLoseConditionHandler winLose;
+   private GameEventHandler eventHandler;
 
    private LevelState levelState;
 
    private PlayerState playerState;
 
    private GlobalState globalState;
+   private float pauseTimer;
 
    public GameStage(EffectsManager effects) {
       this.effects = effects;
@@ -55,7 +56,7 @@ public class GameStage extends Stage {
       camera = new OrthographicCamera(2.0f * aspectRatio * ZOOM, 2.0f * ZOOM);
 
       tileSpawner = new TileSpawner();
-      winLose = new WinLoseConditionHandler();
+      eventHandler = new GameEventHandler();
       levelState = StateMachine.instance().getState(LevelState.class);
       globalState = StateMachine.instance().getState(GlobalState.class);
 
@@ -84,6 +85,8 @@ public class GameStage extends Stage {
       // updates --------------------------------------
       setPlayerTile();
 
+      pauseTimer -= delta;
+      
       if (running) {
 
          levelState.getEvents().tick(delta);
@@ -95,6 +98,14 @@ public class GameStage extends Stage {
          checkingGameConditions(delta);
 
          updatePlayerInput(delta);
+      }
+      else if(levelState.isPaused())
+      {
+         if (pausedPressed()) {
+            globalState.getEvents().enqueue(new GameplayEvent(GameplayEventType.RESUME));
+            return;
+         }
+
       }
       // tileAnimator.update(delta);
 
@@ -157,6 +168,11 @@ public class GameStage extends Stage {
       boolean down = Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN);
       boolean left = Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT);
       boolean right = Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT);
+      
+      if (pausedPressed()) {
+         levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.PAUSE));
+         return;
+      }
 
       boolean escapePressed = Gdx.input.isKeyPressed(Input.Keys.ESCAPE);
 
@@ -185,6 +201,19 @@ public class GameStage extends Stage {
       if (escapePressed) {
          effects.stopSong(null);
       }
+   }
+
+   private boolean pausedPressed() {
+      boolean pause = Gdx.input.isKeyPressed(Input.Keys.P);
+      if(pause)
+      {
+         if(pauseTimer <= 0)
+         {
+            pauseTimer = 0.5f;
+            return true;
+         }
+      }
+      return false;
    }
 
    private void setPlayerTile() {

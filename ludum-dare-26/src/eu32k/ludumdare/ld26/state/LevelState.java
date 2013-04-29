@@ -30,7 +30,9 @@ public class LevelState extends GameState {
    public float deathConditionTimer;
 
    public EventQueue events;
-   
+
+   private boolean paused;
+
    public LevelState() {
       this.runningEffects = new ArrayList<IRunningEffect>();
       tileAnimator = new TileAnimator();
@@ -41,7 +43,7 @@ public class LevelState extends GameState {
    @Override
    public void init() {
       transitions.add(LevelWinningState.class);
-      transitions.add(PauseState.class);
+      transitions.add(LevelPauseState.class);
       transitions.add(LevelLosingState.class);
       transitions.add(MenuState.class);
    }
@@ -82,7 +84,6 @@ public class LevelState extends GameState {
       this.tileAnimator = tileAnimator;
    }
 
-
    public void setTextConsole(TextConsole console) {
       this.console = console;
    }
@@ -115,8 +116,15 @@ public class LevelState extends GameState {
       this.running = running;
    }
 
-   public EventQueue getEvents()
-   {
+   public EventQueue getEvents() {
       return events;
+   }
+
+   public void setPaused(boolean paused) {
+      this.paused = paused;
+   }
+
+   public boolean isPaused() {
+      return this.paused;
    }
 }

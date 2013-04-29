@@ -4,18 +4,20 @@ import eu32k.ludumdare.ld26.events.IEvent;
 import eu32k.ludumdare.ld26.events.IEventHandler;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelLosingState;
+import eu32k.ludumdare.ld26.state.LevelPauseState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.LevelWinningState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
-public class WinLoseConditionHandler implements IEventHandler {
+public class GameEventHandler implements IEventHandler {
    
    private GlobalState globalState;
    private LevelState levelState;
    
-   public WinLoseConditionHandler() {
+   public GameEventHandler() {
       globalState = StateMachine.instance().getState(GlobalState.class);
       levelState = StateMachine.instance().getState(LevelState.class);
+      globalState.getEvents().addHandler(this);
       levelState.getEvents().addHandler(this);
    }
 
@@ -24,8 +26,18 @@ public class WinLoseConditionHandler implements IEventHandler {
       if(ev instanceof GameplayEvent) {
          GameplayEvent event = (GameplayEvent) ev;
          switch(event.getType()) {
+         case PAUSE:
+            levelState.setPaused(true);
+            levelState.log("Paused");
+            StateMachine.instance().enterState(LevelPauseState.class);            
+            break;
+         case RESUME:
+            levelState.setPaused(false);
+            levelState.log("Resumed");
+            StateMachine.instance().enterState(LevelState.class);            
+            break;
          case WIN:
-            StateMachine.instance().getState(LevelState.class).log("WON");
+            levelState.log("WON");
             StateMachine.instance().enterState(LevelWinningState.class);
             break;
          case LOSE:
@@ -43,7 +55,7 @@ public class WinLoseConditionHandler implements IEventHandler {
                break;
             }
             
-            StateMachine.instance().getState(LevelState.class).log(death);
+            levelState.log(death);
             
             StateMachine.instance().enterState(LevelLosingState.class);
 //            StateMachine.instance().createState(new LevelState());

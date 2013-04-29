@@ -11,7 +11,7 @@ public class GameplayEvent extends EventBase {
    public final static int PARAM_LOSE_SQUASHED = 3;
    
    public enum GameplayEventType {
-      WIN,LOSE;
+      START_GAME,PAUSE,RESUME,WIN,LOSE,EXIT;
    }
       
    private GameplayEventType type;
