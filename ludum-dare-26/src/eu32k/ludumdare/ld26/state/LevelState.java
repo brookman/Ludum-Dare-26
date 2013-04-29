@@ -189,6 +189,7 @@ public class LevelState extends GameState {
       if (tileSpawner == null) {
          tileSpawner = new TileSpawner();
       }
+      System.out.println("Level " + (levels.getLevelIndex()+ 1) + ", Seed: " + cfg.seed + ", w:" + cfg.width + ", h: " + cfg.height);
       levelRunning = 0f;
       PlayerState ps = StateMachine.instance().getState(PlayerState.class);
       events.clear();
