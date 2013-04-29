@@ -8,7 +8,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import eu32k.libgdx.rendering.Textures;
+import eu32k.ludumdare.ld26.level.Bounds;
 import eu32k.ludumdare.ld26.level.Tile;
+import eu32k.ludumdare.ld26.level.TileBoundingBoxes;
 
 public class Player extends GameObject {
 
@@ -18,7 +20,7 @@ public class Player extends GameObject {
    private Texture[] textures = new Texture[2];
 
    private boolean movingWithTile = false;
-   
+
    public Player(float x, float y) {
       super(new Vector2(x - WIDTH / 2.0f, y - WIDTH / 2.0f), WIDTH, HEIGHT);
    }
@@ -60,28 +62,31 @@ public class Player extends GameObject {
       }
    }
 
-   public boolean canMove(Vector2 newPos, List<Tile> tiles) {
+   public static boolean canMove(Vector2 newPos, List<Tile> tiles) {
       Vector2 posShifted = new Vector2(newPos.x - RADIUS / 2.0f, newPos.y - RADIUS / 2.0f);
 
-
       for (Tile tile : tiles) {
-         if(!canMoveIntoTile(posShifted, tile))
-            return false;
-      }
-      return true;
-   }
-
-   public boolean canMoveIntoTile(Vector2 posShifted, Tile tile) {
-      for (Rectangle tileBound : tile.getBounds()) {
-         if (intersects(posShifted, RADIUS, tileBound)) {
+         if (!canMoveIntoTile(posShifted, tile)) {
             return false;
          }
       }
       return true;
    }
 
-   private boolean intersects(Vector2 circlePos, float radius, Rectangle rect) {
-      Vector2 circleDistance = new Vector2(Math.abs(circlePos.x - rect.x), Math.abs(circlePos.y - rect.y));
+   public static boolean canMoveIntoTile(Vector2 posShifted, Tile tile) {
+      Bounds bounds = TileBoundingBoxes.getNormalizedBounds(tile.getType(), tile.getRotation());
+
+      for (Rectangle tileBound : bounds.boundingBoxes) {
+         if (intersects(posShifted, RADIUS, tileBound, tile)) {
+            return false;
+         }
+      }
+      return true;
+   }
+
+   private static boolean intersects(Vector2 circlePos, float radius, Rectangle rect, Tile tile) {
+
+      Vector2 circleDistance = new Vector2(Math.abs(circlePos.x - (rect.x + tile.getX())), Math.abs(circlePos.y - (rect.y + tile.getY())));
 
       if (circleDistance.x > rect.width / 2 + radius) {
          return false;
@@ -109,9 +114,8 @@ public class Player extends GameObject {
    public void setMovingWithTile(boolean movingWithTile) {
       this.movingWithTile = movingWithTile;
    }
-   
-   public Vector2 getShiftedPosition()
-   {
+
+   public Vector2 getShiftedPosition() {
       return position;
    }
 }

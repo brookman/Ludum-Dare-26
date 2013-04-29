@@ -1,14 +1,12 @@
 package eu32k.ludumdare.ld26.effects;
 
-import com.badlogic.gdx.graphics.Color;
-
 import eu32k.ludumdare.ld26.events.EventQueue;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
-public class TileFade {
+public class TileFade implements IRunningEffect {
    private boolean complete;
    private Tile tile;
    private float speed;
@@ -16,6 +14,10 @@ public class TileFade {
    private LevelState levelState;
    private float currentAlpha;
    
+   /* (non-Javadoc)
+    * @see eu32k.ludumdare.ld26.effects.IUpdateUntilComplete#complete()
+    */
+   @Override
    public boolean complete() {
       return complete;
    }
@@ -34,6 +36,10 @@ public class TileFade {
       this.speed = speed;
    }
    
+   /* (non-Javadoc)
+    * @see eu32k.ludumdare.ld26.effects.IUpdateUntilComplete#update(float)
+    */
+   @Override
    public void update(float delta) {
       currentAlpha -= (delta);
       if(currentAlpha < 0) {

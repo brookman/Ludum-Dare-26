@@ -1,13 +1,10 @@
 package eu32k.ludumdare.ld26.level;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import com.badlogic.gdx.math.Rectangle;
-
 import eu32k.ludumdare.ld26.Direction;
+import eu32k.ludumdare.ld26.MultiLayerSprite;
 
 public class Tile {
 
@@ -20,116 +17,12 @@ public class Tile {
    }
 
    public static float SIZE = 1.0f;
-   private static float BOUND_SIZE = SIZE / 3.0f; // 0.333333333
 
-   private static boolean[][][] boxes = new boolean[4][4][9];
-   static {
-      boxes[Type.L.ordinal()][Rotation.R.ordinal()] = new boolean[] { //
-      //
-            false, true, false,//
-            false, true, true,//
-            false, false, false,//
-      };
-      boxes[Type.L.ordinal()][Rotation.L.ordinal()] = new boolean[] { //
-      //
-            false, false, false,//
-            true, true, false,//
-            false, true, false,//
-      };
-      boxes[Type.L.ordinal()][Rotation.U.ordinal()] = new boolean[] { //
-      //
-            false, true, false,//
-            true, true, false,//
-            false, false, false,//
-      };
-      boxes[Type.L.ordinal()][Rotation.D.ordinal()] = new boolean[] { //
-      //
-            false, false, false,//
-            false, true, true,//
-            false, true, false,//
-      };
-
-      boxes[Type.I.ordinal()][Rotation.R.ordinal()] = new boolean[] { //
-      //
-            false, true, false,//
-            false, true, false,//
-            false, true, false,//
-      };
-      boxes[Type.I.ordinal()][Rotation.L.ordinal()] = new boolean[] { //
-      //
-            false, true, false,//
-            false, true, false,//
-            false, true, false,//
-      };
-      boxes[Type.I.ordinal()][Rotation.U.ordinal()] = new boolean[] { //
-      //
-            false, false, false,//
-            true, true, true,//
-            false, false, false,//
-      };
-      boxes[Type.I.ordinal()][Rotation.D.ordinal()] = new boolean[] { //
-      //
-            false, false, false,//
-            true, true, true,//
-            false, false, false,//
-      };
-
-      boxes[Type.X.ordinal()][Rotation.R.ordinal()] = new boolean[] { //
-      //
-            false, true, false,//
-            true, true, true,//
-            false, true, false,//
-      };
-      boxes[Type.X.ordinal()][Rotation.L.ordinal()] = new boolean[] { //
-      //
-            false, true, false,//
-            true, true, true,//
-            false, true, false,//
-      };
-      boxes[Type.X.ordinal()][Rotation.U.ordinal()] = new boolean[] { //
-      //
-            false, true, false,//
-            true, true, true,//
-            false, true, false,//
-      };
-      boxes[Type.X.ordinal()][Rotation.D.ordinal()] = new boolean[] { //
-      //
-            false, true, false,//
-            true, true, true,//
-            false, true, false,//
-      };
-
-      boxes[Type.T.ordinal()][Rotation.R.ordinal()] = new boolean[] { //
-      //
-            false, false, false,//
-            true, true, true,//
-            false, true, false,//
-      };
-      boxes[Type.T.ordinal()][Rotation.L.ordinal()] = new boolean[] { //
-      //
-            false, true, false,//
-            true, true, true,//
-            false, false, false,//
-      };
-      boxes[Type.T.ordinal()][Rotation.U.ordinal()] = new boolean[] { //
-      //
-            false, true, false,//
-            false, true, true,//
-            false, true, false,//
-      };
-      boxes[Type.T.ordinal()][Rotation.D.ordinal()] = new boolean[] { //
-      //
-            false, true, false,//
-            true, true, false,//
-            false, true, false,//
-      };
-   }
    public Type type;
    public Rotation rotation;
 
    private float x, y;
 
-   private List<Rectangle> bounds;
    private boolean isMoving;
    private Map<Direction, Tile> neighbors;
 
@@ -142,38 +35,7 @@ public class Tile {
       this.y = y;
       alpha = 1f;
 
-      bounds = new ArrayList<Rectangle>();
-
-      for (int i = 0; i < 9; i++) {
-         boolean isPath = boxes[type.ordinal()][rotation.ordinal()][i];
-         if (!isPath) {
-            int xPos = i % 3;
-            int yPos = 2 - i / 3;
-            bounds.add(new Rectangle(x + xPos * BOUND_SIZE, y + yPos * BOUND_SIZE, BOUND_SIZE, BOUND_SIZE));
-         }
-      }
-
       neighbors = new HashMap<Direction, Tile>();
-   }
-
-   private void updateBounds() {
-      int index = 0;
-      for (int i = 0; i < 9; i++) {
-         boolean isPath = boxes[type.ordinal()][rotation.ordinal()][i];
-         if (!isPath) {
-            int xPos = i % 3;
-            int yPos = 2 - i / 3;
-            Rectangle rect = bounds.get(index);
-            rect.x = x + xPos * BOUND_SIZE;
-            rect.y = y + yPos * BOUND_SIZE;
-            index++;
-         }
-      }
-
-   }
-
-   public List<Rectangle> getBounds() {
-      return bounds;
    }
 
    public boolean isMoving() {
@@ -198,7 +60,6 @@ public class Tile {
 
    public void setX(float x) {
       this.x = x;
-      updateBounds();
    }
 
    public float getY() {
@@ -207,7 +68,6 @@ public class Tile {
 
    public void setY(float y) {
       this.y = y;
-      updateBounds();
    }
 
    public Type getType() {
@@ -228,5 +88,15 @@ public class Tile {
 
    public float getAlpha() {
       return alpha;
+   }
+
+   public MultiLayerSprite getSprite() {
+      MultiLayerSprite sprite = TileSprites.getSprite(type, rotation);
+      sprite.setPosition(x, y);
+      return sprite;
+   }
+
+   public Bounds getBounds() {
+      return TileBoundingBoxes.getNormalizedBounds(type, rotation);
    }
 }

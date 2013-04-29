@@ -13,13 +13,14 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import eu32k.ludumdare.ld26.Player;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
+import eu32k.ludumdare.ld26.effects.IRunningEffect;
 import eu32k.ludumdare.ld26.effects.TileFade;
+import eu32k.ludumdare.ld26.effects.TileMove;
 import eu32k.ludumdare.ld26.gameplay.GameplayEvent;
 import eu32k.ludumdare.ld26.gameplay.GameplayEvent.GameplayEventType;
 import eu32k.ludumdare.ld26.gameplay.WinLoseConditionHandler;
 import eu32k.ludumdare.ld26.level.Level;
 import eu32k.ludumdare.ld26.level.Tile;
-import eu32k.ludumdare.ld26.level.TileMove;
 import eu32k.ludumdare.ld26.level.TileSpawner;
 import eu32k.ludumdare.ld26.rendering.MainRenderer;
 import eu32k.ludumdare.ld26.state.GlobalState;
@@ -59,7 +60,7 @@ public class GameStage extends Stage {
       globalState = StateMachine.instance().getState(GlobalState.class);
 
       renderer = new MainRenderer();
-
+      levelState.setTextConsole(renderer.getConsole());
       StateMachine.instance().createState(new PlayerState());
       playerState = StateMachine.instance().getState(PlayerState.class);
       player = playerState.getPlayer();
@@ -77,34 +78,17 @@ public class GameStage extends Stage {
 
    @Override
    public void draw() {
+      boolean running = levelState.isRunning();
       float delta = Gdx.graphics.getDeltaTime();
 
-      // player inputs --------------------------------
-      boolean up = Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP);
-      boolean down = Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN);
-      boolean left = Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT);
-      boolean right = Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT);
-
-      boolean escapePressed = Gdx.input.isKeyPressed(Input.Keys.ESCAPE);
 
       // updates --------------------------------------
       setPlayerTile();
 
-      List<TileMove> moves = levelState.getMovingTiles();
-      Iterator<TileMove> moveIterator = moves.iterator();
-      while (moveIterator.hasNext()) {
-         TileMove move = moveIterator.next();
-         if (move.complete()) {
-            moveIterator.remove();
-         } else {
-            move.update(delta);
-            if (move.complete()) {
-               moveIterator.remove();
-            }
-         }
-      }
+      updateRunningEffects(delta);
       
-      if(moves.size() > 0)
+      List<IRunningEffect> runningEffects = levelState.getRunningEffects();
+      if(runningEffects.size() > 0)
       {
          int count = 0;
          for(Tile t : levelState.getLevel().getTiles())
@@ -121,7 +105,6 @@ public class GameStage extends Stage {
          }
       }
 
-      fadeTiles(delta);
       
       if(levelState.playerTile == null) {
          levelState.deathConditionTimer += delta;
@@ -131,6 +114,44 @@ public class GameStage extends Stage {
       } else {
          levelState.deathConditionTimer = 0;
       }
+
+      updatePlayerInput(delta);
+
+      tileSpawner.update(delta);
+      // tileAnimator.update(delta);
+
+      camera.position.x = level.getWidth() / 2.0f;
+      camera.position.y = level.getHeight() / 2.0f;
+      camera.update();
+
+      // rendering ------------------------------------
+      renderer.render(delta, camera, level.getTiles(), player, effects.getCurrentColor());
+   }
+
+   private void updateRunningEffects(float delta) {
+      List<IRunningEffect> runningEffects = levelState.getRunningEffects();
+      Iterator<IRunningEffect> effectsIterator = runningEffects.iterator();
+      while (effectsIterator.hasNext()) {
+         IRunningEffect effect = effectsIterator.next();
+         if (effect.complete()) {
+            effectsIterator.remove();
+         } else {
+            effect.update(delta);
+            if (effect.complete()) {
+               effectsIterator.remove();
+            }
+         }
+      }
+   }
+
+   private void updatePlayerInput(float delta) {
+      // player inputs --------------------------------
+      boolean up = Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP);
+      boolean down = Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN);
+      boolean left = Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT);
+      boolean right = Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT);
+
+      boolean escapePressed = Gdx.input.isKeyPressed(Input.Keys.ESCAPE);
 
       Vector2 velocity = new Vector2(0.0f, 0.0f);
       if (up) {
@@ -156,32 +177,6 @@ public class GameStage extends Stage {
 
       if (escapePressed) {
          effects.stopSong(null);
-      }
-
-      tileSpawner.update(delta);
-      // tileAnimator.update(delta);
-
-      camera.position.x = level.getWidth() / 2.0f;
-      camera.position.y = level.getHeight() / 2.0f;
-      camera.update();
-
-      // rendering ------------------------------------
-      renderer.render(delta, camera, level.getTiles(), player, effects.getCurrentColor());
-   }
-
-   private void fadeTiles(float delta) {
-      List<TileFade> fades = levelState.getFadingTiles();
-      Iterator<TileFade> fadeIterator = fades.iterator();
-      while (fadeIterator.hasNext()) {
-         TileFade fade = fadeIterator.next();
-         if (fade.complete()) {
-            fadeIterator.remove();
-         } else {
-            fade.update(delta);
-            if (fade.complete()) {
-               fadeIterator.remove();
-            }
-         }
       }
    }
 

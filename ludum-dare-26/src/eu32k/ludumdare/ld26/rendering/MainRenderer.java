@@ -19,7 +19,6 @@ import eu32k.ludumdare.ld26.Config;
 import eu32k.ludumdare.ld26.MultiLayerSprite;
 import eu32k.ludumdare.ld26.Player;
 import eu32k.ludumdare.ld26.level.Tile;
-import eu32k.ludumdare.ld26.level.TileSprites;
 
 public class MainRenderer {
 
@@ -123,7 +122,7 @@ public class MainRenderer {
       debugRenderer.begin(ShapeType.FilledRectangle);
       debugRenderer.setColor(new Color(1.0f, 1.0f, 1.0f, 0.05f));
       for (Tile tile : tiles) {
-         for (Rectangle rect : tile.getBounds()) {
+         for (Rectangle rect : tile.getBounds().boundingBoxes) {
             debugRenderer.filledRect(rect.x, rect.y, rect.width, rect.height);
          }
       }
@@ -152,8 +151,7 @@ public class MainRenderer {
       batch.begin();
       float oldAlpha = 0f;
       for (Tile tile : tiles) {
-         MultiLayerSprite sprite = TileSprites.getSprite(tile.getType(), tile.getRotation());
-         sprite.setPosition(tile.getX(), tile.getY());
+         MultiLayerSprite sprite = tile.getSprite();
 
          if (bg) {
             sprite.activateLayer(0);
