@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import eu32k.libgdx.SimpleGame;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
+import eu32k.ludumdare.ld26.level.TileSprites;
 import eu32k.ludumdare.ld26.stages.GameStage;
 import eu32k.ludumdare.ld26.stages.LostStage;
 import eu32k.ludumdare.ld26.stages.MenuStage;
@@ -48,6 +49,7 @@ public class LudumDare26 extends SimpleGame {
       StateMachine.instance().getState(LostState.class).setStage(lostStage);
       StateMachine.instance().enterState(MenuState.class);
 
+      TileSprites.init();
    }
 
    @Override
