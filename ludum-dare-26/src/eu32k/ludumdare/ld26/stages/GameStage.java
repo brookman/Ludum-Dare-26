@@ -23,6 +23,7 @@ import eu32k.ludumdare.ld26.level.TileSpawner;
 import eu32k.ludumdare.ld26.objects.Goal;
 import eu32k.ludumdare.ld26.objects.Player;
 import eu32k.ludumdare.ld26.rendering.MainRenderer;
+import eu32k.ludumdare.ld26.rendering.TextRenderer;
 import eu32k.ludumdare.ld26.state.GameState;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelLosingState;
@@ -65,8 +66,6 @@ public class GameStage extends Stage {
       playerState = StateMachine.instance().getState(PlayerState.class);
       player = playerState.getPlayer();
 
-      renderer.getConsole().addLine("Hallo Velo");
-      renderer.getConsole().addLine("Hallo Tibau abuas");
    }
 
    @Override
@@ -80,6 +79,8 @@ public class GameStage extends Stage {
       this.level = levelState.getLevel();
       // updates --------------------------------------
       setPlayerAndGoalTile();
+      
+      renderer.getTextRenderer().addText("level", "Level " , 30, Gdx.graphics.getHeight() - 30);
 
       pauseTimer -= delta;
 

@@ -42,5 +42,10 @@ public class TextRenderer {
    public Map<String, Vector2> getTextPositions() {
       return textPositions;
    }
+   
+   public void addText(String textKey, String text, float x, float y) {
+      this.textLines.put(textKey, text);
+      this.textPositions.put(textKey, new Vector2(x, y));
+   }
 
 }

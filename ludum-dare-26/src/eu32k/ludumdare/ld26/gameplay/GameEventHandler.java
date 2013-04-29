@@ -38,7 +38,6 @@ public class GameEventHandler implements IEventHandler {
    }
 
    private void handleFadeComplete(FadeComplete ev) {
-      levelState.log("Popped tile");
       Tile t = ev.fade.getTile();
       t.setDead(true);
       levelState.getLevel().getTiles().remove(t);
@@ -55,12 +54,12 @@ public class GameEventHandler implements IEventHandler {
       switch (event.getType()) {
       case PAUSE:
          levelState.setPaused(true);
-         levelState.log("Paused");
+//         levelState.log("Paused");
          StateMachine.instance().enterState(LevelPauseState.class);
          break;
       case RESUME:
          levelState.setPaused(false);
-         levelState.log("Resumed");
+//         levelState.log("Resumed");
          StateMachine.instance().enterState(LevelState.class);
          break;
       case NEXTLEVEL:
@@ -82,7 +81,7 @@ public class GameEventHandler implements IEventHandler {
          }
          break;
       case WIN:
-         levelState.log("WON");
+//         levelState.log("WON");
          levelState.getEvents().clear();
          StateMachine.instance().enterState(LevelWinningState.class);
          break;
@@ -109,7 +108,7 @@ public class GameEventHandler implements IEventHandler {
 
    private void lose(String death) {
       levelState.getEvents().clear();
-      levelState.log(death);
+//      levelState.log(death);
       levelState.addDeathStatistics();
       StateMachine.instance().enterState(LevelLosingState.class);
    }

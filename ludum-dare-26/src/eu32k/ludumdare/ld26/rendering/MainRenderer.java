@@ -45,11 +45,14 @@ public class MainRenderer {
    private BitmapFont consolasFont;
 
    private AdvancedShader background;
-
+   
+   private TextRenderer textRenderer;
+   
    public MainRenderer() {
       batch = new SpriteBatch();
       hudBatch = new SpriteBatch();
       debugRenderer = new ShapeRenderer();
+      textRenderer = new TextRenderer();
       text = new RunText("Welcome to the super minimalistic labyrinth game! yay! :D", 5.0f);
       fps = new BitmapFont(Gdx.files.internal("fonts/calibri.fnt"), Gdx.files.internal("fonts/calibri.png"), false);
       consolasFont = new BitmapFont(Gdx.files.internal("fonts/consolas.fnt"), Gdx.files.internal("fonts/consolas.png"), false);
@@ -81,12 +84,14 @@ public class MainRenderer {
       render(true, camera, tiles, player, goal, color, time);
       // renderDebug(camera, tiles);
 
-      hudBatch.begin();
-      text.draw(hudBatch, 30.0f, 50.0f);
-      fps.draw(hudBatch, "fps: " + Gdx.graphics.getFramesPerSecond(), 30.0f, Gdx.graphics.getHeight() - 30.0f);
-      fps.draw(hudBatch, DebugText.text == null ? "null" : DebugText.text, 30.0f, Gdx.graphics.getHeight() - 60.0f);
-      console.draw(hudBatch);
-      hudBatch.end();
+//      hudBatch.begin();
+//      text.draw(hudBatch, 30.0f, 50.0f);
+//      fps.draw(hudBatch, "fps: " + Gdx.graphics.getFramesPerSecond(), 30.0f, Gdx.graphics.getHeight() - 30.0f);
+//      fps.draw(hudBatch, DebugText.text == null ? "null" : DebugText.text, 30.0f, Gdx.graphics.getHeight() - 60.0f);
+//      console.draw(hudBatch);
+//      hudBatch.end();
+      
+      textRenderer.render();
 
       mainBuffer.end();
 
@@ -252,4 +257,9 @@ public class MainRenderer {
    }
 
    private boolean paused;
+
+   public TextRenderer getTextRenderer() {
+      return textRenderer;
+   }
+
 }
