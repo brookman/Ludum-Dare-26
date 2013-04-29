@@ -3,9 +3,7 @@ package eu32k.ludumdare.ld26.animation;
 import eu32k.ludumdare.ld26.Direction;
 import eu32k.ludumdare.ld26.effects.TileFade;
 import eu32k.ludumdare.ld26.level.Tile;
-import eu32k.ludumdare.ld26.level.TileEvent;
 import eu32k.ludumdare.ld26.level.TileMove;
-import eu32k.ludumdare.ld26.level.TileEvent.TileEventType;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.StateMachine;
@@ -13,7 +11,7 @@ import eu32k.ludumdare.ld26.state.StateMachine;
 public class TileAnimator {
 
    private float speed = 0.8f;
-   
+
    private GlobalState globalState;
 
    public TileAnimator() {
@@ -30,19 +28,19 @@ public class TileAnimator {
          switch (dir) {
          case N:
             targetX = toShift.getX();
-            targetY = toShift.getY() + toShift.getSprite().getHeight();
+            targetY = toShift.getY() + Tile.SIZE;
             break;
          case E:
-            targetX = toShift.getX() + toShift.getSprite().getWidth();
+            targetX = toShift.getX() + Tile.SIZE;
             targetY = toShift.getY();
             break;
          case S:
             targetX = toShift.getX();
-            targetY = toShift.getY() - toShift.getSprite().getHeight();
+            targetY = toShift.getY() - Tile.SIZE;
             break;
          case W:
          default:
-            targetX = toShift.getX() - toShift.getSprite().getWidth();
+            targetX = toShift.getX() - Tile.SIZE;
             targetY = toShift.getY();
             break;
          }
@@ -61,16 +59,16 @@ public class TileAnimator {
       Direction dir = spawned.getNeighbors().keySet().iterator().next();
       switch (dir) {
       case N:
-         spawned.setY(spawned.getY()-1);
+         spawned.setY(spawned.getY() - 1);
          break;
       case E:
-         spawned.setX(spawned.getX()-1);
+         spawned.setX(spawned.getX() - 1);
          break;
       case S:
-         spawned.setY(spawned.getY()+1);
+         spawned.setY(spawned.getY() + 1);
          break;
       case W:
-         spawned.setX(spawned.getX()+1);
+         spawned.setX(spawned.getX() + 1);
       default:
          break;
       }

@@ -24,7 +24,6 @@ public class LudumDare26 extends SimpleGame {
    private MenuStage menuStage;
    private GameStage gameStage;
    private LostStage lostStage;
-   private Stage currentStage;
 
    public LudumDare26() {
       super(false);
@@ -38,6 +37,8 @@ public class LudumDare26 extends SimpleGame {
 
    @Override
    public void init() {
+      TileSprites.init();
+
       effects = new EffectsManager();
       effects.initOtgy(0);
 
@@ -49,16 +50,13 @@ public class LudumDare26 extends SimpleGame {
       StateMachine.instance().getState(LostState.class).setStage(lostStage);
       StateMachine.instance().enterState(MenuState.class);
 
-      TileSprites.init();
    }
 
    @Override
    public void draw(float delta) {
       StateMachine.instance().getState(GlobalState.class).getEvents().tick(delta);
       effects.update(delta);
-      // if (currentStage == null) {
-      // selectStage(menuStage);
-      // }
+
       Stage current = StateMachine.instance().getCurrentState().getStage();
       if (current != null) {
          Gdx.input.setInputProcessor(current);

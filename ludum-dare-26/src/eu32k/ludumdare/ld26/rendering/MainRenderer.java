@@ -19,6 +19,7 @@ import eu32k.ludumdare.ld26.Config;
 import eu32k.ludumdare.ld26.MultiLayerSprite;
 import eu32k.ludumdare.ld26.Player;
 import eu32k.ludumdare.ld26.level.Tile;
+import eu32k.ludumdare.ld26.level.TileSprites;
 
 public class MainRenderer {
 
@@ -64,7 +65,7 @@ public class MainRenderer {
       horizontalBlur = new AdvancedShader(Gdx.files.internal("shaders/simple.vsh").readString(), Gdx.files.internal("shaders/blur_h.fsh").readString());
 
       background = new AdvancedShader(Gdx.files.internal("shaders/simple.vsh").readString(), Gdx.files.internal("shaders/background.fsh").readString());
-      //System.out.println(background.getLog());
+      // System.out.println(background.getLog());
    }
 
    public void render(float delta, Camera camera, List<Tile> tiles, Player player, Color color) {
@@ -151,7 +152,8 @@ public class MainRenderer {
       batch.begin();
       float oldAlpha = 0f;
       for (Tile tile : tiles) {
-         MultiLayerSprite sprite = tile.getSprite();
+         MultiLayerSprite sprite = TileSprites.getSprite(tile.getType(), tile.getRotation());
+         sprite.setPosition(tile.getX(), tile.getY());
 
          if (bg) {
             sprite.activateLayer(0);
@@ -168,7 +170,7 @@ public class MainRenderer {
          sprite.setColor(color);
          sprite.draw(batch);
          color.a = oldAlpha;
-         
+
       }
 
       if (bg) {
