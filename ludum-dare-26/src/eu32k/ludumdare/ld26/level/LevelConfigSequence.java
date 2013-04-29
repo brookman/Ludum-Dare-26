@@ -57,4 +57,12 @@ public class LevelConfigSequence {
          return null;
       return levels.get(levelIndex);
    }
+
+   public void reset() {
+      this.levelIndex = 0;
+   }
+
+   public int getLevelIndex() {
+      return levelIndex;
+   }
 }

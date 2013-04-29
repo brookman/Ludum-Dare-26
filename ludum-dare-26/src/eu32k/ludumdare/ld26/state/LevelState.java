@@ -27,7 +27,7 @@ public class LevelState extends GameState {
    private boolean initializing;
    private boolean running;
    private int deathType;
-
+   private float levelRunning;
    private Level level;
    private List<IRunningEffect> runningEffects;
    private TileAnimator tileAnimator;
@@ -167,6 +167,15 @@ public class LevelState extends GameState {
       this.goal = goal;
    }
 
+   public void initGame() {
+      PlayerState ps = StateMachine.instance().getState(PlayerState.class);
+      ps.resetStatistic(PlayerState.STATISTIC_DEATHS);
+      ps.resetStatistic(PlayerState.STATISTIC_RETRIES);
+      ps.resetStatistic(PlayerState.STATISTIC_SUCCESSFULTIME);
+      ps.resetStatistic(PlayerState.STATISTIC_TOTALTIME);
+      levels.reset();
+   }
+
    public void initLevel() {
       if (levels != null) {
          initLevel(levels.getCurrentConfig());
@@ -177,9 +186,11 @@ public class LevelState extends GameState {
       if (cfg == null) {
          return;
       }
-      if(tileSpawner == null){
+      if (tileSpawner == null) {
          tileSpawner = new TileSpawner();
       }
+      levelRunning = 0f;
+      PlayerState ps = StateMachine.instance().getState(PlayerState.class);
       events.clear();
       runningEffects.clear();
       spawned = null;
@@ -226,6 +237,7 @@ public class LevelState extends GameState {
    public void update(float delta) {
       events.tick(delta);
       tileSpawner.update(delta);
+      levelRunning += delta;
    }
 
    private void findSuitableGoalPosition(Vector2 p, Vector2 g, Vector2 tmp) {
@@ -263,6 +275,33 @@ public class LevelState extends GameState {
 
    public boolean isInitializing() {
       return initializing;
+   }
+
+   public void addDeathStatistics() {
+      PlayerState ps = StateMachine.instance().getState(PlayerState.class);
+      addTime(ps, PlayerState.STATISTIC_TOTALTIME);
+      ps.countStatistic(PlayerState.STATISTIC_DEATHS);
+   }
+
+   private void addTime(PlayerState ps, String key) {
+      int total = ps.genericStatistics.get(key);
+      ps.setStatistic(key, total + (int) levelRunning);
+   }
+
+   public void addRetryStatistics() {
+      PlayerState ps = StateMachine.instance().getState(PlayerState.class);
+      ps.countStatistic(PlayerState.STATISTIC_RETRIES);
+  }
+
+   public void addSuccessStatistic() {
+      PlayerState ps = StateMachine.instance().getState(PlayerState.class);
+      addTime(ps, PlayerState.STATISTIC_TOTALTIME);
+      addTime(ps, PlayerState.STATISTIC_SUCCESSFULTIME);
+     
+   }
+
+   public int getCurrentLevelIndex() {
+      return levels == null ? 0 : levels.getLevelIndex();
    }
 
 }
