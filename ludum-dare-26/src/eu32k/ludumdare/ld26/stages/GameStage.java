@@ -65,12 +65,8 @@ public class GameStage extends Stage {
       StateMachine.instance().createState(new PlayerState());
       playerState = StateMachine.instance().getState(PlayerState.class);
       player = playerState.getPlayer();
-      playerState.initLevel(0, 0);
 
-      level = new Level(5, 5);
-      level.generateRandomTiles();
-
-      levelState.setLevel(level);
+      levelState.initLevel(5, 5);
       tileSpawner.init();
 
       renderer.getConsole().addLine("Hallo Velo");
@@ -82,11 +78,15 @@ public class GameStage extends Stage {
       boolean running = levelState.isRunning();
       float delta = Gdx.graphics.getDeltaTime();
 
+      if (!levelState.ready()) {
+         return;
+      }
+      this.level = levelState.getLevel();
       // updates --------------------------------------
       setPlayerTile();
 
       pauseTimer -= delta;
-      
+
       if (running) {
 
          levelState.getEvents().tick(delta);
@@ -98,9 +98,7 @@ public class GameStage extends Stage {
          checkingGameConditions(delta);
 
          updatePlayerInput(delta);
-      }
-      else if(levelState.isPaused())
-      {
+      } else if (levelState.isPaused()) {
          if (pausedPressed()) {
             globalState.getEvents().enqueue(new GameplayEvent(GameplayEventType.RESUME));
             return;
@@ -108,15 +106,11 @@ public class GameStage extends Stage {
 
       }
       GameState currentState = StateMachine.instance().getCurrentState();
-      if(currentState instanceof LevelLosingState)
-      {
-         LevelLosingState lState = (LevelLosingState)currentState;
-         if(lState.handleKeys(delta)
-               && (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)
-                     || (Gdx.input.isTouched())))
-         {
+      if (currentState instanceof LevelLosingState) {
+         LevelLosingState lState = (LevelLosingState) currentState;
+         if (lState.handleKeys(delta) && (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY) || (Gdx.input.isTouched()))) {
             globalState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, 0, GameplayEvent.PARAM_LOSE_TOLOST));
-            
+
          }
       }
       // tileAnimator.update(delta);
@@ -151,7 +145,7 @@ public class GameStage extends Stage {
       if (levelState.playerTile == null) {
          levelState.deathConditionTimer += delta;
          if (levelState.deathConditionTimer > 0.05) {
-            levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE,  0, GameplayEvent.PARAM_LOSE_FALLOFFBOARD));
+            levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, 0, GameplayEvent.PARAM_LOSE_FALLOFFBOARD));
          }
       } else {
          levelState.deathConditionTimer = 0;
@@ -180,7 +174,7 @@ public class GameStage extends Stage {
       boolean down = Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN);
       boolean left = Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT);
       boolean right = Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT);
-      
+
       if (pausedPressed()) {
          levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.PAUSE));
          return;
@@ -217,10 +211,8 @@ public class GameStage extends Stage {
 
    private boolean pausedPressed() {
       boolean pause = Gdx.input.isKeyPressed(Input.Keys.P);
-      if(pause)
-      {
-         if(pauseTimer <= 0)
-         {
+      if (pause) {
+         if (pauseTimer <= 0) {
             pauseTimer = 0.5f;
             return true;
          }
