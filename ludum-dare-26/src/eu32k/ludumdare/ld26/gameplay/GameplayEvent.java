@@ -1,6 +1,7 @@
 package eu32k.ludumdare.ld26.gameplay;
 
 import eu32k.ludumdare.ld26.events.EventBase;
+import eu32k.ludumdare.ld26.gameplay.GameplayEvent.GameplayEventType;
 
 public class GameplayEvent extends EventBase {
    
@@ -23,12 +24,16 @@ public class GameplayEvent extends EventBase {
       this(type, 0, PARAM_NONE);
    }
 
-   public GameplayEvent(GameplayEventType type, int timer, int param) {
+   public GameplayEvent(GameplayEventType type, float timer, int param) {
       setTime(timer);
       this.type = type;
       this.setParam(param);
    }
    
+
+   public GameplayEvent(GameplayEventType startGame, float f) {
+      this(startGame, f, 0);
+   }
 
    public GameplayEventType getType() {
       return type;

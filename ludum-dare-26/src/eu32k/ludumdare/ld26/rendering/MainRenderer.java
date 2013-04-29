@@ -76,12 +76,12 @@ public class MainRenderer {
       inverseColor = new Color();
    }
 
-   public void render(float delta, Camera camera, List<Tile> tiles, Player player, Goal goal, Color color) {
+   public void render(float delta, Camera camera, List<Tile> tiles, Player player, Goal goal, Color mainColor, Color playerColor, Color inverseColor) {
       mainBuffer.begin();
 
       float time = Time.getTime();
 
-      render(true, camera, tiles, player, goal, color, time);
+      render(true, camera, tiles, player, goal, mainColor, playerColor, inverseColor, time);
       // renderDebug(camera, tiles);
 
 //      hudBatch.begin();
@@ -96,7 +96,7 @@ public class MainRenderer {
       mainBuffer.end();
 
       secondaryBuffer.begin();
-      render(false, camera, tiles, player, goal, color, time);
+      render(false, camera, tiles, player, goal, mainColor, playerColor, inverseColor, time);
       secondaryBuffer.end();
 
       Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
@@ -149,23 +149,19 @@ public class MainRenderer {
       debugRenderer.end();
    }
 
-   private void render(boolean bg, Camera camera, List<Tile> tiles, Player player, Goal goal, Color color, float time) {
+   private void render(boolean bg, Camera camera, List<Tile> tiles, Player player, Goal goal, Color mainColor, Color playerColor, Color inverseColor, float time) {
 
       Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
       Gdx.gl.glEnable(GL20.GL_BLEND);
       Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-      Background.getInstance().draw(new Vector3(color.r, color.g, color.b), true, time);
+      Background.getInstance().draw(new Vector3(mainColor.r, mainColor.g, mainColor.b), true, time);
 
       batch.setProjectionMatrix(camera.combined);
       batch.begin();
       float oldAlpha = 0f;
       LevelState ls = StateMachine.instance().getState(LevelState.class);
-      inverseColor.r = 1f - color.r;
-      inverseColor.g = 1f - color.g;
-      inverseColor.b = 1f- color.b;
-      inverseColor.a = 1f;
       for (Tile tile : tiles) {
          MultiLayerSprite sprite = tile.getSprite();
 
@@ -180,11 +176,11 @@ public class MainRenderer {
 
          boolean isPlayerTile = ls.playerTile == tile || ls.goalTile == tile;
          sprite.activateLayer(1);
-         oldAlpha = color.a;
-         color.a = tile.getAlpha();
-         sprite.setColor(isPlayerTile ? inverseColor : color);
+         oldAlpha = playerColor.a;
+         playerColor.a = tile.getAlpha();
+         sprite.setColor(isPlayerTile ? playerColor : mainColor);
          sprite.draw(batch);
-         color.a = oldAlpha;
+         playerColor.a = oldAlpha;
 
       }
       if (bg) {
@@ -194,7 +190,7 @@ public class MainRenderer {
       }
 
       goal.getSprite().activateLayer(1);
-      goal.getSprite().setColor(color);
+      goal.getSprite().setColor(inverseColor);
       goal.draw(batch);
 
       if (bg) {
@@ -205,9 +201,9 @@ public class MainRenderer {
 
       float deltaTime = paused ? 0 : Gdx.graphics.getDeltaTime();
       player.getSprite().activateLayer(1);
-      player.getSprite().setColor(inverseColor);
+      player.getSprite().setColor(playerColor);
       player.draw(batch);
-      player.getEffect().draw(batch, inverseColor, deltaTime);
+      player.getEffect().draw(batch, playerColor, deltaTime);
 
       if (bg) {
          goal.getSprite().activateLayer(0);
@@ -216,9 +212,9 @@ public class MainRenderer {
       }
 
       goal.getSprite().activateLayer(1);
-      goal.getSprite().setColor(color);
+      goal.getSprite().setColor(inverseColor);
       goal.draw(batch);
-      goal.getEffect().draw(batch, color, deltaTime);
+      goal.getEffect().draw(batch, inverseColor, deltaTime);
 
       batch.end();
 
