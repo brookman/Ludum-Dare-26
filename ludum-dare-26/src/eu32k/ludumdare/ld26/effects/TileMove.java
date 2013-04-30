@@ -61,6 +61,8 @@ public class TileMove implements IRunningEffect {
       Goal goal = levelState.getGoal();
       boolean movesPlayer = player != null && levelState.playerTile != null && levelState.playerTile.equals(tile);
       boolean movesGoal = goal != null && levelState.goalTile != null && levelState.goalTile.equals(tile);
+      if(goal.isFreeMovement())
+         movesGoal = false;
       if(movesPlayer)
       {
          poX = player.getX() - x;
