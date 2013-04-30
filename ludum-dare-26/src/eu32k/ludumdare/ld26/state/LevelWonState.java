@@ -1,6 +1,5 @@
 package eu32k.ludumdare.ld26.state;
 
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class LevelWonState extends GameState {
 

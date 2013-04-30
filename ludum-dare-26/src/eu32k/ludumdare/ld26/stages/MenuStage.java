@@ -154,7 +154,7 @@ public class MenuStage extends Stage {
    }
 
    private void challengeMode() {
-      startGame(939, 3, 3, 12, 8, 25);
+      startGame(939, 3, 3, 12, 8, 1);
    }
 
    private void seedMode() {
