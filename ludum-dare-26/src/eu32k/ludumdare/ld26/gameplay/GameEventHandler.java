@@ -13,7 +13,6 @@ import eu32k.ludumdare.ld26.state.LevelPauseState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.LevelWinningState;
 import eu32k.ludumdare.ld26.state.LevelWonState;
-import eu32k.ludumdare.ld26.state.MenuState;
 import eu32k.ludumdare.ld26.state.PlayerState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
@@ -55,12 +54,12 @@ public class GameEventHandler implements IEventHandler {
       switch (event.getType()) {
       case PAUSE:
          levelState.setPaused(true);
-//         levelState.log("Paused");
+         // levelState.log("Paused");
          StateMachine.instance().enterState(LevelPauseState.class);
          break;
       case RESUME:
          levelState.setPaused(false);
-//         levelState.log("Resumed");
+         // levelState.log("Resumed");
          StateMachine.instance().enterState(LevelState.class);
          break;
       case NEXTLEVEL:
@@ -71,12 +70,12 @@ public class GameEventHandler implements IEventHandler {
                PlayerState ps = StateMachine.instance().getState(PlayerState.class);
                StateMachine.instance().enterState(LevelInitState.class);
             } else {
-               StateMachine.instance().enterState(MenuState.class);
+               StateMachine.instance().enterState(LevelWonState.class);
             }
          }
          break;
       case WIN:
-//         levelState.log("WON");
+         // levelState.log("WON");
          levelState.getEvents().clear();
          StateMachine.instance().enterState(LevelWinningState.class);
          break;
@@ -106,7 +105,7 @@ public class GameEventHandler implements IEventHandler {
 
    private void lose(String death) {
       levelState.getEvents().clear();
-//      levelState.log(death);
+      // levelState.log(death);
       levelState.addDeathStatistics();
       StateMachine.instance().enterState(LevelLosingState.class);
    }
