@@ -2,7 +2,6 @@ package eu32k.ludumdare.ld26.stages;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -92,7 +91,7 @@ public class LevelFinishedStage extends Stage {
       exitButton.setColor(color);
       title.setColor(color);
 
-      Background.getInstance().draw(new Vector3(color.r, color.g, color.b), false);
+      Background.getInstance().draw(color, false);
       super.draw();
    }
 

@@ -43,27 +43,25 @@ public class Player extends GameObject {
       return sprite;
    }
 
-   public void move(Vector2 velocity, List<Tile> tiles) {
-      Vector2 scaledVelocity = velocity.cpy().mul(SPEED);
+   public void move(float xVelocity, float yVelocity, List<Tile> tiles) {
 
-      Vector2 xPart = new Vector2(scaledVelocity.x, 0.0f);
-      Vector2 yPart = new Vector2(0.0f, scaledVelocity.y);
-
-      Vector2 newPos = position.cpy().add(xPart);
+      Vector2 xPart = Vector2.tmp.set(xVelocity * SPEED, 0.0f);
+      Vector2 newPos = xPart.add(position);
 
       if (canMove(newPos, tiles)) {
-         position = newPos;
+         position.set(newPos);
       }
 
-      newPos = position.cpy().add(yPart);
+      Vector2 yPart = Vector2.tmp.set(0.0f, yVelocity * SPEED);
+      newPos = yPart.add(position);
 
       if (canMove(newPos, tiles)) {
-         position = newPos;
+         position.set(newPos);
       }
    }
 
    public static boolean canMove(Vector2 newPos, List<Tile> tiles) {
-      Vector2 posShifted = new Vector2(newPos.x - RADIUS / 2.0f, newPos.y - RADIUS / 2.0f);
+      Vector2 posShifted = Vector2.tmp2.set(newPos.x - RADIUS / 2.0f, newPos.y - RADIUS / 2.0f);
 
       for (Tile tile : tiles) {
          if (!canMoveIntoTile(posShifted, tile)) {
@@ -90,7 +88,7 @@ public class Player extends GameObject {
 
    private static boolean intersects(Vector2 circlePos, float radius, Rectangle rect, Tile tile) {
 
-      Vector2 circleDistance = new Vector2(Math.abs(circlePos.x - (rect.x + tile.getX())), Math.abs(circlePos.y - (rect.y + tile.getY())));
+      Vector2 circleDistance = Vector2.tmp3.set(Math.abs(circlePos.x - (rect.x + tile.getX())), Math.abs(circlePos.y - (rect.y + tile.getY())));
 
       if (circleDistance.x > rect.width / 2 + radius) {
          return false;

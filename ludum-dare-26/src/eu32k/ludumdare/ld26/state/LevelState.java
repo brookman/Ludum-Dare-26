@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 import eu32k.ludumdare.ld26.animation.TileAnimator;
@@ -56,10 +55,10 @@ public class LevelState extends GameState {
    private TileSpawner tileSpawner;
 
    public LevelState() {
-      this.runningEffects = new ArrayList<IRunningEffect>();
+      runningEffects = new ArrayList<IRunningEffect>();
       tileAnimator = new TileAnimator();
       deathConditionTimer = 0;
-      this.events = new EventQueue();
+      events = new EventQueue();
       setLevels(new LevelConfigSequence());
    }
 
@@ -99,8 +98,8 @@ public class LevelState extends GameState {
    public void setLevel(Level level) {
       this.level = level;
       if (level != null) {
-         this.width = level.getWidth();
-         this.height = level.getHeight();
+         width = level.getWidth();
+         height = level.getHeight();
       }
    }
 
@@ -120,17 +119,17 @@ public class LevelState extends GameState {
       this.console = console;
    }
 
-//   public void log(String text) {
-//      if (console != null) {
-//         console.addLine(text);
-//      }
-//   }
-//
-//   public void log(String text, Color color) {
-//      if (console != null) {
-//         console.addLine(text, color);
-//      }
-//   }
+   // public void log(String text) {
+   // if (console != null) {
+   // console.addLine(text);
+   // }
+   // }
+   //
+   // public void log(String text, Color color) {
+   // if (console != null) {
+   // console.addLine(text, color);
+   // }
+   // }
 
    public int getDeathType() {
       return deathType;
@@ -157,7 +156,7 @@ public class LevelState extends GameState {
    }
 
    public boolean isPaused() {
-      return this.paused;
+      return paused;
    }
 
    public Goal getGoal() {
@@ -190,7 +189,6 @@ public class LevelState extends GameState {
       if (tileSpawner == null) {
          tileSpawner = new TileSpawner();
       }
-      System.out.println("Level " + (levels.getLevelIndex()+ 1) + ", Seed: " + cfg.seed + ", w:" + cfg.width + ", h: " + cfg.height);
       levelRunning = 0f;
       PlayerState ps = StateMachine.instance().getState(PlayerState.class);
       events.clear();
@@ -200,15 +198,15 @@ public class LevelState extends GameState {
       playerTile = null;
       goalTile = null;
       random = new Random(cfg.seed);
-      this.width = cfg.width;
-      this.height = cfg.height;
+      width = cfg.width;
+      height = cfg.height;
       if (width < 3) {
          width = 3;
       }
       if (height < 3) {
          height = 3;
       }
-      this.level = new Level(width, height);
+      level = new Level(width, height);
       level.setRandom(random);
       level.generateRandomTiles();
 
@@ -244,13 +242,13 @@ public class LevelState extends GameState {
 
    private void findSuitableGoalPosition(Vector2 p, Vector2 g, Vector2 tmp) {
       do {
-         g.set(random.nextInt(this.width), random.nextInt(this.height));
+         g.set(random.nextInt(width), random.nextInt(height));
          tmp.set(g);
       } while (tmp.sub(p).len() < 1.5f);
    }
 
    public void repositionGoal() {
-//      log("Repositioning goal");
+      // log("Repositioning goal");
       Vector2 p = Vector2.tmp;
       Vector2 g = Vector2.tmp2;
       Vector2 tmp = Vector2.tmp3;
@@ -258,7 +256,6 @@ public class LevelState extends GameState {
       p.set(player.getX(), player.getY());
       findSuitableGoalPosition(p, g, tmp);
       GameObjectMove move = new GameObjectMove();
-      // System.out.println(Float.toString(g.x) + "/" + Float.toString(g.y));
       move.initMove(goal, g.y + 0.5f, g.x + 0.5f, 5f);
       runningEffects.add(move);
    }
@@ -293,13 +290,13 @@ public class LevelState extends GameState {
    public void addRetryStatistics() {
       PlayerState ps = StateMachine.instance().getState(PlayerState.class);
       ps.countStatistic(PlayerState.STATISTIC_RETRIES);
-  }
+   }
 
    public void addSuccessStatistic() {
       PlayerState ps = StateMachine.instance().getState(PlayerState.class);
       addTime(ps, PlayerState.STATISTIC_TOTALTIME);
       addTime(ps, PlayerState.STATISTIC_SUCCESSFULTIME);
-     
+
    }
 
    public int getCurrentLevelIndex() {

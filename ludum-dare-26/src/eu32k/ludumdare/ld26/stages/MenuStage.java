@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -138,7 +137,7 @@ public class MenuStage extends Stage {
       seed.setColor(color);
       seed.getStyle().fontColor.a = color.a;
 
-      Background.getInstance().draw(new Vector3(color.r, color.g, color.b), false);
+      Background.getInstance().draw(color, false);
       super.draw();
    }
 

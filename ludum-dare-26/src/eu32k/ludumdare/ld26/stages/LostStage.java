@@ -4,8 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -13,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.Array;
 
 import eu32k.libgdx.rendering.Textures;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
@@ -91,7 +88,7 @@ public class LostStage extends Stage {
 
    @Override
    public void draw() {
-      if(Gdx.input.isKeyPressed(Input.Keys.R)) {
+      if (Gdx.input.isKeyPressed(Input.Keys.R)) {
          retry();
          return;
       }
@@ -101,7 +98,7 @@ public class LostStage extends Stage {
       exitButton.setColor(color);
       title.setColor(color);
 
-      Background.getInstance().draw(new Vector3(color.r, color.g, color.b), false);
+      Background.getInstance().draw(color, false);
       super.draw();
    }
 

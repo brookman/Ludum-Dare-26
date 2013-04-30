@@ -6,7 +6,6 @@ import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -55,7 +54,7 @@ public class FinishStage extends Stage {
       addActor(table);
 
       Color color = effects.getCurrentColor();
-      Background.getInstance().draw(new Vector3(color.r, color.g, color.b), false);
+      Background.getInstance().draw(color, false);
       for (Label label : list) {
          label.setColor(color);
       }

@@ -48,7 +48,7 @@ public class GameStage extends Stage {
 
    private GlobalState globalState;
    private float pauseTimer;
-   
+
    private boolean quickRetry;
    private float retryTimer;
 
@@ -78,7 +78,7 @@ public class GameStage extends Stage {
       if (!levelState.ready()) {
          return;
       }
-      this.level = levelState.getLevel();
+      level = levelState.getLevel();
       // updates --------------------------------------
       setPlayerAndGoalTile();
 
@@ -87,7 +87,7 @@ public class GameStage extends Stage {
       pauseTimer -= delta;
 
       if (running) {
-         
+
          clearPauseScreen();
 
          repositionGoal();
@@ -111,19 +111,18 @@ public class GameStage extends Stage {
       Color inverseColor = new Color();
       inverseColor.r = 1f - mainColor.r;
       inverseColor.g = 1f - mainColor.g;
-      inverseColor.b = 1f- mainColor.b;
+      inverseColor.b = 1f - mainColor.b;
       inverseColor.a = 1f;
       Color playerColor = new Color(inverseColor);
       GameState currentState = StateMachine.instance().getCurrentState();
       if (currentState instanceof LevelLosingState) {
          LevelLosingState lState = (LevelLosingState) currentState;
-         if (lState.handleKeys(delta) && (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY) || (Gdx.input.isTouched()))) {
+         if (lState.handleKeys(delta) && (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY) || Gdx.input.isTouched())) {
             globalState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, 0, GameplayEvent.PARAM_LOSE_TOLOST));
 
          }
          lState.update(delta);
-      }
-      else if(currentState instanceof LevelInitState){
+      } else if (currentState instanceof LevelInitState) {
          LevelInitState lis = (LevelInitState) currentState;
          lis.update(delta);
          lis.setColors(mainColor, playerColor, inverseColor);
@@ -165,7 +164,7 @@ public class GameStage extends Stage {
          boolean movingTileInvolved = false;
          for (Tile t : levelState.getLevel().getTiles()) {
             Vector2 shiftedPosition = player.getShiftedPosition();
-            if (!player.canMoveIntoTile(shiftedPosition, t)) {
+            if (!Player.canMoveIntoTile(shiftedPosition, t)) {
                count++;
                if (t.isMoving()) {
                   movingTileInvolved = true;
@@ -217,9 +216,9 @@ public class GameStage extends Stage {
       boolean left = Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT);
       boolean right = Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT);
       boolean retry = Gdx.input.isKeyPressed(Input.Keys.R) && !quickRetry;
-      
+
       handleRetry(delta, retry);
-            
+
       if (pausedPressed()) {
          levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.PAUSE));
          return;
@@ -227,27 +226,27 @@ public class GameStage extends Stage {
 
       boolean escapePressed = Gdx.input.isKeyPressed(Input.Keys.ESCAPE);
 
-      Vector2 velocity = new Vector2(0.0f, 0.0f);
+      Vector2 velocity = Vector2.tmp.set(0.0f, 0.0f);
       if (up) {
-         velocity.add(new Vector2(0.0f, 1.0f));
+         velocity.add(0.0f, 1.0f);
       }
       if (down) {
-         velocity.add(new Vector2(0.0f, -1.0f));
+         velocity.add(0.0f, -1.0f);
       }
       if (left) {
-         velocity.add(new Vector2(-1.0f, 0.0f));
+         velocity.add(-1.0f, 0.0f);
       }
       if (right) {
-         velocity.add(new Vector2(1.0f, 0.0f));
+         velocity.add(1.0f, 0.0f);
       }
       if (Gdx.input.isTouched()) {
-         Vector3 touch = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0.0f);
+         Vector3 touch = Vector3.tmp.set(Gdx.input.getX(), Gdx.input.getY(), 0.0f);
          camera.unproject(touch);
-         velocity = new Vector2(touch.x - Player.WIDTH / 2, touch.y - Player.HEIGHT / 2).sub(player.position);
+         velocity = Vector2.tmp.set(touch.x - Player.WIDTH / 2, touch.y - Player.HEIGHT / 2).sub(player.position);
       }
       velocity.nor();
       velocity.mul(delta);
-      player.move(velocity, level.getTiles());
+      player.move(velocity.x, velocity.y, level.getTiles());
 
       if (escapePressed) {
          effects.stopSong(null);
@@ -256,16 +255,16 @@ public class GameStage extends Stage {
 
    private void handleRetry(float delta, boolean retry) {
       retryTimer += delta;
-      if(retry) {
+      if (retry) {
          retry();
          quickRetry = true;
          return;
       } else {
-         if(retryTimer > 0.05f) {
+         if (retryTimer > 0.05f) {
             retryTimer = 0;
          }
       }
-      this.quickRetry = false;
+      quickRetry = false;
    }
 
    private boolean pausedPressed() {
@@ -323,7 +322,7 @@ public class GameStage extends Stage {
       }
       return null;
    }
-   
+
    private void retry() {
       LevelState levelState = StateMachine.instance().getState(LevelState.class);
       levelState.events.clear();
