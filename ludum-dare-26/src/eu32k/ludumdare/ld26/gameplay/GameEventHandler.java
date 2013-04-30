@@ -70,6 +70,7 @@ public class GameEventHandler implements IEventHandler {
                PlayerState ps = StateMachine.instance().getState(PlayerState.class);
                StateMachine.instance().enterState(LevelInitState.class);
             } else {
+               levelState.addSuccessStatistic();
                StateMachine.instance().enterState(LevelWonState.class);
             }
          }
