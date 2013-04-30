@@ -6,6 +6,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.math.Vector2;
 
+import eu32k.libgdx.common.TempVector2;
 import eu32k.ludumdare.ld26.animation.TileAnimator;
 import eu32k.ludumdare.ld26.effects.GameObjectMove;
 import eu32k.ludumdare.ld26.effects.IRunningEffect;
@@ -217,9 +218,9 @@ public class LevelState extends GameState {
    }
 
    private void initPlacePlayerAndGoal() {
-      Vector2 p = Vector2.tmp;
-      Vector2 g = Vector2.tmp2;
-      Vector2 tmp = Vector2.tmp3;
+      Vector2 p = TempVector2.tmp;
+      Vector2 g = TempVector2.tmp2;
+      Vector2 tmp = TempVector2.tmp3;
       p.set(random.nextInt(width), random.nextInt(height));
 
       findSuitableGoalPosition(p, g, tmp);
@@ -249,9 +250,9 @@ public class LevelState extends GameState {
 
    public void repositionGoal() {
       // log("Repositioning goal");
-      Vector2 p = Vector2.tmp;
-      Vector2 g = Vector2.tmp2;
-      Vector2 tmp = Vector2.tmp3;
+      Vector2 p = TempVector2.tmp;
+      Vector2 g = TempVector2.tmp2;
+      Vector2 tmp = TempVector2.tmp3;
       Player player = StateMachine.instance().getState(PlayerState.class).getPlayer();
       p.set(player.getX(), player.getY());
       findSuitableGoalPosition(p, g, tmp);

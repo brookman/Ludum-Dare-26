@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import eu32k.libgdx.common.TempVector2;
 import eu32k.libgdx.rendering.Textures;
 import eu32k.ludumdare.ld26.MultiLayerSprite;
 import eu32k.ludumdare.ld26.effects.particles.GameObjectParticleEffect;
@@ -45,14 +46,14 @@ public class Player extends GameObject {
 
    public void move(float xVelocity, float yVelocity, List<Tile> tiles) {
 
-      Vector2 xPart = Vector2.tmp.set(xVelocity * SPEED, 0.0f);
+      Vector2 xPart = TempVector2.tmp.set(xVelocity * SPEED, 0.0f);
       Vector2 newPos = xPart.add(position);
 
       if (canMove(newPos, tiles)) {
          position.set(newPos);
       }
 
-      Vector2 yPart = Vector2.tmp.set(0.0f, yVelocity * SPEED);
+      Vector2 yPart = TempVector2.tmp.set(0.0f, yVelocity * SPEED);
       newPos = yPart.add(position);
 
       if (canMove(newPos, tiles)) {
@@ -61,7 +62,7 @@ public class Player extends GameObject {
    }
 
    public static boolean canMove(Vector2 newPos, List<Tile> tiles) {
-      Vector2 posShifted = Vector2.tmp2.set(newPos.x - RADIUS / 2.0f, newPos.y - RADIUS / 2.0f);
+      Vector2 posShifted = TempVector2.tmp2.set(newPos.x - RADIUS / 2.0f, newPos.y - RADIUS / 2.0f);
 
       for (Tile tile : tiles) {
          if (!canMoveIntoTile(posShifted, tile)) {
@@ -88,7 +89,7 @@ public class Player extends GameObject {
 
    private static boolean intersects(Vector2 circlePos, float radius, Rectangle rect, Tile tile) {
 
-      Vector2 circleDistance = Vector2.tmp3.set(Math.abs(circlePos.x - (rect.x + tile.getX())), Math.abs(circlePos.y - (rect.y + tile.getY())));
+      Vector2 circleDistance = TempVector2.tmp3.set(Math.abs(circlePos.x - (rect.x + tile.getX())), Math.abs(circlePos.y - (rect.y + tile.getY())));
 
       if (circleDistance.x > rect.width / 2 + radius) {
          return false;

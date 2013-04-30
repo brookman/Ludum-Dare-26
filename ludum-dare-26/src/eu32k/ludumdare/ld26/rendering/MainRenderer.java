@@ -10,9 +10,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
 
 import eu32k.libgdx.common.Time;
 import eu32k.ludumdare.ld26.Config;
@@ -128,24 +125,24 @@ public class MainRenderer {
       mixerShader.end();
    }
 
-   private void renderDebug(Camera camera, List<Tile> tiles) {
-      debugRenderer.setProjectionMatrix(camera.combined);
-      debugRenderer.begin(ShapeType.FilledRectangle);
-      debugRenderer.setColor(new Color(1.0f, 1.0f, 1.0f, 0.05f));
-      for (Tile tile : tiles) {
-         for (Rectangle rect : tile.getBounds().boundingBoxes) {
-            debugRenderer.filledRect(rect.x, rect.y, rect.width, rect.height);
-         }
-      }
-      debugRenderer.end();
-
-      debugRenderer.begin(ShapeType.FilledRectangle);
-      debugRenderer.setColor(new Color(1.0f, 0.0f, 0.0f, 1.0f));
-      Vector3 p = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0.0f);
-      camera.unproject(p);
-      debugRenderer.filledRect(p.x, p.y, 10.0f, 10.0f);
-      debugRenderer.end();
-   }
+   // private void renderDebug(Camera camera, List<Tile> tiles) {
+   // debugRenderer.setProjectionMatrix(camera.combined);
+   // debugRenderer.begin(ShapeType.FilledRectangle);
+   // debugRenderer.setColor(new Color(1.0f, 1.0f, 1.0f, 0.05f));
+   // for (Tile tile : tiles) {
+   // for (Rectangle rect : tile.getBounds().boundingBoxes) {
+   // debugRenderer.filledRect(rect.x, rect.y, rect.width, rect.height);
+   // }
+   // }
+   // debugRenderer.end();
+   //
+   // debugRenderer.begin(ShapeType.FilledRectangle);
+   // debugRenderer.setColor(new Color(1.0f, 0.0f, 0.0f, 1.0f));
+   // Vector3 p = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0.0f);
+   // camera.unproject(p);
+   // debugRenderer.filledRect(p.x, p.y, 10.0f, 10.0f);
+   // debugRenderer.end();
+   // }
 
    private void render(boolean bg, Camera camera, List<Tile> tiles, Player player, Goal goal, Color mainColor, Color playerColor, Color inverseColor, float time) {
 
@@ -205,7 +202,7 @@ public class MainRenderer {
       player.getSprite().activateLayer(1);
       player.getSprite().setColor(playerColor);
       player.draw(batch);
-      if (!bg) {
+      if (Config.SHOW_PARTICLES && bg || Config.SHOW_PARTICLES_GLOW && !bg) {
          player.getEffect().draw(batch, playerColor, deltaTime);
       }
 
@@ -218,7 +215,7 @@ public class MainRenderer {
       goal.getSprite().activateLayer(1);
       goal.getSprite().setColor(inverseColor);
       goal.draw(batch);
-      if (!bg) {
+      if (Config.SHOW_PARTICLES && bg || Config.SHOW_PARTICLES_GLOW && !bg) {
          goal.getEffect().draw(batch, inverseColor, deltaTime);
       }
 

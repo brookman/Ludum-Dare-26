@@ -10,7 +10,6 @@ public class Main {
       LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
       cfg.title = "IMBARINTH";
       cfg.useGL20 = true;
-      cfg.useCPUSynch = true;
       cfg.samples = 4;
       cfg.vSyncEnabled = true;
       // cfg.resizable = false;

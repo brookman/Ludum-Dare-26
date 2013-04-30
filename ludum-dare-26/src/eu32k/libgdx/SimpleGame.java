@@ -40,7 +40,6 @@ public abstract class SimpleGame implements ApplicationListener, InputProcessor 
    public void create() {
       init();
       Gdx.input.setInputProcessor(this);
-      Gdx.graphics.setVSync(true);
    }
 
    @Override

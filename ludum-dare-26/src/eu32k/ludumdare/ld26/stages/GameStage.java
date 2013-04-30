@@ -12,6 +12,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
+import eu32k.libgdx.common.TempVector2;
+import eu32k.libgdx.common.TempVector3;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.effects.IRunningEffect;
 import eu32k.ludumdare.ld26.gameplay.GameEventHandler;
@@ -226,7 +228,7 @@ public class GameStage extends Stage {
 
       boolean escapePressed = Gdx.input.isKeyPressed(Input.Keys.ESCAPE);
 
-      Vector2 velocity = Vector2.tmp.set(0.0f, 0.0f);
+      Vector2 velocity = TempVector2.tmp.set(0.0f, 0.0f);
       if (up) {
          velocity.add(0.0f, 1.0f);
       }
@@ -240,9 +242,9 @@ public class GameStage extends Stage {
          velocity.add(1.0f, 0.0f);
       }
       if (Gdx.input.isTouched()) {
-         Vector3 touch = Vector3.tmp.set(Gdx.input.getX(), Gdx.input.getY(), 0.0f);
+         Vector3 touch = TempVector3.tmp.set(Gdx.input.getX(), Gdx.input.getY(), 0.0f);
          camera.unproject(touch);
-         velocity = Vector2.tmp.set(touch.x - Player.WIDTH / 2, touch.y - Player.HEIGHT / 2).sub(player.position);
+         velocity = TempVector2.tmp.set(touch.x - Player.WIDTH / 2, touch.y - Player.HEIGHT / 2).sub(player.position);
       }
       velocity.nor();
       velocity.mul(delta);
