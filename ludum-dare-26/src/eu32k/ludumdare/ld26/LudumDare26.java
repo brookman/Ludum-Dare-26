@@ -68,7 +68,6 @@ public class LudumDare26 extends SimpleGame {
       StateMachine.instance().getState(LevelLostState.class).setStage(lostStage);
       StateMachine.instance().getState(LevelWonState.class).setStage(finishStage);
       StateMachine.instance().enterState(MenuState.class);
-
    }
 
    @Override

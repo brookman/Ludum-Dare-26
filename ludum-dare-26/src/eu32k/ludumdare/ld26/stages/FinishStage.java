@@ -30,11 +30,17 @@ public class FinishStage extends Stage {
 
       skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 
+   }
+
+   @Override
+   public void draw() {
+      clear();
+
+      Map<String, Integer> genericStatistics = StateMachine.instance().getState(PlayerState.class).genericStatistics;
+
       Table table = new Table();
       table.setFillParent(true);
       table.center();
-
-      Map<String, Integer> genericStatistics = StateMachine.instance().getState(PlayerState.class).genericStatistics;
 
       for (String key : genericStatistics.keySet()) {
          Label nameField = new Label(key + ": ", skin);
@@ -47,10 +53,7 @@ public class FinishStage extends Stage {
       }
 
       addActor(table);
-   }
 
-   @Override
-   public void draw() {
       Color color = effects.getCurrentColor();
       Background.getInstance().draw(new Vector3(color.r, color.g, color.b), false);
       for (Label label : list) {
