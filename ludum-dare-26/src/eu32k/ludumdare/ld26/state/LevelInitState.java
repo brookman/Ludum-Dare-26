@@ -34,6 +34,7 @@ public class LevelInitState extends GameState {
       state.getEvents().enqueue(new GameplayEvent(GameplayEventType.START_GAME, fadeInLength));
       LevelState ls = StateMachine.instance().getState(LevelState.class);
       List<Tile> tiles = ls.getLevel().getTiles();
+      ls.setPaused(false);
       effects.clear();
       timeSinceEnter = 0f;
       for (Tile t : tiles) {

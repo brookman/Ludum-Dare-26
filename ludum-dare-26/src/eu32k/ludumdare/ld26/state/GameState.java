@@ -3,18 +3,17 @@ package eu32k.ludumdare.ld26.state;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-import eu32k.ludumdare.ld26.stages.GameStage;
+import eu32k.ludumdare.ld26.stages.AbstractStage;
 
 public abstract class GameState {
 	
 	protected List<Class<? extends GameState>> transitions;
 	
-	protected Stage stage;
+	protected AbstractStage stage;
 	
-	public GameState(Stage stage) {
+	public GameState(AbstractStage stage) {
 		transitions = new ArrayList<Class<? extends GameState>>();
 		this.stage = stage;
 	}
@@ -42,7 +41,7 @@ public abstract class GameState {
       return stage;
    }
 
-   public void setStage(Stage stage) {
+   public void setStage(AbstractStage stage) {
       this.stage = stage;
    }
 

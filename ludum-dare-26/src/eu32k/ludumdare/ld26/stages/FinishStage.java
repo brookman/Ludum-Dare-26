@@ -6,7 +6,6 @@ import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -16,11 +15,9 @@ import eu32k.ludumdare.ld26.rendering.Background;
 import eu32k.ludumdare.ld26.state.PlayerState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
-public class FinishStage extends Stage {
+public class FinishStage extends AbstractStage {
 
    private Skin skin;
-
-   private EffectsManager effects;
 
    private List<Label> list = new ArrayList<Label>();
 

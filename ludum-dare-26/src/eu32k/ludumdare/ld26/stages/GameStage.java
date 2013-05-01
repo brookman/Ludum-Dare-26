@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import eu32k.libgdx.common.TempVector2;
 import eu32k.libgdx.common.TempVector3;
@@ -28,11 +27,12 @@ import eu32k.ludumdare.ld26.state.GameState;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelInitState;
 import eu32k.ludumdare.ld26.state.LevelLosingState;
+import eu32k.ludumdare.ld26.state.LevelPauseState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.PlayerState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
-public class GameStage extends Stage {
+public class GameStage extends AbstractStage {
 
    private static final float ZOOM = 5.55555555555f;
    private Camera camera;
@@ -40,8 +40,6 @@ public class GameStage extends Stage {
    private MainRenderer renderer;
    private Player player;
    private Level level;
-   private EffectsManager effects;
-
    private GameEventHandler eventHandler;
 
    private LevelState levelState;
@@ -251,7 +249,7 @@ public class GameStage extends Stage {
       player.move(velocity.x, velocity.y, level.getTiles());
 
       if (escapePressed) {
-         effects.stopSong(null);
+         StateMachine.instance().enterState(LevelPauseState.class);
       }
    }
 

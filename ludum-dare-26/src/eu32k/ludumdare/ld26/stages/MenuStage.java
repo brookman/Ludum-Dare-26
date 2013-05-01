@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -22,11 +21,9 @@ import eu32k.ludumdare.ld26.state.LevelInitState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
-public class MenuStage extends Stage {
+public class MenuStage extends AbstractStage {
 
    private Skin skin;
-
-   private EffectsManager effects;
 
    private Image title;
    private TextButton challengeButton;
@@ -153,7 +150,7 @@ public class MenuStage extends Stage {
    }
 
    private void challengeMode() {
-      startGame(43454, 4, 3, 12, 8, 25);
+      startGame(6457, 4, 3, 12, 8, 25);
    }
 
    private void seedMode() {

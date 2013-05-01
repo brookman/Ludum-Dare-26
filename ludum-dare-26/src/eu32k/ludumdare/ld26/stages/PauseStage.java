@@ -1,7 +1,6 @@
 package eu32k.ludumdare.ld26.stages;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -14,21 +13,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import eu32k.libgdx.rendering.Textures;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.rendering.Background;
-import eu32k.ludumdare.ld26.state.LevelInitState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.MenuState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
-public class LostStage extends AbstractStage {
+public class PauseStage extends AbstractStage {
 
    private Skin skin;
 
    private Image title;
-   private TextButton challengeButton;
-   private TextButton seedButton;
+   private TextButton continueButton;
+   private TextButton menuButton;
    private TextButton exitButton;
 
-   public LostStage(EffectsManager effects) {
+   private LevelState levelState;
+
+   public PauseStage(EffectsManager effects) {
       this.effects = effects;
 
       skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
@@ -36,31 +36,33 @@ public class LostStage extends AbstractStage {
       Table table = new Table();
       table.setFillParent(true);
       table.center();
+      levelState = StateMachine.instance().getState(LevelState.class);
 
       title = new Image(new TextureRegion(Textures.get("textures/title.png"), 256, 64));
 
-      challengeButton = new TextButton("Retry", skin);
-      challengeButton.setColor(Color.CYAN);
-      challengeButton.addListener(new InputListener() {
+      continueButton = new TextButton("Continue", skin);
+      continueButton.addListener(new InputListener() {
          @Override
          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            retry();
+            levelState.setRunning(true);
+            levelState.setPaused(false);
+            StateMachine.instance().enterState(LevelState.class);
             return false;
          }
       });
 
-      seedButton = new TextButton("Back to Menu", skin);
-      seedButton.setColor(Color.CYAN);
-      seedButton.addListener(new InputListener() {
+      menuButton = new TextButton("Back to Menu", skin);
+      menuButton.addListener(new InputListener() {
          @Override
          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            levelState.setRunning(false);
+            levelState.setPaused(true);
             StateMachine.instance().enterState(MenuState.class);
             return false;
          }
       });
 
       exitButton = new TextButton("Exit", skin);
-      exitButton.setColor(Color.CYAN);
       exitButton.addListener(new InputListener() {
          @Override
          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -69,15 +71,20 @@ public class LostStage extends AbstractStage {
          }
       });
 
+      
+
       int padding = 4;
 
-      table.add(title).fill().pad(padding);
+      table.add(title).fill().pad(padding).colspan(3);
       table.row();
-      table.add(challengeButton).fill().pad(padding);
+      table.add(continueButton).fill().pad(padding).colspan(3);
       table.row();
-      table.add(seedButton).fill().pad(padding);
+
+      table.add(menuButton).fill().pad(padding);
+
       table.row();
-      table.add(exitButton).fill().pad(padding);
+      table.add(exitButton).fill().pad(padding).colspan(3);
+
       table.row();
 
       addActor(table);
@@ -85,26 +92,14 @@ public class LostStage extends AbstractStage {
 
    @Override
    public void draw() {
-      if (Gdx.input.isKeyPressed(Input.Keys.R)) {
-         retry();
-         return;
-      }
       Color color = effects.getCurrentColor();
-      challengeButton.setColor(color);
-      seedButton.setColor(color);
+      continueButton.setColor(color);
+      menuButton.setColor(color);
       exitButton.setColor(color);
       title.setColor(color);
 
       Background.getInstance().draw(color, false);
       super.draw();
-   }
-
-   private void retry() {
-      LevelState levelState = StateMachine.instance().getState(LevelState.class);
-      levelState.events.clear();
-      levelState.initLevel();
-      levelState.addRetryStatistics();
-      StateMachine.instance().enterState(LevelInitState.class);
    }
 
 }

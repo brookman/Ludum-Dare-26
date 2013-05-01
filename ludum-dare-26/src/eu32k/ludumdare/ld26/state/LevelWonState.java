@@ -1,6 +1,7 @@
 package eu32k.ludumdare.ld26.state;
 
 
+
 public class LevelWonState extends GameState {
 
    @Override
@@ -9,6 +10,10 @@ public class LevelWonState extends GameState {
 		transitions.add(MenuState.class);
 		
 	}
+   
+   public void enter() {
+      stage.getEffects().stopSong(null);
+   }
 
 	@Override
 	public void destroy() {
