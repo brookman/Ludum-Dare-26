@@ -10,10 +10,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 
 import eu32k.libgdx.common.Time;
 import eu32k.ludumdare.ld26.Config;
@@ -45,9 +41,9 @@ public class MainRenderer {
    private BitmapFont consolasFont;
 
    private AdvancedShader background;
-   
+
    private TextRenderer textRenderer;
-   
+
    public MainRenderer() {
       batch = new SpriteBatch();
       hudBatch = new SpriteBatch();
@@ -72,7 +68,7 @@ public class MainRenderer {
 
       background = new AdvancedShader(Gdx.files.internal("shaders/simple.vsh").readString(), Gdx.files.internal("shaders/background.fsh").readString());
       // System.out.println(background.getLog());
-      
+
       inverseColor = new Color();
    }
 
@@ -84,13 +80,12 @@ public class MainRenderer {
       render(true, camera, tiles, player, goal, mainColor, playerColor, inverseColor, time);
       // renderDebug(camera, tiles);
 
-//      hudBatch.begin();
-//      text.draw(hudBatch, 30.0f, 50.0f);
-//      fps.draw(hudBatch, "fps: " + Gdx.graphics.getFramesPerSecond(), 30.0f, Gdx.graphics.getHeight() - 30.0f);
-//      fps.draw(hudBatch, DebugText.text == null ? "null" : DebugText.text, 30.0f, Gdx.graphics.getHeight() - 60.0f);
-//      console.draw(hudBatch);
-//      hudBatch.end();
-      
+      hudBatch.begin();
+      fps.draw(hudBatch, "                           fps: " + Gdx.graphics.getFramesPerSecond(), 30.0f, Gdx.graphics.getHeight() - 30.0f);
+      fps.draw(hudBatch, DebugText.text == null ? "null" : DebugText.text, 30.0f, Gdx.graphics.getHeight() - 60.0f);
+      // console.draw(hudBatch);
+      hudBatch.end();
+
       textRenderer.render();
 
       mainBuffer.end();
@@ -126,28 +121,28 @@ public class MainRenderer {
       mixerShader.setUniformf("uFactor1", 1.0f);
       mixerShader.setUniformf("uFactor2", 2.2f);
 
-      mixerShader.renderToQuad(null, true, new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+      mixerShader.renderToQuad(null, true, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
       mixerShader.end();
    }
 
-   private void renderDebug(Camera camera, List<Tile> tiles) {
-      debugRenderer.setProjectionMatrix(camera.combined);
-      debugRenderer.begin(ShapeType.FilledRectangle);
-      debugRenderer.setColor(new Color(1.0f, 1.0f, 1.0f, 0.05f));
-      for (Tile tile : tiles) {
-         for (Rectangle rect : tile.getBounds().boundingBoxes) {
-            debugRenderer.filledRect(rect.x, rect.y, rect.width, rect.height);
-         }
-      }
-      debugRenderer.end();
-
-      debugRenderer.begin(ShapeType.FilledRectangle);
-      debugRenderer.setColor(new Color(1.0f, 0.0f, 0.0f, 1.0f));
-      Vector3 p = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0.0f);
-      camera.unproject(p);
-      debugRenderer.filledRect(p.x, p.y, 10.0f, 10.0f);
-      debugRenderer.end();
-   }
+   // private void renderDebug(Camera camera, List<Tile> tiles) {
+   // debugRenderer.setProjectionMatrix(camera.combined);
+   // debugRenderer.begin(ShapeType.FilledRectangle);
+   // debugRenderer.setColor(new Color(1.0f, 1.0f, 1.0f, 0.05f));
+   // for (Tile tile : tiles) {
+   // for (Rectangle rect : tile.getBounds().boundingBoxes) {
+   // debugRenderer.filledRect(rect.x, rect.y, rect.width, rect.height);
+   // }
+   // }
+   // debugRenderer.end();
+   //
+   // debugRenderer.begin(ShapeType.FilledRectangle);
+   // debugRenderer.setColor(new Color(1.0f, 0.0f, 0.0f, 1.0f));
+   // Vector3 p = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0.0f);
+   // camera.unproject(p);
+   // debugRenderer.filledRect(p.x, p.y, 10.0f, 10.0f);
+   // debugRenderer.end();
+   // }
 
    private void render(boolean bg, Camera camera, List<Tile> tiles, Player player, Goal goal, Color mainColor, Color playerColor, Color inverseColor, float time) {
 
@@ -156,7 +151,7 @@ public class MainRenderer {
       Gdx.gl.glEnable(GL20.GL_BLEND);
       Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-      Background.getInstance().draw(new Vector3(mainColor.r, mainColor.g, mainColor.b), true, time);
+      Background.getInstance().draw(mainColor, true, time);
 
       batch.setProjectionMatrix(camera.combined);
       batch.begin();
@@ -207,7 +202,9 @@ public class MainRenderer {
       player.getSprite().activateLayer(1);
       player.getSprite().setColor(playerColor);
       player.draw(batch);
-      player.getEffect().draw(batch, playerColor, deltaTime);
+      if (Config.SHOW_PARTICLES && bg || Config.SHOW_PARTICLES_GLOW && !bg) {
+         player.getEffect().draw(batch, playerColor, deltaTime);
+      }
 
       if (bg) {
          goal.getSprite().activateLayer(0);
@@ -218,7 +215,9 @@ public class MainRenderer {
       goal.getSprite().activateLayer(1);
       goal.getSprite().setColor(inverseColor);
       goal.draw(batch);
-      goal.getEffect().draw(batch, inverseColor, deltaTime);
+      if (Config.SHOW_PARTICLES && bg || Config.SHOW_PARTICLES_GLOW && !bg) {
+         goal.getEffect().draw(batch, inverseColor, deltaTime);
+      }
 
       batch.end();
 

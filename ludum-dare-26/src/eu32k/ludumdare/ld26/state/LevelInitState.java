@@ -17,12 +17,12 @@ public class LevelInitState extends GameState {
    private float timeSinceEnter;
    private float fadeInLength;
    private List<IRunningEffect> effects;
-   
-   public LevelInitState(){
+
+   public LevelInitState() {
       fadeInLength = 2f;
       effects = new ArrayList<IRunningEffect>();
    }
-   
+
    @Override
    public void init() {
       transitions.add(LevelState.class);
@@ -36,22 +36,19 @@ public class LevelInitState extends GameState {
       List<Tile> tiles = ls.getLevel().getTiles();
       effects.clear();
       timeSinceEnter = 0f;
-      System.out.println("Entered init");
-      for(Tile t : tiles)
-      {
+      for (Tile t : tiles) {
          effects.add(new TileFadeIn(t, fadeInLength));
       }
    }
 
    public void update(float d) {
       timeSinceEnter += d;
-      for(IRunningEffect effect : effects)
-      {
+      for (IRunningEffect effect : effects) {
          effect.update(d);
       }
    }
-   
-   public float getTimeSinceEnter(){
+
+   public float getTimeSinceEnter() {
       return timeSinceEnter;
    }
 
@@ -72,8 +69,8 @@ public class LevelInitState extends GameState {
       float value = timeSinceEnter / fadeInLength;
       setColor(mainColor, Interpolation.linear, value);
       setColor(playerColor, Interpolation.exp5, value / 100f);
-      setColor(inverseColor, Interpolation.exp5,value / 10f + 0.9f);
-      
+      setColor(inverseColor, Interpolation.exp5, value / 10f + 0.9f);
+
    }
 
    private void setColor(Color color, Interpolation interpolation, float value) {

@@ -2,6 +2,7 @@ package eu32k.ludumdare.ld26.effects;
 
 import com.badlogic.gdx.math.Vector2;
 
+import eu32k.libgdx.common.TempVector2;
 import eu32k.ludumdare.ld26.level.MoveComplete;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.objects.Goal;
@@ -19,41 +20,40 @@ public class TileMove implements IRunningEffect {
    private float speedY;
    private LevelState levelState;
    private Player player;
-   
+
+   @Override
    public boolean complete() {
       return complete;
    }
 
-   public TileMove()
-   {
-      this.levelState = StateMachine.instance().getState(LevelState.class);
+   public TileMove() {
+      levelState = StateMachine.instance().getState(LevelState.class);
       PlayerState playerState = StateMachine.instance().getState(PlayerState.class);
-      if(playerState != null)
-      {
-         this.player = playerState.getPlayer();
+      if (playerState != null) {
+         player = playerState.getPlayer();
       }
    }
-   
-   public void initMove(Tile tile, float targetX, float targetY, float speed)
-   {
+
+   public void initMove(Tile tile, float targetX, float targetY, float speed) {
       this.tile = tile;
       this.targetX = targetX;
       this.targetY = targetY;
       complete = false;
-      Vector2 t1 = Vector2.tmp;
-      Vector2 t2 = Vector2.tmp2;
+      Vector2 t1 = TempVector2.tmp;
+      Vector2 t2 = TempVector2.tmp2;
       t1.set(tile.getX(), tile.getY());
       t2.set(targetX, targetY);
       t2.sub(t1).nor().mul(speed);
       speedX = t2.x;
       speedY = t2.y;
    }
-   
+
+   @Override
    public void update(float delta) {
       float x = tile.getX();
       float y = tile.getY();
-      
-      //Player offset to tile... used in case player is moved with a tile to put him in the exact same position
+
+      // Player offset to tile... used in case player is moved with a tile to put him in the exact same position
       float poX = 0;
       float poY = 0;
       float goX = 0;
@@ -61,50 +61,45 @@ public class TileMove implements IRunningEffect {
       Goal goal = levelState.getGoal();
       boolean movesPlayer = player != null && levelState.playerTile != null && levelState.playerTile.equals(tile);
       boolean movesGoal = goal != null && levelState.goalTile != null && levelState.goalTile.equals(tile);
-      if(goal.isFreeMovement())
+      if (goal.isFreeMovement()) {
          movesGoal = false;
-      if(movesPlayer)
-      {
+      }
+      if (movesPlayer) {
          poX = player.getX() - x;
          poY = player.getY() - y;
       }
 
-      if(movesGoal)
-      {
+      if (movesGoal) {
          goX = goal.getX() - x;
          goY = goal.getY() - y;
       }
 
       x += speedX * delta;
       y += speedY * delta;
-      if ((speedX > 0 && x >= targetX) || (speedX < 0 && x <= targetX) || (speedY > 0 && y >= targetY) || (speedY < 0 && y <= targetY)) {
+      if (speedX > 0 && x >= targetX || speedX < 0 && x <= targetX || speedY > 0 && y >= targetY || speedY < 0 && y <= targetY) {
          levelState.getEvents().enqueue(new MoveComplete(this));
          tile.setX(targetX);
          tile.setY(targetY);
-         if(movesPlayer)
-         {
+         if (movesPlayer) {
             player.setMovingWithTile(true);
             player.setPosition(tile.getX() + poX, tile.getY() + poY);
-         }         
-         if(movesGoal)
-         {
+         }
+         if (movesGoal) {
             goal.setPosition(tile.getX() + goX, tile.getY() + goY);
-         }         
-         
+         }
+
          complete = true;
          return;
       }
       tile.setX(x);
       tile.setY(y);
-      if(movesPlayer)
-      {
+      if (movesPlayer) {
          player.setMovingWithTile(false);
          player.setPosition(tile.getX() + poX, tile.getY() + poY);
-      }         
-      if(movesGoal)
-      {
+      }
+      if (movesGoal) {
          goal.setPosition(tile.getX() + goX, tile.getY() + goY);
-      }         
+      }
    }
 
    public Tile getTile() {
@@ -114,5 +109,5 @@ public class TileMove implements IRunningEffect {
    public void setTile(Tile tile) {
       this.tile = tile;
    }
-   
+
 }

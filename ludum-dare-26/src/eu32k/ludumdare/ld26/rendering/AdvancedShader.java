@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.math.Vector2;
 
 import eu32k.libgdx.common.Time;
 import eu32k.ludumdare.ld26.Config;
@@ -17,21 +16,21 @@ public class AdvancedShader extends ShaderProgram {
       super(vertexShader, fragmentShader);
    }
 
-   public void renderToScreeQuad(Vector2 resolution) {
-      renderToQuad(null, false, resolution);
+   public void renderToScreeQuad(float xRes, float yRes) {
+      renderToQuad(null, false, xRes, yRes);
    }
 
    public void renderToQuad(FrameBuffer frameBuffer) {
-      renderToQuad(frameBuffer, true, new Vector2(Config.X_RESOLUTION, Config.Y_RESOLUTION));
+      renderToQuad(frameBuffer, true, Config.X_RESOLUTION, Config.Y_RESOLUTION);
    }
 
-   public void renderToQuad(FrameBuffer frameBuffer, boolean flip, Vector2 resolution) {
+   public void renderToQuad(FrameBuffer frameBuffer, boolean flip, float xRes, float yRes) {
       if (hasUniform("time")) {
          setUniformf("time", Time.getTime());
 
       }
       if (hasUniform("resolution")) {
-         setUniformf("resolution", resolution);
+         setUniformf("resolution", xRes, yRes);
       }
 
       if (frameBuffer != null) {
