@@ -58,7 +58,8 @@ public class Level {
    private Tile createRandomTile(float x, float y) {
       int randType = tileRandom.nextInt(4);
       int randRot = tileRandom.nextInt(4);
-      Tile tile = new Tile(x, y, Type.values()[randType], Rotation.values()[randRot]);
+      Tile tile = new Tile();
+      tile.init(x, y, Type.values()[randType], Rotation.values()[randRot]);
       return tile;
    }
 

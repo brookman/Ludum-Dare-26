@@ -5,11 +5,12 @@ import java.util.Map;
 
 import eu32k.ludumdare.ld26.Direction;
 import eu32k.ludumdare.ld26.MultiLayerSprite;
+import eu32k.ludumdare.ld26.pool.IObjectPoolItem;
 
-public class Tile {
+public class Tile implements IObjectPoolItem {
 
    private boolean dead;
-   
+
    public enum Type {
       L, I, X, T // L Shape, I Shape, X Shape (+ Shape), T Shape
    }
@@ -30,14 +31,18 @@ public class Tile {
 
    private float alpha;
 
-   public Tile(float x, float y, Type type, Rotation rotation) {
+   public Tile() {
+
+      neighbors = new HashMap<Direction, Tile>();
+   }
+
+   public void init(float x, float y, Type type, Rotation rotation) {
       this.type = type;
       this.rotation = rotation;
       this.x = x;
       this.y = y;
       alpha = 1f;
-
-      neighbors = new HashMap<Direction, Tile>();
+      this.dead = false;
    }
 
    public boolean isMoving() {
@@ -108,5 +113,15 @@ public class Tile {
 
    public void setDead(boolean dead) {
       this.dead = dead;
+   }
+
+   @Override
+   public boolean isInUse() {
+      return dead;
+   }
+
+   @Override
+   public void setInUse(boolean inUse) {
+      this.dead = inUse;
    }
 }
