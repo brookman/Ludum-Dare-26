@@ -1,8 +1,9 @@
 package eu32k.ludumdare.ld26.gameplay;
 
-import eu32k.ludumdare.ld26.effects.FadeComplete;
 import eu32k.ludumdare.ld26.events.IEvent;
 import eu32k.ludumdare.ld26.events.IEventHandler;
+import eu32k.ludumdare.ld26.events.messages.FadeComplete;
+import eu32k.ludumdare.ld26.events.messages.GameplayEvent;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.state.GameState;
 import eu32k.ludumdare.ld26.state.GlobalState;

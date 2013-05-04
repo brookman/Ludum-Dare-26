@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.Color;
 
 import eu32k.ludumdare.ld26.events.IEvent;
 import eu32k.ludumdare.ld26.events.IEventHandler;
+import eu32k.ludumdare.ld26.events.messages.MusicEvent;
+import eu32k.ludumdare.ld26.events.messages.PlayPartEvent;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 

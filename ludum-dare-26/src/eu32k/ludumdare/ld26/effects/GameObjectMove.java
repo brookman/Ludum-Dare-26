@@ -3,7 +3,7 @@ package eu32k.ludumdare.ld26.effects;
 import com.badlogic.gdx.math.Vector2;
 
 import eu32k.libgdx.common.TempVector2;
-import eu32k.ludumdare.ld26.level.ObjectMoveComplete;
+import eu32k.ludumdare.ld26.events.messages.ObjectMoveComplete;
 import eu32k.ludumdare.ld26.objects.GameObject;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.StateMachine;

@@ -1,11 +1,13 @@
 package eu32k.ludumdare.ld26.level;
 
-import eu32k.ludumdare.ld26.effects.FadeComplete;
 import eu32k.ludumdare.ld26.events.IEvent;
 import eu32k.ludumdare.ld26.events.IEventHandler;
-import eu32k.ludumdare.ld26.gameplay.GameplayEvent;
-import eu32k.ludumdare.ld26.gameplay.GameplayEvent.GameplayEventType;
-import eu32k.ludumdare.ld26.level.TileEvent.TileEventType;
+import eu32k.ludumdare.ld26.events.messages.FadeComplete;
+import eu32k.ludumdare.ld26.events.messages.GameplayEvent;
+import eu32k.ludumdare.ld26.events.messages.MoveComplete;
+import eu32k.ludumdare.ld26.events.messages.TileEvent;
+import eu32k.ludumdare.ld26.events.messages.GameplayEvent.GameplayEventType;
+import eu32k.ludumdare.ld26.events.messages.TileEvent.TileEventType;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.PlayerState;

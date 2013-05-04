@@ -2,6 +2,7 @@ package eu32k.ludumdare.ld26.effects;
 
 import com.badlogic.gdx.math.Interpolation;
 
+import eu32k.ludumdare.ld26.events.messages.FadeComplete;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.pool.IObjectPoolItem;
 import eu32k.ludumdare.ld26.state.LevelState;

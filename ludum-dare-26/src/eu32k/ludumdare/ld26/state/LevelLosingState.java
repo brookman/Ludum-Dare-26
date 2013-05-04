@@ -5,8 +5,8 @@ import java.util.List;
 
 import eu32k.ludumdare.ld26.effects.IRunningEffect;
 import eu32k.ludumdare.ld26.effects.TileFade;
-import eu32k.ludumdare.ld26.gameplay.GameplayEvent;
-import eu32k.ludumdare.ld26.gameplay.GameplayEvent.GameplayEventType;
+import eu32k.ludumdare.ld26.events.messages.GameplayEvent;
+import eu32k.ludumdare.ld26.events.messages.GameplayEvent.GameplayEventType;
 import eu32k.ludumdare.ld26.level.Tile;
 
 public class LevelLosingState extends GameState {

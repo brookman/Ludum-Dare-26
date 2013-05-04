@@ -1,4 +1,4 @@
-package eu32k.ludumdare.ld26.effects;
+package eu32k.ludumdare.ld26.events.messages;
 
 import eu32k.ludumdare.ld26.events.EventBase;
 

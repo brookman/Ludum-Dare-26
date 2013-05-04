@@ -1,7 +1,7 @@
 package eu32k.ludumdare.ld26.state;
 
-import eu32k.ludumdare.ld26.gameplay.GameplayEvent;
-import eu32k.ludumdare.ld26.gameplay.GameplayEvent.GameplayEventType;
+import eu32k.ludumdare.ld26.events.messages.GameplayEvent;
+import eu32k.ludumdare.ld26.events.messages.GameplayEvent.GameplayEventType;
 
 public class LevelWinningState extends GameState {
 

@@ -1,7 +1,7 @@
-package eu32k.ludumdare.ld26.gameplay;
+package eu32k.ludumdare.ld26.events.messages;
 
 import eu32k.ludumdare.ld26.events.EventBase;
-import eu32k.ludumdare.ld26.gameplay.GameplayEvent.GameplayEventType;
+import eu32k.ludumdare.ld26.events.messages.GameplayEvent.GameplayEventType;
 
 public class GameplayEvent extends EventBase {
    
