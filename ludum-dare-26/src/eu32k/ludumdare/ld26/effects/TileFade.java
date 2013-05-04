@@ -7,59 +7,63 @@ import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class TileFade implements IRunningEffect {
-   private boolean complete;
+   private boolean complete = false;
+   private boolean running;
    private Tile tile;
-   private float timer;
-   private LevelState levelState;
-   private float currentAlpha;
    private float fadeTime;
+   private float runningTime;
+   private float fadeFrom;
+   private float fadeTo;
    
-   /* (non-Javadoc)
-    * @see eu32k.ludumdare.ld26.effects.IUpdateUntilComplete#complete()
-    */
+   public TileFade()
+   {
+      clear();
+   }
+
+   public void clear() {
+      this.complete = true;
+      this.runningTime = 0f;
+      this.tile = null;
+      this.fadeTime = 0f;
+      this.fadeFrom = 0f;
+      this.fadeTo = 0f;
+   }
+   
+   public void init(Tile tile, float fadeTime, float fadeFrom, float fadeTo)
+   {
+      this.complete = false;
+      this.runningTime = 0f;
+      this.tile = tile;
+      this.fadeTime = fadeTime;
+      this.fadeFrom = fadeFrom;
+      this.fadeTo = fadeTo;
+   }
+   
    @Override
    public boolean complete() {
       return complete;
    }
 
-   public TileFade()
-   {
-      this.levelState = StateMachine.instance().getState(LevelState.class);
-      this.currentAlpha = 1;
-   }
-   
-   public void initFade(Tile tile, float fadeTime)
-   {
-      timer = 0f;
-      this.tile = tile;
-      complete = false;
-      this.fadeTime = fadeTime;
-   }
-   
-   /* (non-Javadoc)
-    * @see eu32k.ludumdare.ld26.effects.IUpdateUntilComplete#update(float)
-    */
    @Override
    public void update(float delta) {
-      timer += delta;
-      float value = (timer / fadeTime);
-      currentAlpha = Interpolation.linear.apply(1f, 0f, value);
-      if(currentAlpha < 0) {
-         currentAlpha = 0;
+      runningTime += delta;
+      if(runningTime > fadeTime)
+      {
+         tile.setAlpha(fadeTo);
+         StateMachine.instance().getState(LevelState.class).getEvents().enqueue(new FadeComplete(this));
+//         clear();
          complete = true;
-         
-         tile.setDead(true);
-         levelState.getEvents().enqueue(new FadeComplete(this));
+         return;
       }
-      tile.setAlpha(currentAlpha);
+      tile.setAlpha(Interpolation.linear.apply(fadeFrom, fadeTo, runningTime / fadeTime));
    }
 
    public Tile getTile() {
-      return tile;
+      return this.tile;
    }
 
-   public void setTile(Tile tile) {
-      this.tile = tile;
+   public float fadeTo() {
+      return fadeTo;
    }
-   
+
 }

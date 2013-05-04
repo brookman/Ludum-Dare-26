@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 
 import eu32k.ludumdare.ld26.effects.IRunningEffect;
-import eu32k.ludumdare.ld26.effects.TileFadeIn;
+import eu32k.ludumdare.ld26.effects.TileFade;
 import eu32k.ludumdare.ld26.gameplay.GameplayEvent;
 import eu32k.ludumdare.ld26.gameplay.GameplayEvent.GameplayEventType;
 import eu32k.ludumdare.ld26.level.Tile;
@@ -38,7 +38,9 @@ public class LevelInitState extends GameState {
       effects.clear();
       timeSinceEnter = 0f;
       for (Tile t : tiles) {
-         effects.add(new TileFadeIn(t, fadeInLength));
+         TileFade fade = new TileFade();
+         fade.init(t, fadeInLength, 0f, 1f);
+         effects.add(fade);
       }
    }
 

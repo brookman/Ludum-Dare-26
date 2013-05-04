@@ -39,13 +39,15 @@ public class GameEventHandler implements IEventHandler {
 
    private void handleFadeComplete(FadeComplete ev) {
       Tile t = ev.fade.getTile();
-      t.setDead(true);
-      levelState.getLevel().getTiles().remove(t);
-      if (levelState.playerTile == t) {
-         levelState.playerTile = null;
-      }
-      if (levelState.goalTile == t) {
-         levelState.goalTile = null;
+      if (ev.fade.fadeTo() == 0f) {
+         t.setDead(true);
+         levelState.getLevel().getTiles().remove(t);
+         if (levelState.playerTile == t) {
+            levelState.playerTile = null;
+         }
+         if (levelState.goalTile == t) {
+            levelState.goalTile = null;
+         }
       }
    }
 

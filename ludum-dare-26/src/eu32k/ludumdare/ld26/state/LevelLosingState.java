@@ -34,7 +34,7 @@ public class LevelLosingState extends GameState {
       effects.clear();
       for (Tile t : tiles) {
          TileFade fade = new TileFade();
-         fade.initFade(t, fadeOutTime);
+         fade.init(t, fadeOutTime, 1f, 0f);
          effects.add(fade);
       }
       this.timer = 0f;
