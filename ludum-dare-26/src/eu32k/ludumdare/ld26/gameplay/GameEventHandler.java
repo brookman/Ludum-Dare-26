@@ -39,6 +39,7 @@ public class GameEventHandler implements IEventHandler {
    }
 
    private void handleFadeComplete(FadeComplete ev) {
+      ev.fade.setInUse(false);
       Tile t = ev.fade.getTile();
       if (ev.fade.fadeTo() == 0f) {
 

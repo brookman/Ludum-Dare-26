@@ -4,9 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import com.badlogic.gdx.scenes.scene2d.Stage;
-
 import eu32k.ludumdare.ld26.events.EventQueue;
+import eu32k.ludumdare.ld26.pool.GamePool;
 
 public class GlobalState extends GameState {
 
@@ -18,8 +17,11 @@ public class GlobalState extends GameState {
 
    private static final long TEST_SEED = 76535225L;
    
+   private GamePool pool;
+   
    @Override
    public void init() {
+      pool = new GamePool();
       masterRandom = new Random(TEST_SEED);
       randoms = new HashMap<String, Random>();
       events = new EventQueue();
@@ -29,6 +31,10 @@ public class GlobalState extends GameState {
    public void destroy() {
       // TODO Auto-generated method stub
 
+   }
+   
+   public GamePool pool(){
+      return pool;
    }
 
    public Random getMasterRandom() {

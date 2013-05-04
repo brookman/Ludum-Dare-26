@@ -15,8 +15,8 @@ import eu32k.ludumdare.ld26.rendering.Background;
 import eu32k.ludumdare.ld26.state.PlayerState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
-public class FinishStage extends AbstractStage {
 
+public class FinishStage extends AbstractStage {
    private Skin skin;
 
    private List<Label> list = new ArrayList<Label>();

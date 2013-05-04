@@ -1,7 +1,10 @@
 package eu32k.ludumdare.ld26.events;
 
-public class EventBase implements IEvent {
+import eu32k.ludumdare.ld26.pool.IObjectPoolItem;
+
+public class EventBase implements IEvent , IObjectPoolItem{
    private float time;
+   private boolean inUse;
 
    protected void setTime(float time) {
       this.time = time;
@@ -15,5 +18,15 @@ public class EventBase implements IEvent {
    @Override
    public float timeLeft() {
       return time;
+   }
+
+   @Override
+   public boolean isInUse() {
+      return inUse;
+   }
+
+   @Override
+   public void setInUse(boolean inUse) {
+      this.inUse = inUse;
    }
 }

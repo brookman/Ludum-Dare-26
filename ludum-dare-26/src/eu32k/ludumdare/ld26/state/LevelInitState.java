@@ -10,6 +10,7 @@ import eu32k.ludumdare.ld26.effects.IRunningEffect;
 import eu32k.ludumdare.ld26.effects.TileFade;
 import eu32k.ludumdare.ld26.events.messages.GameplayEvent;
 import eu32k.ludumdare.ld26.events.messages.GameplayEvent.GameplayEventType;
+import eu32k.ludumdare.ld26.level.Level;
 import eu32k.ludumdare.ld26.level.Tile;
 
 //TODO: Still needs to be implemented
@@ -33,12 +34,14 @@ public class LevelInitState extends GameState {
       GlobalState state = StateMachine.instance().getState(GlobalState.class);
       state.getEvents().enqueue(new GameplayEvent(GameplayEventType.START_GAME, fadeInLength));
       LevelState ls = StateMachine.instance().getState(LevelState.class);
-      List<Tile> tiles = ls.getLevel().getTiles();
+      Level level = ls.getLevel();
+      List<Tile> tiles = level.getTiles();
       ls.setPaused(false);
       effects.clear();
       timeSinceEnter = 0f;
+      state.pool().fades().preloadTo(level.getWidth() * level.getHeight());
       for (Tile t : tiles) {
-         TileFade fade = new TileFade();
+         TileFade fade = state.pool().fades().getFreeItem();
          fade.init(t, fadeInLength, 0f, 1f);
          effects.add(fade);
       }
@@ -60,6 +63,11 @@ public class LevelInitState extends GameState {
 
    }
 
+   @Override
+   public void leave(){
+      GlobalState gs = StateMachine.instance().getState(GlobalState.class);
+      gs.pool().fades().setInUseForAll(false);
+   }
    public float getFadeInLength() {
       return fadeInLength;
    }

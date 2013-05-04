@@ -29,11 +29,12 @@ public class LevelLosingState extends GameState {
    @Override
    public void enter() {
       StateMachine.instance().getState(GlobalState.class).getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, 1, GameplayEvent.PARAM_LOSE_TOLOST));
+      GlobalState gs = StateMachine.instance().getState(GlobalState.class);
       LevelState ls = StateMachine.instance().getState(LevelState.class);
       List<Tile> tiles = ls.getLevel().getTiles();
       effects.clear();
       for (Tile t : tiles) {
-         TileFade fade = new TileFade();
+         TileFade fade = gs.pool().fades().getFreeItem();
          fade.init(t, fadeOutTime, 1f, 0f);
          effects.add(fade);
       }
@@ -52,8 +53,10 @@ public class LevelLosingState extends GameState {
    }
 
    @Override
-   public void leave(){
+   public void leave(){      
       effects.clear();
+      GlobalState gs = StateMachine.instance().getState(GlobalState.class);
+      gs.pool().fades().setInUseForAll(false);
    }
    public boolean handleKeys(float delta) {
       timer += delta;
