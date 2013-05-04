@@ -178,7 +178,7 @@ public class GameStage extends AbstractStage {
 
       if (levelState.playerTile == null) {
          levelState.deathConditionTimer += delta;
-         if (levelState.deathConditionTimer > 0.05) {
+         if (levelState.deathConditionTimer > 0.05f) {
             levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, 0, GameplayEvent.PARAM_LOSE_FALLOFFBOARD));
          }
       } else {

@@ -21,7 +21,7 @@ public class TileSpawner implements IEventHandler {
       levelState = StateMachine.instance().getState(LevelState.class);
       levelState.getEvents().addHandler(this);
    }
-      
+
    public void spawnTile(float spawnTime) {
       levelState.getEvents().enqueue(new TileEvent(spawnTime, null, TileEventType.TRIGGER_SPAWN));
    }
@@ -40,7 +40,7 @@ public class TileSpawner implements IEventHandler {
             break;
          case TRIGGER_POP:
             levelState.getLevel().popTile(event.getTile());
-            if(event.getTile().equals(levelState.playerTile)) {
+            if (event.getTile().equals(levelState.playerTile)) {
                levelState.playerTile = null;
             }
             levelState.getEvents().enqueue(new TileEvent(0, event.getTile(), TileEventType.POPPED));
@@ -60,7 +60,9 @@ public class TileSpawner implements IEventHandler {
          }
       } else if (ev instanceof FadeComplete) {
          FadeComplete event = (FadeComplete) ev;
-         levelState.getEvents().enqueue(new TileEvent(0, event.fade.getTile(), TileEventType.TRIGGER_POP));
+         if (event.fade.fadeTo() == 0f) {
+            levelState.getEvents().enqueue(new TileEvent(0, event.fade.getTile(), TileEventType.TRIGGER_POP));
+         }
       }
 
    }

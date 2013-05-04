@@ -4,8 +4,6 @@ import eu32k.ludumdare.ld26.Direction;
 import eu32k.ludumdare.ld26.effects.TileFade;
 import eu32k.ludumdare.ld26.effects.TileMove;
 import eu32k.ludumdare.ld26.level.Tile;
-import eu32k.ludumdare.ld26.level.TileEvent;
-import eu32k.ludumdare.ld26.level.TileEvent.TileEventType;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.StateMachine;

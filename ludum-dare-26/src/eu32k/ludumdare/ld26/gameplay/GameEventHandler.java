@@ -40,6 +40,7 @@ public class GameEventHandler implements IEventHandler {
    private void handleFadeComplete(FadeComplete ev) {
       Tile t = ev.fade.getTile();
       if (ev.fade.fadeTo() == 0f) {
+
          t.setDead(true);
          levelState.getLevel().getTiles().remove(t);
          if (levelState.playerTile == t) {

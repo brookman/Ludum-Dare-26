@@ -158,29 +158,30 @@ public class MainRenderer {
       float oldAlpha = 0f;
       LevelState ls = StateMachine.instance().getState(LevelState.class);
       for (Tile tile : tiles) {
-         MultiLayerSprite sprite = tile.getSprite();
+         if (!tile.isDead()) {
+            MultiLayerSprite sprite = tile.getSprite();
 
-         if (bg) {
-            sprite.activateLayer(0);
-            Color c = Color.WHITE;
-            oldAlpha = c.a;
-            c.a = tile.getAlpha();
-            sprite.setColor(c);
-            c.a = oldAlpha;
+            if (bg) {
+               sprite.activateLayer(0);
+               Color c = Color.WHITE;
+               oldAlpha = c.a;
+               c.a = tile.getAlpha();
+               sprite.setColor(c);
+               c.a = oldAlpha;
+               sprite.draw(batch);
+            }
+
+            boolean isPlayerTile = ls.playerTile == tile || ls.goalTile == tile;
+            sprite.activateLayer(1);
+            oldAlpha = playerColor.a;
+            float oldMainAlpha = mainColor.a;
+            playerColor.a = tile.getAlpha();
+            mainColor.a = tile.getAlpha();
+            sprite.setColor(isPlayerTile ? playerColor : mainColor);
             sprite.draw(batch);
+            playerColor.a = oldAlpha;
+            mainColor.a = oldMainAlpha;
          }
-
-         boolean isPlayerTile = ls.playerTile == tile || ls.goalTile == tile;
-         sprite.activateLayer(1);
-         oldAlpha = playerColor.a;
-         float oldMainAlpha = mainColor.a;
-         playerColor.a = tile.getAlpha();
-         mainColor.a = tile.getAlpha();
-         sprite.setColor(isPlayerTile ? playerColor : mainColor);
-         sprite.draw(batch);
-         playerColor.a = oldAlpha;
-         mainColor.a = oldMainAlpha;
-
       }
       if (bg) {
          goal.getSprite().activateLayer(0);
