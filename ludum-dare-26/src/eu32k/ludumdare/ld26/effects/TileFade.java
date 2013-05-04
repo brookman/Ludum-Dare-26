@@ -3,10 +3,11 @@ package eu32k.ludumdare.ld26.effects;
 import com.badlogic.gdx.math.Interpolation;
 
 import eu32k.ludumdare.ld26.level.Tile;
+import eu32k.ludumdare.ld26.pool.IObjectPoolItem;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
-public class TileFade implements IRunningEffect {
+public class TileFade implements IRunningEffect, IObjectPoolItem {
    private boolean complete = false;
    private boolean running;
    private Tile tile;
@@ -14,9 +15,9 @@ public class TileFade implements IRunningEffect {
    private float runningTime;
    private float fadeFrom;
    private float fadeTo;
-   
-   public TileFade()
-   {
+   private boolean inUse;
+
+   public TileFade() {
       clear();
    }
 
@@ -28,9 +29,8 @@ public class TileFade implements IRunningEffect {
       this.fadeFrom = 0f;
       this.fadeTo = 0f;
    }
-   
-   public void init(Tile tile, float fadeTime, float fadeFrom, float fadeTo)
-   {
+
+   public void init(Tile tile, float fadeTime, float fadeFrom, float fadeTo) {
       this.complete = false;
       this.runningTime = 0f;
       this.tile = tile;
@@ -38,7 +38,7 @@ public class TileFade implements IRunningEffect {
       this.fadeFrom = fadeFrom;
       this.fadeTo = fadeTo;
    }
-   
+
    @Override
    public boolean complete() {
       return complete;
@@ -47,11 +47,10 @@ public class TileFade implements IRunningEffect {
    @Override
    public void update(float delta) {
       runningTime += delta;
-      if(runningTime > fadeTime)
-      {
+      if (runningTime > fadeTime) {
          tile.setAlpha(fadeTo);
          StateMachine.instance().getState(LevelState.class).getEvents().enqueue(new FadeComplete(this));
-//         clear();
+         // clear();
          complete = true;
          return;
       }
@@ -64,6 +63,16 @@ public class TileFade implements IRunningEffect {
 
    public float fadeTo() {
       return fadeTo;
+   }
+
+   @Override
+   public boolean isInUse() {
+      return this.inUse;
+   }
+
+   @Override
+   public void setInUse(boolean inUse) {
+      this.inUse = inUse;
    }
 
 }
