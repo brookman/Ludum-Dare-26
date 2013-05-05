@@ -2,9 +2,9 @@ package eu32k.ludumdare.ld26.effects;
 
 import com.badlogic.gdx.math.Interpolation;
 
-import eu32k.ludumdare.ld26.events.messages.FadeComplete;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.pool.IObjectPoolItem;
+import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
@@ -50,7 +50,9 @@ public class TileFade implements IRunningEffect, IObjectPoolItem {
       runningTime += delta;
       if (runningTime > fadeTime) {
          tile.setAlpha(fadeTo);
-         StateMachine.instance().getState(LevelState.class).getEvents().enqueue(new FadeComplete(this));
+         GlobalState gs = StateMachine.instance().getState(GlobalState.class);
+         LevelState ls = StateMachine.instance().getState(LevelState.class);
+         ls.getEvents().enqueue(gs.pool().events().fadeComplete(this));
          // clear();
          complete = true;
          return;

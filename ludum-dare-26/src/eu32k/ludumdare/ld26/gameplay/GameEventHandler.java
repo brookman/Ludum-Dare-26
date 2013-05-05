@@ -2,8 +2,8 @@ package eu32k.ludumdare.ld26.gameplay;
 
 import eu32k.ludumdare.ld26.events.IEvent;
 import eu32k.ludumdare.ld26.events.IEventHandler;
-import eu32k.ludumdare.ld26.events.messages.FadeComplete;
 import eu32k.ludumdare.ld26.events.messages.GameplayEvent;
+import eu32k.ludumdare.ld26.events.messages.GenericEvent;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.state.GameState;
 import eu32k.ludumdare.ld26.state.GlobalState;
@@ -33,12 +33,21 @@ public class GameEventHandler implements IEventHandler {
    public void handle(IEvent ev) {
       if (ev instanceof GameplayEvent) {
          handleGameplayEvent((GameplayEvent) ev);
-      } else if (ev instanceof FadeComplete) {
-         handleFadeComplete((FadeComplete) ev);
+      }
+      else if(ev instanceof GenericEvent){
+         handleGenericEvent((GenericEvent) ev);
+      } 
+   }
+
+   private void handleGenericEvent(GenericEvent ev) {
+      switch(ev.type){
+      case FADE_COMPLETE:
+         handleFadeComplete(ev);
+         break;
       }
    }
 
-   private void handleFadeComplete(FadeComplete ev) {
+   private void handleFadeComplete(GenericEvent ev) {
       ev.fade.setInUse(false);
       Tile t = ev.fade.getTile();
       if (ev.fade.fadeTo() == 0f) {

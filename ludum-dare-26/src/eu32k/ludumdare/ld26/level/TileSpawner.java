@@ -2,15 +2,12 @@ package eu32k.ludumdare.ld26.level;
 
 import eu32k.ludumdare.ld26.events.IEvent;
 import eu32k.ludumdare.ld26.events.IEventHandler;
-import eu32k.ludumdare.ld26.events.messages.FadeComplete;
-import eu32k.ludumdare.ld26.events.messages.GameplayEvent;
+import eu32k.ludumdare.ld26.events.messages.GenericEvent;
 import eu32k.ludumdare.ld26.events.messages.MoveComplete;
 import eu32k.ludumdare.ld26.events.messages.TileEvent;
-import eu32k.ludumdare.ld26.events.messages.GameplayEvent.GameplayEventType;
 import eu32k.ludumdare.ld26.events.messages.TileEvent.TileEventType;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelState;
-import eu32k.ludumdare.ld26.state.PlayerState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class TileSpawner implements IEventHandler {
@@ -64,13 +61,24 @@ public class TileSpawner implements IEventHandler {
             levelState.getEvents().enqueue(new TileEvent((2 / levelState.getLevel().getDufficulty()) - 1, moved, TileEventType.SPAWNED));
             levelState.spawned = null;
          }
-      } else if (ev instanceof FadeComplete) {
-         FadeComplete event = (FadeComplete) ev;
-         if (event.fade.fadeTo() == 0f) {
-            levelState.getEvents().enqueue(new TileEvent(0, event.fade.getTile(), TileEventType.TRIGGER_POP));
-         }
+      } else if (ev instanceof GenericEvent) {
+         handleGenericEvent((GenericEvent) ev);
       }
 
+   }
+
+   private void handleGenericEvent(GenericEvent ev) {
+      switch(ev.type){
+      case FADE_COMPLETE:
+         handleFadeComplete(ev);            
+         break;
+      }
+   }
+
+   private void handleFadeComplete(GenericEvent event) {
+      if (event.fade.fadeTo() == 0f) {
+         levelState.getEvents().enqueue(new TileEvent(0, event.fade.getTile(), TileEventType.TRIGGER_POP));
+      }
    }
 
    public void update(float delta) {

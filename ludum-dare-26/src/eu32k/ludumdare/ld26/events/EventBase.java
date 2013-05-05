@@ -1,8 +1,7 @@
 package eu32k.ludumdare.ld26.events;
 
-import eu32k.ludumdare.ld26.pool.IObjectPoolItem;
 
-public class EventBase implements IEvent , IObjectPoolItem{
+public class EventBase implements IEvent{
    private float time;
    private boolean inUse;
 

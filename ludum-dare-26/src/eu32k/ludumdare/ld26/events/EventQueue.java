@@ -41,7 +41,7 @@ public class EventQueue {
          tickEvents.clear();
       }
       if (clearAfterIteration) {
-         events.clear();
+         clearInternal();
          clearAfterIteration = false;
       }
       isTicking = false;
@@ -60,13 +60,21 @@ public class EventQueue {
       for (IEventHandler handler : handlers) {
          handler.handle(event);
       }
+      event.setInUse(false);
    }
 
    public void clear() {
       if (isTicking) {
          this.clearAfterIteration = true;
       } else {
-         events.clear();
+         clearInternal();
       }
+   }
+
+   private void clearInternal() {
+      for(IEvent ev : events){
+         ev.setInUse(false);
+      }
+      events.clear();
    }
 }

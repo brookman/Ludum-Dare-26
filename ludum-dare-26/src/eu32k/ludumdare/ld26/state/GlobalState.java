@@ -18,7 +18,7 @@ public class GlobalState extends GameState {
    private static final long TEST_SEED = 76535225L;
    
    private GamePool pool;
-   
+      
    @Override
    public void init() {
       pool = new GamePool();
