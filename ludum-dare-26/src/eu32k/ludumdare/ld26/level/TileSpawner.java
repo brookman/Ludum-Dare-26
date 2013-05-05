@@ -36,17 +36,6 @@ public class TileSpawner implements IEventHandler {
          case SPAWNED:
             levelState.getTileAnimator().animateShift(event.getTile());
             break;
-         case TRIGGER_POP:
-            levelState.getLevel().popTile(event.getTile());
-            if (event.getTile().equals(levelState.playerTile)) {
-               levelState.playerTile = null;
-            }
-            if (event.getTile().equals(levelState.goalTile)) {
-               levelState.goalTile = null;
-            }
-            levelState.toPop = null;
-            levelState.getEvents().enqueue(new TileEvent(0, event.getTile(), TileEventType.POPPED));
-            break;
          case POPPED:
             spawnTile((5f / levelState.getLevel().getDufficulty()));
             break;
@@ -57,6 +46,18 @@ public class TileSpawner implements IEventHandler {
 
    }
 
+   private void pop(Tile tile) {
+      levelState.getLevel().popTile(tile);
+      if (tile.equals(levelState.playerTile)) {
+         levelState.playerTile = null;
+      }
+      if (tile.equals(levelState.goalTile)) {
+         levelState.goalTile = null;
+      }
+      levelState.toPop = null;
+      levelState.getEvents().enqueue(new TileEvent(0, tile, TileEventType.POPPED));
+   }
+
    private void handleGenericEvent(GenericEvent ev) {
       switch (ev.type) {
       case FADE_COMPLETE:
@@ -64,7 +65,6 @@ public class TileSpawner implements IEventHandler {
          break;
       case MOVE_COMPLETE:
          handleMoveComplete(ev);
-
          break;
       }
    }
@@ -81,7 +81,7 @@ public class TileSpawner implements IEventHandler {
 
    private void handleFadeComplete(GenericEvent event) {
       if (event.fade.fadeTo() == 0f) {
-         levelState.getEvents().enqueue(new TileEvent(0, event.fade.getTile(), TileEventType.TRIGGER_POP));
+         pop(event.fade.getTile());
       }
    }
 

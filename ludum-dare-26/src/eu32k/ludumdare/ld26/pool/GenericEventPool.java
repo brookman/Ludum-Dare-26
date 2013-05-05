@@ -52,4 +52,8 @@ public class GenericEventPool extends ObjectPool<GenericEvent> {
       ev.move = tileMove;
       return ev;
    }
+   @Override
+   public String toString(){
+      return "Event Pool";
+   }
 }

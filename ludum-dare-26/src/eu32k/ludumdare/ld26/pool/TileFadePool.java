@@ -8,5 +8,9 @@ public class TileFadePool extends ObjectPool<TileFade>{
    protected TileFade instanceItem() {
       return new TileFade();
    }
+   @Override
+   public String toString(){
+      return "Fade Pool";
+   }
 
 }

@@ -20,7 +20,7 @@ public abstract class ObjectPool<T extends IObjectPoolItem> {
 
    public void preloadTo(int size) {
       preload(size - size());
-      System.out.println(toString() + "PoolSize: " + items.size());
+      //System.out.println(toString() + ": " + items.size());
    }
 
    public int size() {
@@ -43,13 +43,13 @@ public abstract class ObjectPool<T extends IObjectPoolItem> {
       T newItem = instanceItem();
       newItem.setInUse(true);
       items.add(newItem);
-      System.out.println(toString() + "PoolSize: " + items.size());
+      //System.out.println(toString() + ": " + items.size());
       return newItem;
    }
 
    public void add(T fade) {
       items.add(fade);
-      System.out.println(toString() + "PoolSize: " + items.size());
+      //System.out.println(toString() + ": " + items.size());
    }
 
    public void clear() {

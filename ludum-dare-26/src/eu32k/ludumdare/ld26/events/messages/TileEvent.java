@@ -6,7 +6,7 @@ import eu32k.ludumdare.ld26.level.Tile;
 public class TileEvent extends EventBase {
    
    public enum TileEventType {
-      SPAWNED, TRIGGER_SPAWN, TRIGGER_POP, POPPED;
+      SPAWNED, TRIGGER_SPAWN, POPPED;
    }
    
    private Tile tile;

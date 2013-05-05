@@ -9,4 +9,8 @@ public class TilePool extends ObjectPool<Tile> {
       return new Tile();
    }
 
+   @Override
+   public String toString(){
+      return "Tile Pool";
+   }
 }

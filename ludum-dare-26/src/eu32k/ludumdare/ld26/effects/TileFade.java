@@ -17,6 +17,7 @@ public class TileFade implements IRunningEffect, IObjectPoolItem {
    private float fadeFrom;
    private float fadeTo;
    private boolean inUse;
+   private boolean notifyCompletion;
 
    public TileFade() {
       clear();
@@ -32,12 +33,16 @@ public class TileFade implements IRunningEffect, IObjectPoolItem {
    }
 
    public void init(Tile tile, float fadeTime, float fadeFrom, float fadeTo) {
+      init(tile, fadeTime, fadeFrom, fadeTo, false);
+   }
+   public void init(Tile tile, float fadeTime, float fadeFrom, float fadeTo, boolean notifyCompletion) {
       this.complete = false;
       this.runningTime = 0f;
       this.tile = tile;
       this.fadeTime = fadeTime;
       this.fadeFrom = fadeFrom;
       this.fadeTo = fadeTo;
+      this.notifyCompletion = notifyCompletion;
    }
 
    @Override
@@ -50,10 +55,16 @@ public class TileFade implements IRunningEffect, IObjectPoolItem {
       runningTime += delta;
       if (runningTime > fadeTime) {
          tile.setAlpha(fadeTo);
-         GlobalState gs = StateMachine.instance().getState(GlobalState.class);
-         LevelState ls = StateMachine.instance().getState(LevelState.class);
-         ls.getEvents().enqueue(gs.pool().events().fadeComplete(this));
-         // clear();
+
+         if (notifyCompletion) {
+            GlobalState gs = StateMachine.instance().getState(GlobalState.class);
+            LevelState ls = StateMachine.instance().getState(LevelState.class);
+            ls.getEvents().enqueue(gs.pool().events().fadeComplete(this));
+            // clear();
+         }
+         else{
+            setInUse(false);
+         }
          complete = true;
          return;
       }
