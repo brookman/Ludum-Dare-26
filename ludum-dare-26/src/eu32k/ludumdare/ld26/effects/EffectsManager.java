@@ -95,7 +95,6 @@ public class EffectsManager implements IEventHandler {
             }
             break;
          case PLAY_PART:
-            System.out.println("Play part");
             handlePlayPartEvent(event);
             break;
          }

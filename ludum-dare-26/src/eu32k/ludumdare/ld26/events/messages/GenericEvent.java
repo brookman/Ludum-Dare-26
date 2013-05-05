@@ -11,7 +11,7 @@ import eu32k.ludumdare.ld26.objects.GameObject;
 
 public class GenericEvent extends EventBase{
    public enum GenericEventType{
-      NONE, FADE_COMPLETE, GAMEEVENT, MUSICEVENT, MOVE_COMPLETE, OBJECTMOVE_COMPLETE, PLAY_PART
+      NONE, FADE_COMPLETE, GAMEEVENT, MUSICEVENT, MOVE_COMPLETE, OBJECTMOVE_COMPLETE, PLAY_PART, TILE_EVENT
    };
    
 
@@ -28,6 +28,11 @@ public class GenericEvent extends EventBase{
    public final static int GAMEEVENT_LOSE_SQUASHED = 3;
 
    public static final int GAMEEVENT_LOSE_TOLOST = 4;
+
+   public final static int TILEEVENT_SPAWNED = 1;
+   public final static int TILEEVENT_TRIGGER_SPAWN = 2;
+   public final static int TILEEVENT_POPPED = 3;
+
 
    public GenericEventType type;
    public Vector2 vecA;

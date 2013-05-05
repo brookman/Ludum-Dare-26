@@ -3,8 +3,6 @@ package eu32k.ludumdare.ld26.level;
 import eu32k.ludumdare.ld26.events.IEvent;
 import eu32k.ludumdare.ld26.events.IEventHandler;
 import eu32k.ludumdare.ld26.events.messages.GenericEvent;
-import eu32k.ludumdare.ld26.events.messages.TileEvent;
-import eu32k.ludumdare.ld26.events.messages.TileEvent.TileEventType;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.StateMachine;
@@ -21,26 +19,12 @@ public class TileSpawner implements IEventHandler {
    }
 
    public void spawnTile(float spawnTime) {
-      levelState.getEvents().enqueue(new TileEvent(spawnTime, null, TileEventType.TRIGGER_SPAWN));
+      levelState.getEvents().enqueue(globalState.pool().events().tileEvent(spawnTime, null, GenericEvent.TILEEVENT_TRIGGER_SPAWN));
    }
 
    @Override
    public void handle(IEvent ev) {
-      if (ev instanceof TileEvent) {
-         TileEvent event = (TileEvent) ev;
-         switch (event.getType()) {
-         case TRIGGER_SPAWN:
-            levelState.spawned = levelState.getLevel().spawnTile();
-            levelState.getTileAnimator().animateSpawn(levelState.spawned);
-            break;
-         case SPAWNED:
-            levelState.getTileAnimator().animateShift(event.getTile());
-            break;
-         case POPPED:
-            spawnTile((5f / levelState.getLevel().getDufficulty()));
-            break;
-         }
-      } else if (ev instanceof GenericEvent) {
+      if (ev instanceof GenericEvent) {
          handleGenericEvent((GenericEvent) ev);
       }
 
@@ -55,7 +39,7 @@ public class TileSpawner implements IEventHandler {
          levelState.goalTile = null;
       }
       levelState.toPop = null;
-      levelState.getEvents().enqueue(new TileEvent(0, tile, TileEventType.POPPED));
+      levelState.getEvents().enqueue(globalState.pool().events().tileEvent(0, tile, GenericEvent.TILEEVENT_POPPED));
    }
 
    private void handleGenericEvent(GenericEvent ev) {
@@ -66,6 +50,24 @@ public class TileSpawner implements IEventHandler {
       case MOVE_COMPLETE:
          handleMoveComplete(ev);
          break;
+      case TILE_EVENT:
+         handleTileEvent(ev);         
+         break;
+      }
+   }
+
+   private void handleTileEvent(GenericEvent ev) {
+      switch (ev.intA) {
+      case GenericEvent.TILEEVENT_TRIGGER_SPAWN:
+         levelState.spawned = levelState.getLevel().spawnTile();
+         levelState.getTileAnimator().animateSpawn(levelState.spawned);
+         break;
+      case GenericEvent.TILEEVENT_SPAWNED:
+         levelState.getTileAnimator().animateShift(ev.tile);
+         break;
+      case GenericEvent.TILEEVENT_POPPED:
+         spawnTile((5f / levelState.getLevel().getDufficulty()));
+         break;
       }
    }
 
@@ -74,7 +76,7 @@ public class TileSpawner implements IEventHandler {
       if (moved.equals(levelState.toPop)) {
          levelState.getTileAnimator().animatePop(moved);
       } else if (moved.equals(levelState.spawned)) {
-         levelState.getEvents().enqueue(new TileEvent((2 / levelState.getLevel().getDufficulty()) - 1, moved, TileEventType.SPAWNED));
+         levelState.getEvents().enqueue(globalState.pool().events().tileEvent((2 / levelState.getLevel().getDufficulty()) - 1, moved, GenericEvent.TILEEVENT_SPAWNED));
          levelState.spawned = null;
       }
    }
