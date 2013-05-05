@@ -1,9 +1,8 @@
 package eu32k.ludumdare.ld26.level;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -28,7 +27,7 @@ public class Level {
    private int dufficulty;
 
    private Random tileRandom;
-
+   private int spawnDistance;
    // private List<Tile> tiles;
 
    private Tile nextTile;
@@ -36,6 +35,7 @@ public class Level {
    private TilePool pool;
 
    public Level(TilePool pool, int width, int height) {
+      spawnDistance = 0;
       this.pool = pool;
       if (pool == null) {
          this.pool = new TilePool();
@@ -99,19 +99,28 @@ public class Level {
       }
    }
 
-   public boolean isNearGameobject(GameObject object, Tile tile, int distance) {
+   public boolean isHorizontalNearGameobject(GameObject object, Tile tile, int distance) {
+      if (object == null || tile == null)
+         return false;
+      if (distance < 0)
+         distance = 0;
+      int oy = (int) object.getY();
+      int ty = (int) tile.getY();
+
+      int yDistance = Math.abs(oy - ty);
+      return (yDistance <= distance);
+   }
+
+   public boolean isVerticalNearGameobject(GameObject object, Tile tile, int distance) {
       if (object == null || tile == null)
          return false;
       if (distance < 0)
          distance = 0;
       int ox = (int) object.getX();
-      int oy = (int) object.getY();
       int tx = (int) tile.getX();
-      int ty = (int) tile.getY();
 
       int xDistance = Math.abs(ox - tx);
-      int yDistance = Math.abs(oy - ty);
-      return (xDistance <= distance || yDistance <= distance);
+      return (xDistance <= distance);
    }
 
    public Tile spawnTile() {
@@ -122,17 +131,45 @@ public class Level {
       float xRand = target.getX();
       float yRand = target.getY();
       Set<Direction> dirs = target.getNeighbors().keySet();
-      List<Direction> allDirs = Arrays.asList(Direction.values());
-      Iterator<Direction> it = allDirs.iterator();
       List<Direction> freeDirs = new ArrayList<Direction>();
-      while (it.hasNext()) {
-         Direction dir = it.next();
-         if (!dirs.contains(dir)) {
-            freeDirs.add(dir);
+      LevelState ls = StateMachine.instance().getState(LevelState.class);
+      PlayerState ps = StateMachine.instance().getState(PlayerState.class);
+      System.out.println("Player: " + ps.getPlayer().getX() + "/" + ps.getPlayer().getY() + " Object: " + ls.getGoal().getX() + "/" + ls.getGoal().getY());
+      System.out.println("Tile: " + target.getX() + "/" + target.getY());
+      System.out.println("Tile Neighbours:");
+      for (Direction key : target.getNeighbors().keySet()) {
+         System.out.println(key);
+      }
+      if (dirs.size() == 3) {
+         freeDirs.add(Direction.N);
+         freeDirs.add(Direction.E);
+         freeDirs.add(Direction.S);
+         freeDirs.add(Direction.W);
+         for(Direction dir : dirs){
+            freeDirs.remove(dir);
+         }
+      } else {
+         if (isHorizontalNearGameobject(ps.getPlayer(), target, spawnDistance) || isHorizontalNearGameobject(ls.getGoal(), target, spawnDistance)) {
+            if (!dirs.contains(Direction.E)) {
+               freeDirs.add(Direction.E);
+            } 
+            if (!dirs.contains(Direction.W)) {
+               freeDirs.add(Direction.W);
+            }
+         }
+         if (isVerticalNearGameobject(ps.getPlayer(), target, spawnDistance) || isVerticalNearGameobject(ls.getGoal(), target, spawnDistance)) {
+            if (!dirs.contains(Direction.getOpposite(Direction.N))) {
+               freeDirs.add(Direction.N);
+            }
+            if (!dirs.contains(Direction.S)) {
+               freeDirs.add(Direction.S);
+            }
          }
       }
-      int dirRand = tileRandom.nextInt(freeDirs.size());
-      Direction dir = freeDirs.get(dirRand);
+      System.out.println("Free Dirs:");
+      printDirs(freeDirs);
+      int size = freeDirs.size();
+      Direction dir = size <= 1 ? freeDirs.get(0) : freeDirs.get(tileRandom.nextInt(size));
       float x, y;
       switch (dir) {
       case S:
@@ -160,13 +197,21 @@ public class Level {
       return nextTile;
    }
 
+   private void printDirs(List<Direction> blabla) {
+      for (Direction dir : blabla) {
+         System.out.println(blabla);
+      }
+   }
+
    private List<Tile> getEdgeTiles() {
       Player player = StateMachine.instance().getState(PlayerState.class).getPlayer();
       Goal goal = StateMachine.instance().getState(LevelState.class).getGoal();
       List<Tile> edgeTiles = new ArrayList<Tile>();
       for (Tile tile : pool.items()) {
          if (tile.isInUse()) {
-            if (tile.getNeighbors().size() < 4 && (isNearGameobject(player, tile, 0) || isNearGameobject(goal, tile, 0))) {
+            Map<Direction, Tile> neighbours = tile.getNeighbors();
+            if (((!neighbours.containsKey(Direction.N) || !neighbours.containsKey(Direction.S)) && (isVerticalNearGameobject(player, tile, spawnDistance) || isHorizontalNearGameobject(goal, tile, spawnDistance)))
+                  || ((!neighbours.containsKey(Direction.E) || !neighbours.containsKey(Direction.W)) && (isHorizontalNearGameobject(player, tile, spawnDistance) || isHorizontalNearGameobject(goal, tile, spawnDistance)))) {
                edgeTiles.add(tile);
             }
          }
@@ -279,5 +324,13 @@ public class Level {
 
    public void setRandom(Random random) {
       this.tileRandom = random;
+   }
+
+   public int getSpawnDistance() {
+      return spawnDistance;
+   }
+
+   public void setSpawnDistance(int spawnDistance) {
+      this.spawnDistance = spawnDistance;
    }
 }
