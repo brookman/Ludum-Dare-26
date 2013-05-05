@@ -13,14 +13,13 @@ import eu32k.ludumdare.ld26.level.Tile.Type;
 import eu32k.ludumdare.ld26.objects.GameObject;
 import eu32k.ludumdare.ld26.objects.Goal;
 import eu32k.ludumdare.ld26.objects.Player;
+import eu32k.ludumdare.ld26.pool.TilePool;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.PlayerState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class Level {
-
-   private Tile[][] tileMatrix;
 
    private int width;
 
@@ -30,40 +29,46 @@ public class Level {
 
    private Random tileRandom;
 
-   private List<Tile> tiles;
+   // private List<Tile> tiles;
 
    private Tile nextTile;
 
-   public Level(int width, int height) {
-      tileMatrix = new Tile[height][width];
+   private TilePool pool;
+
+   public Level(TilePool pool, int width, int height) {
+      this.pool = pool;
+      if (pool == null) {
+         this.pool = new TilePool();
+      }
+      pool.preloadTo(width * height + 2);
       this.height = height;
       this.width = width;
       dufficulty = 20;
       GlobalState globalState = StateMachine.instance().getState(GlobalState.class);
       tileRandom = globalState.createNewRandom("tiles");
-      tiles = new ArrayList<Tile>();
    }
 
    public void generateRandomTiles() {
+      Tile[][] tileMatrix = new Tile[height][width];
       for (int i = 0; i < height; i++) {
          for (int j = 0; j < width; j++) {
             Tile tile = createRandomTile(j, i);
-            tiles.add(tile);
+            // tiles.add(tile);
             tileMatrix[i][j] = tile;
          }
       }
-      placeNeighbors();
+      placeNeighbors(tileMatrix);
    }
 
    private Tile createRandomTile(float x, float y) {
       int randType = tileRandom.nextInt(4);
       int randRot = tileRandom.nextInt(4);
-      Tile tile = new Tile();
+      Tile tile = pool.getFreeItem();
       tile.init(x, y, Type.values()[randType], Rotation.values()[randRot]);
       return tile;
    }
 
-   private void placeNeighbors() {
+   private void placeNeighbors(Tile[][] tileMatrix) {
       for (int i = 0; i < height; i++) {
          for (int j = 0; j < width; j++) {
             Tile tile = tileMatrix[i][j];
@@ -94,49 +99,30 @@ public class Level {
       }
    }
 
-   public boolean isNearGameobject(GameObject object, Tile tile, int distance)
-   {
-      if(object == null || tile == null)
+   public boolean isNearGameobject(GameObject object, Tile tile, int distance) {
+      if (object == null || tile == null)
          return false;
-      if(distance < 0)
+      if (distance < 0)
          distance = 0;
-      int ox = (int)object.getX();
-      int oy = (int)object.getY();
-      int tx = (int)tile.getX();
-      int ty = (int)tile.getY();
-      
+      int ox = (int) object.getX();
+      int oy = (int) object.getY();
+      int tx = (int) tile.getX();
+      int ty = (int) tile.getY();
+
       int xDistance = Math.abs(ox - tx);
       int yDistance = Math.abs(oy - ty);
       return (xDistance <= distance || yDistance <= distance);
    }
-   
+
    public Tile spawnTile() {
-      Player player = StateMachine.instance().getState(PlayerState.class).getPlayer();
-      Goal goal = StateMachine.instance().getState(LevelState.class).getGoal();
-      List<Tile> edgeTiles = new ArrayList<Tile>();
-      for (Tile tile : tiles) {
-         if (tile.getNeighbors().size() < 4 
-               && (isNearGameobject(player, tile, 0)
-               || isNearGameobject(goal, tile, 0))) {
-            edgeTiles.add(tile);
-         }
-      }
-      if(edgeTiles.size() == 0)
-      {
-         for (Tile tile : tiles) {
-            if (tile.getNeighbors().size() < 4) {
-               edgeTiles.add(tile);
-            }
-         }
-      }
+      List<Tile> edgeTiles = getEdgeTiles();
       int randomTile = tileRandom.nextInt(edgeTiles.size());
-      
+
       Tile target = edgeTiles.get(randomTile);
       float xRand = target.getX();
       float yRand = target.getY();
       Set<Direction> dirs = target.getNeighbors().keySet();
-      List<Direction> allDirs = new ArrayList<Direction>();
-      allDirs = Arrays.asList(Direction.values());
+      List<Direction> allDirs = Arrays.asList(Direction.values());
       Iterator<Direction> it = allDirs.iterator();
       List<Direction> freeDirs = new ArrayList<Direction>();
       while (it.hasNext()) {
@@ -170,20 +156,37 @@ public class Level {
       Tile nextTile = createRandomTile(x, y);
       nextTile.getNeighbors().put(Direction.getOpposite(dir), target);
       target.getNeighbors().put(dir, nextTile);
-      tiles.add(nextTile);
+      // tiles.add(nextTile);
       return nextTile;
    }
 
+   private List<Tile> getEdgeTiles() {
+      Player player = StateMachine.instance().getState(PlayerState.class).getPlayer();
+      Goal goal = StateMachine.instance().getState(LevelState.class).getGoal();
+      List<Tile> edgeTiles = new ArrayList<Tile>();
+      for (Tile tile : pool.items()) {
+         if (tile.isInUse()) {
+            if (tile.getNeighbors().size() < 4 && (isNearGameobject(player, tile, 0) || isNearGameobject(goal, tile, 0))) {
+               edgeTiles.add(tile);
+            }
+         }
+      }
+      if (edgeTiles.size() == 0) {
+         for (Tile tile : pool.items()) {
+            if (tile.isInUse() && tile.getNeighbors().size() < 4) {
+               edgeTiles.add(tile);
+            }
+         }
+      }
+      return edgeTiles;
+   }
+
    public void popTile(Tile tile) {
-      tiles.remove(tile);
+      tile.setInUse(false);
    }
 
    public List<Tile> getTiles() {
-      return tiles;
-   }
-
-   public void setTiles(List<Tile> tiles) {
-      this.tiles = tiles;
+      return pool.items();
    }
 
    public int getWidth() {
@@ -215,7 +218,6 @@ public class Level {
    }
 
    public void setNextTile(Tile nextTile) {
-      tiles.add(nextTile);
       this.nextTile = nextTile;
    }
 

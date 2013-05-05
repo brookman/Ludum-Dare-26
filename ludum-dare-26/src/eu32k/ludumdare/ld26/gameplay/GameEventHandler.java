@@ -43,8 +43,8 @@ public class GameEventHandler implements IEventHandler {
       Tile t = ev.fade.getTile();
       if (ev.fade.fadeTo() == 0f) {
 
-         t.setDead(true);
-         levelState.getLevel().getTiles().remove(t);
+         t.setInUse(false);
+//         levelState.getLevel().getTiles().remove(t);
          if (levelState.playerTile == t) {
             levelState.playerTile = null;
          }
@@ -71,6 +71,7 @@ public class GameEventHandler implements IEventHandler {
          if (state instanceof LevelWinningState || state instanceof LevelWonState) {
             if (levelState.getLevels().nextLevel()) {
                levelState.addSuccessStatistic();
+               globalState.pool().tiles().clear();
                levelState.initLevel();
                PlayerState ps = StateMachine.instance().getState(PlayerState.class);
                StateMachine.instance().enterState(LevelInitState.class);

@@ -73,6 +73,9 @@ public class Player extends GameObject {
    }
 
    public static boolean canMoveIntoTile(Vector2 posShifted, Tile tile) {
+      if (!tile.isInUse()) {
+         return true;
+      }
       Bounds bounds = TileBoundingBoxes.getNormalizedBounds(tile.getType(), tile.getRotation());
 
       if (Math.abs(tile.getX() - posShifted.x) > 1.5f || Math.abs(tile.getY() - posShifted.y) > 1.5f) {

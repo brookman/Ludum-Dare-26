@@ -163,15 +163,17 @@ public class GameStage extends AbstractStage {
          int count = 0;
          boolean movingTileInvolved = false;
          for (Tile t : levelState.getLevel().getTiles()) {
-            Vector2 shiftedPosition = player.getShiftedPosition();
-            if (!Player.canMoveIntoTile(shiftedPosition, t)) {
-               count++;
-               if (t.isMoving()) {
-                  movingTileInvolved = true;
+            if (t.isInUse()) {
+               Vector2 shiftedPosition = player.getShiftedPosition();
+               if (!Player.canMoveIntoTile(shiftedPosition, t)) {
+                  count++;
+                  if (t.isMoving()) {
+                     movingTileInvolved = true;
+                  }
                }
-            }
-            if (movingTileInvolved && count > 1) {
-               levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, 0, GameplayEvent.PARAM_LOSE_SQUASHED));
+               if (movingTileInvolved && count > 1) {
+                  levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, 0, GameplayEvent.PARAM_LOSE_SQUASHED));
+               }
             }
          }
       }
@@ -305,7 +307,7 @@ public class GameStage extends AbstractStage {
    private Tile findPlayerTile() {
       List<Tile> tiles = levelState.getLevel().getTiles();
       for (Tile tile : tiles) {
-         if (!tile.isDead() && tile.contains(player.getX(), player.getY())) {
+         if (tile.isInUse() && tile.contains(player.getX(), player.getY())) {
             return tile;
          }
       }
@@ -316,7 +318,7 @@ public class GameStage extends AbstractStage {
       Goal goal = levelState.getGoal();
       List<Tile> tiles = levelState.getLevel().getTiles();
       for (Tile tile : tiles) {
-         if (!tile.isDead() && tile.contains(goal.position.x, goal.position.y)) {
+         if (tile.isInUse() && tile.contains(goal.position.x, goal.position.y)) {
             return tile;
          }
       }
@@ -326,6 +328,8 @@ public class GameStage extends AbstractStage {
    private void retry() {
       LevelState levelState = StateMachine.instance().getState(LevelState.class);
       levelState.events.clear();
+      globalState.pool().fades().setInUseForAll(false);
+      globalState.pool().tiles().setInUseForAll(false);
       levelState.initLevel();
       levelState.addRetryStatistics();
       StateMachine.instance().enterState(LevelInitState.class);

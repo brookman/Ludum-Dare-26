@@ -41,9 +41,11 @@ public class LevelInitState extends GameState {
       timeSinceEnter = 0f;
       state.pool().fades().preloadTo(level.getWidth() * level.getHeight());
       for (Tile t : tiles) {
-         TileFade fade = state.pool().fades().getFreeItem();
-         fade.init(t, fadeInLength, 0f, 1f);
-         effects.add(fade);
+         if (t.isInUse()) {
+            TileFade fade = state.pool().fades().getFreeItem();
+            fade.init(t, fadeInLength, 0f, 1f);
+            effects.add(fade);
+         }
       }
    }
 
@@ -64,10 +66,11 @@ public class LevelInitState extends GameState {
    }
 
    @Override
-   public void leave(){
+   public void leave() {
       GlobalState gs = StateMachine.instance().getState(GlobalState.class);
       gs.pool().fades().setInUseForAll(false);
    }
+
    public float getFadeInLength() {
       return fadeInLength;
    }

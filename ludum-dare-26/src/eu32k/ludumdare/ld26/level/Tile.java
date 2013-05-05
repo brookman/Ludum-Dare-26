@@ -9,7 +9,7 @@ import eu32k.ludumdare.ld26.pool.IObjectPoolItem;
 
 public class Tile implements IObjectPoolItem {
 
-   private boolean dead;
+   private boolean inUse;
 
    public enum Type {
       L, I, X, T // L Shape, I Shape, X Shape (+ Shape), T Shape
@@ -42,7 +42,9 @@ public class Tile implements IObjectPoolItem {
       this.x = x;
       this.y = y;
       alpha = 1f;
-      this.dead = false;
+      neighbors.clear();
+      this.inUse = true;
+      this.isMoving = false;
    }
 
    public boolean isMoving() {
@@ -107,21 +109,13 @@ public class Tile implements IObjectPoolItem {
       return TileBoundingBoxes.getNormalizedBounds(type, rotation);
    }
 
-   public boolean isDead() {
-      return dead;
-   }
-
-   public void setDead(boolean dead) {
-      this.dead = dead;
-   }
-
    @Override
    public boolean isInUse() {
-      return dead;
+      return inUse;
    }
 
    @Override
    public void setInUse(boolean inUse) {
-      this.dead = inUse;
+      this.inUse = inUse;
    }
 }

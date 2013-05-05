@@ -38,7 +38,7 @@ public class StateMachine {
 
    @SuppressWarnings("unchecked")
    public <T extends GameState> T enterState(Class<T> stateClass) {
-      System.out.println("entering state "+stateClass.getName());
+      //System.out.println("entering state "+stateClass.getName());
       if (current == null) {
          changeCurrentState(stateClass);
       } else {

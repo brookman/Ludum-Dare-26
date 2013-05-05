@@ -1,6 +1,7 @@
 package eu32k.ludumdare.ld26.pool;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class ObjectPool<T extends IObjectPoolItem> {
    ArrayList<T> items;
@@ -53,5 +54,9 @@ public abstract class ObjectPool<T extends IObjectPoolItem> {
 
    public void clear() {
       items.clear();
+   }
+
+   public List<T> items() {
+      return items;
    }
 }

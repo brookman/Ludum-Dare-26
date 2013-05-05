@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.badlogic.gdx.math.Vector2;
+import com.sun.corba.se.spi.orbutil.fsm.State;
 
 import eu32k.libgdx.common.TempVector2;
 import eu32k.ludumdare.ld26.animation.TileAnimator;
@@ -54,6 +55,7 @@ public class LevelState extends GameState {
    private LevelConfigSequence levels;
 
    private TileSpawner tileSpawner;
+   private GlobalState globalState;
 
    public LevelState() {
       runningEffects = new ArrayList<IRunningEffect>();
@@ -61,6 +63,7 @@ public class LevelState extends GameState {
       deathConditionTimer = 0;
       events = new EventQueue();
       setLevels(new LevelConfigSequence());
+      this.globalState = StateMachine.instance().getState(GlobalState.class);
    }
 
    @Override
@@ -207,7 +210,7 @@ public class LevelState extends GameState {
       if (height < 3) {
          height = 3;
       }
-      level = new Level(width, height);
+      level = new Level(globalState.pool().tiles(), width, height);
       level.setRandom(random);
       level.generateRandomTiles();
 

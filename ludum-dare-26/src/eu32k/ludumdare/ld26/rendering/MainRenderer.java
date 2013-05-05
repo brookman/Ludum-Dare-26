@@ -158,7 +158,7 @@ public class MainRenderer {
       float oldAlpha = 0f;
       LevelState ls = StateMachine.instance().getState(LevelState.class);
       for (Tile tile : tiles) {
-         if (!tile.isDead()) {
+         if (tile.isInUse()) {
             MultiLayerSprite sprite = tile.getSprite();
 
             if (bg) {
