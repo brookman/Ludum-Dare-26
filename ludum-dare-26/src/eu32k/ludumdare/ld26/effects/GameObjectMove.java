@@ -3,8 +3,8 @@ package eu32k.ludumdare.ld26.effects;
 import com.badlogic.gdx.math.Vector2;
 
 import eu32k.libgdx.common.TempVector2;
-import eu32k.ludumdare.ld26.events.messages.ObjectMoveComplete;
 import eu32k.ludumdare.ld26.objects.GameObject;
+import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
@@ -49,7 +49,8 @@ public class GameObjectMove implements IRunningEffect {
       x += speedX * delta;
       y += speedY * delta;
       if (speedX > 0 && x >= targetX || speedX < 0 && x <= targetX || speedY > 0 && y >= targetY || speedY < 0 && y <= targetY) {
-         levelState.getEvents().enqueue(new ObjectMoveComplete(this));
+         GlobalState gs = StateMachine.instance().getState(GlobalState.class);
+         levelState.getEvents().enqueue(gs.pool().events().objectMoveComplete(this));
          object.setPosition(targetX, targetY);
          complete = true;
          object.setFreeMovement(false);

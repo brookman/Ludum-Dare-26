@@ -1,8 +1,8 @@
 package eu32k.ludumdare.ld26.pool;
 
+import eu32k.ludumdare.ld26.effects.GameObjectMove;
 import eu32k.ludumdare.ld26.effects.TileFade;
 import eu32k.ludumdare.ld26.effects.TileMove;
-import eu32k.ludumdare.ld26.events.IEvent;
 import eu32k.ludumdare.ld26.events.messages.GenericEvent;
 import eu32k.ludumdare.ld26.events.messages.GenericEvent.GenericEventType;
 
@@ -45,15 +45,24 @@ public class GenericEventPool extends ObjectPool<GenericEvent> {
       return ev;
    }
 
-   public IEvent moveComplete(TileMove tileMove) {
+   public GenericEvent moveComplete(TileMove tileMove) {
       GenericEvent ev = getFreeItem();
       ev.init();
       ev.type = GenericEventType.MOVE_COMPLETE;
-      ev.move = tileMove;
+      ev.tileMove = tileMove;
       return ev;
    }
-   @Override
+
+   public GenericEvent objectMoveComplete(GameObjectMove move) {
+      GenericEvent ev = getFreeItem();
+      ev.init();
+      ev.type = GenericEventType.OBJECTMOVE_COMPLETE;
+      ev.objectMove = move;
+      return ev;
+   }
+@Override
    public String toString(){
       return "Event Pool";
    }
+
 }

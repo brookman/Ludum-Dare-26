@@ -70,7 +70,7 @@ public class TileSpawner implements IEventHandler {
    }
 
    private void handleMoveComplete(GenericEvent event) {
-      Tile moved = event.move.getTile();
+      Tile moved = event.tileMove.getTile();
       if (moved.equals(levelState.toPop)) {
          levelState.getTileAnimator().animatePop(moved);
       } else if (moved.equals(levelState.spawned)) {
