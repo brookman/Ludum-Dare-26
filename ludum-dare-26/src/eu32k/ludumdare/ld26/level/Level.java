@@ -154,8 +154,6 @@ public class Level {
          break;
       }
       Tile nextTile = createRandomTile(x, y);
-      System.out.println("Setting neighbours");
-      System.out.println("Target: " + target);
       nextTile.getNeighbors().put(Direction.getOpposite(dir), target);
       target.getNeighbors().put(dir, nextTile);
       // tiles.add(nextTile);

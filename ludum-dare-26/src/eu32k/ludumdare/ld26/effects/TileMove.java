@@ -3,10 +3,10 @@ package eu32k.ludumdare.ld26.effects;
 import com.badlogic.gdx.math.Vector2;
 
 import eu32k.libgdx.common.TempVector2;
-import eu32k.ludumdare.ld26.events.messages.MoveComplete;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.objects.Goal;
 import eu32k.ludumdare.ld26.objects.Player;
+import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.PlayerState;
 import eu32k.ludumdare.ld26.state.StateMachine;
@@ -77,7 +77,8 @@ public class TileMove implements IRunningEffect {
       x += speedX * delta;
       y += speedY * delta;
       if (speedX > 0 && x >= targetX || speedX < 0 && x <= targetX || speedY > 0 && y >= targetY || speedY < 0 && y <= targetY) {
-         levelState.getEvents().enqueue(new MoveComplete(this));
+         GlobalState gs = StateMachine.instance().getState(GlobalState.class);
+         levelState.getEvents().enqueue(gs.pool().events().moveComplete(this));
          tile.setX(targetX);
          tile.setY(targetY);
          if (movesPlayer) {

@@ -3,7 +3,6 @@ package eu32k.ludumdare.ld26.level;
 import eu32k.ludumdare.ld26.events.IEvent;
 import eu32k.ludumdare.ld26.events.IEventHandler;
 import eu32k.ludumdare.ld26.events.messages.GenericEvent;
-import eu32k.ludumdare.ld26.events.messages.MoveComplete;
 import eu32k.ludumdare.ld26.events.messages.TileEvent;
 import eu32k.ludumdare.ld26.events.messages.TileEvent.TileEventType;
 import eu32k.ludumdare.ld26.state.GlobalState;
@@ -42,7 +41,7 @@ public class TileSpawner implements IEventHandler {
             if (event.getTile().equals(levelState.playerTile)) {
                levelState.playerTile = null;
             }
-            if(event.getTile().equals(levelState.goalTile)){
+            if (event.getTile().equals(levelState.goalTile)) {
                levelState.goalTile = null;
             }
             levelState.toPop = null;
@@ -52,15 +51,6 @@ public class TileSpawner implements IEventHandler {
             spawnTile((5f / levelState.getLevel().getDufficulty()));
             break;
          }
-      } else if (ev instanceof MoveComplete) {
-         MoveComplete event = (MoveComplete) ev;
-         Tile moved = event.move.getTile();
-         if (moved.equals(levelState.toPop)) {
-            levelState.getTileAnimator().animatePop(moved);
-         } else if (moved.equals(levelState.spawned)) {
-            levelState.getEvents().enqueue(new TileEvent((2 / levelState.getLevel().getDufficulty()) - 1, moved, TileEventType.SPAWNED));
-            levelState.spawned = null;
-         }
       } else if (ev instanceof GenericEvent) {
          handleGenericEvent((GenericEvent) ev);
       }
@@ -68,10 +58,24 @@ public class TileSpawner implements IEventHandler {
    }
 
    private void handleGenericEvent(GenericEvent ev) {
-      switch(ev.type){
+      switch (ev.type) {
       case FADE_COMPLETE:
-         handleFadeComplete(ev);            
+         handleFadeComplete(ev);
          break;
+      case MOVE_COMPLETE:
+         handleMoveComplete(ev);
+
+         break;
+      }
+   }
+
+   private void handleMoveComplete(GenericEvent event) {
+      Tile moved = event.move.getTile();
+      if (moved.equals(levelState.toPop)) {
+         levelState.getTileAnimator().animatePop(moved);
+      } else if (moved.equals(levelState.spawned)) {
+         levelState.getEvents().enqueue(new TileEvent((2 / levelState.getLevel().getDufficulty()) - 1, moved, TileEventType.SPAWNED));
+         levelState.spawned = null;
       }
    }
 

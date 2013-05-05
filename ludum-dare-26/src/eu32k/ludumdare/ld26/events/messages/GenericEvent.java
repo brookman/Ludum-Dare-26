@@ -3,12 +3,13 @@ package eu32k.ludumdare.ld26.events.messages;
 import com.badlogic.gdx.math.Vector2;
 
 import eu32k.ludumdare.ld26.effects.TileFade;
+import eu32k.ludumdare.ld26.effects.TileMove;
 import eu32k.ludumdare.ld26.events.EventBase;
 import eu32k.ludumdare.ld26.level.Tile;
 
 public class GenericEvent extends EventBase{
    public enum GenericEventType{
-      NONE, FADE_COMPLETE, GAMEEVENT, MUSICEVENT
+      NONE, FADE_COMPLETE, GAMEEVENT, MUSICEVENT, MOVE_COMPLETE
    };
    
 
@@ -34,6 +35,7 @@ public class GenericEvent extends EventBase{
    public Tile tile;
    public TileFade fade;
    public boolean booleanA;
+   public TileMove move;
    
    public GenericEvent(){
       type = GenericEventType.NONE;
@@ -50,5 +52,6 @@ public class GenericEvent extends EventBase{
       tile = null;
       fade = null;
       booleanA = false;
+      move = null;
    }
 }
