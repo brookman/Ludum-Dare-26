@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 
 import eu32k.ludumdare.ld26.events.IEvent;
 import eu32k.ludumdare.ld26.events.IEventHandler;
-import eu32k.ludumdare.ld26.events.messages.MusicEvent;
+import eu32k.ludumdare.ld26.events.messages.GenericEvent;
 import eu32k.ludumdare.ld26.events.messages.PlayPartEvent;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.StateMachine;
@@ -83,15 +83,20 @@ public class EffectsManager implements IEventHandler {
    public void handle(IEvent ev) {
       if (ev instanceof PlayPartEvent) {
          handlePlayPartEvent((PlayPartEvent) ev);
-      } else if (ev instanceof MusicEvent) {
-         boolean playMusic = ((MusicEvent) ev).getPlayMusic();
-         if (playMusic) {
-            musicVolume = 0.5f;
-         } else {
-            musicVolume = 0.0f;
-         }
-         if (music != null) {
-            music.setVolume(musicVolume);
+      } else if (ev instanceof GenericEvent) {
+         GenericEvent event = (GenericEvent) ev;
+         switch (event.type) {
+         case MUSICEVENT:
+            boolean playMusic = event.booleanA;
+            if (playMusic) {
+               musicVolume = 0.5f;
+            } else {
+               musicVolume = 0.0f;
+            }
+            if (music != null) {
+               music.setVolume(musicVolume);
+            }
+            break;
          }
       }
    }

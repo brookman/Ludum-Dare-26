@@ -8,7 +8,7 @@ import eu32k.ludumdare.ld26.level.Tile;
 
 public class GenericEvent extends EventBase{
    public enum GenericEventType{
-      NONE, FADE_COMPLETE, GAMEEVENT
+      NONE, FADE_COMPLETE, GAMEEVENT, MUSICEVENT
    };
    
 
@@ -33,6 +33,7 @@ public class GenericEvent extends EventBase{
    public int intB;
    public Tile tile;
    public TileFade fade;
+   public boolean booleanA;
    
    public GenericEvent(){
       type = GenericEventType.NONE;
@@ -46,5 +47,8 @@ public class GenericEvent extends EventBase{
       vecB.set(0f, 0f);
       intA = 0;
       intB = 0;
+      tile = null;
+      fade = null;
+      booleanA = false;
    }
 }

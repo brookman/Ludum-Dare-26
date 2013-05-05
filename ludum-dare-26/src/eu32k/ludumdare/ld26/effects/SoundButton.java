@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import eu32k.libgdx.rendering.Textures;
-import eu32k.ludumdare.ld26.events.messages.MusicEvent;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
@@ -31,7 +30,8 @@ public class SoundButton {
       } else {
          if (isPressed) {
             soundPlaying = !soundPlaying;
-            StateMachine.instance().getState(GlobalState.class).getEvents().enqueue(new MusicEvent(soundPlaying));
+            GlobalState gs = StateMachine.instance().getState(GlobalState.class);
+            gs.getEvents().enqueue(gs.pool().events().musicEvent(soundPlaying));
             isPressed = false;
          }
       }

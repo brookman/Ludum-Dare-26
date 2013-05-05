@@ -1,7 +1,6 @@
 package eu32k.ludumdare.ld26.pool;
 
 import eu32k.ludumdare.ld26.effects.TileFade;
-import eu32k.ludumdare.ld26.events.IEvent;
 import eu32k.ludumdare.ld26.events.messages.GenericEvent;
 import eu32k.ludumdare.ld26.events.messages.GenericEvent.GenericEventType;
 
@@ -48,6 +47,14 @@ public class GenericEventPool extends ObjectPool<GenericEvent> {
       ev.setTime(time);
       ev.intA = gameEventType;
       ev.intB = paramB;
+      return ev;
+   }
+
+   public GenericEvent musicEvent(boolean soundPlaying) {
+      GenericEvent ev = getFreeItem();
+      ev.init();
+      ev.type = GenericEventType.MUSICEVENT;
+      ev.booleanA = soundPlaying;
       return ev;
    }
 }
