@@ -8,8 +8,7 @@ import com.badlogic.gdx.math.Interpolation;
 
 import eu32k.ludumdare.ld26.effects.IRunningEffect;
 import eu32k.ludumdare.ld26.effects.TileFade;
-import eu32k.ludumdare.ld26.events.messages.GameplayEvent;
-import eu32k.ludumdare.ld26.events.messages.GameplayEvent.GameplayEventType;
+import eu32k.ludumdare.ld26.events.messages.GenericEvent;
 import eu32k.ludumdare.ld26.level.Level;
 import eu32k.ludumdare.ld26.level.Tile;
 
@@ -32,7 +31,7 @@ public class LevelInitState extends GameState {
    @Override
    public void enter() {
       GlobalState state = StateMachine.instance().getState(GlobalState.class);
-      state.getEvents().enqueue(new GameplayEvent(GameplayEventType.START_GAME, fadeInLength));
+      state.getEvents().enqueue(state.pool().events().gameplayEvent(GenericEvent.GAMEEVENT_TYPE_START_GAME, fadeInLength));
       LevelState ls = StateMachine.instance().getState(LevelState.class);
       Level level = ls.getLevel();
       List<Tile> tiles = level.getTiles();

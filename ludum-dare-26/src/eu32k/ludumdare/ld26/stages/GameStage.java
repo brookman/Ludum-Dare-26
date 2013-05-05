@@ -15,8 +15,7 @@ import eu32k.libgdx.common.TempVector2;
 import eu32k.libgdx.common.TempVector3;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.effects.IRunningEffect;
-import eu32k.ludumdare.ld26.events.messages.GameplayEvent;
-import eu32k.ludumdare.ld26.events.messages.GameplayEvent.GameplayEventType;
+import eu32k.ludumdare.ld26.events.messages.GenericEvent;
 import eu32k.ludumdare.ld26.gameplay.GameEventHandler;
 import eu32k.ludumdare.ld26.level.Level;
 import eu32k.ludumdare.ld26.level.Tile;
@@ -102,7 +101,7 @@ public class GameStage extends AbstractStage {
       } else if (levelState.isPaused()) {
          drawPauseScreen();
          if (pausedPressed()) {
-            globalState.getEvents().enqueue(new GameplayEvent(GameplayEventType.RESUME));
+            globalState.getEvents().enqueue(globalState.pool().events().gameplayEvent(GenericEvent.GAMEEVENT_TYPE_RESUME));
             return;
          }
 
@@ -118,7 +117,7 @@ public class GameStage extends AbstractStage {
       if (currentState instanceof LevelLosingState) {
          LevelLosingState lState = (LevelLosingState) currentState;
          if (lState.handleKeys(delta) && (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY) || Gdx.input.isTouched())) {
-            globalState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, 0, GameplayEvent.PARAM_LOSE_TOLOST));
+            globalState.getEvents().enqueue(globalState.pool().events().gameplayEvent(GenericEvent.GAMEEVENT_TYPE_LOSE, 0, GenericEvent.GAMEEVENT_LOSE_TOLOST));
 
          }
          lState.update(delta);
@@ -162,6 +161,7 @@ public class GameStage extends AbstractStage {
       if (runningEffects.size() > 0) {
          int count = 0;
          boolean movingTileInvolved = false;
+         
          for (Tile t : levelState.getLevel().getTiles()) {
             if (t.isInUse()) {
                Vector2 shiftedPosition = player.getShiftedPosition();
@@ -172,7 +172,7 @@ public class GameStage extends AbstractStage {
                   }
                }
                if (movingTileInvolved && count > 1) {
-                  levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, 0, GameplayEvent.PARAM_LOSE_SQUASHED));
+                  levelState.getEvents().enqueue(globalState.pool().events().gameplayEvent(GenericEvent.GAMEEVENT_TYPE_LOSE, 0, GenericEvent.GAMEEVENT_LOSE_SQUASHED));
                }
             }
          }
@@ -181,7 +181,7 @@ public class GameStage extends AbstractStage {
       if (levelState.playerTile == null) {
          levelState.deathConditionTimer += delta;
          if (levelState.deathConditionTimer > 0.05f) {
-            levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, 0, GameplayEvent.PARAM_LOSE_FALLOFFBOARD));
+            levelState.getEvents().enqueue(globalState.pool().events().gameplayEvent(GenericEvent.GAMEEVENT_TYPE_LOSE, 0, GenericEvent.GAMEEVENT_LOSE_FALLOFFBOARD));
          }
       } else {
          levelState.deathConditionTimer = 0;
@@ -190,7 +190,7 @@ public class GameStage extends AbstractStage {
       if (levelState.playerTile != null && levelState.playerTile.equals(levelState.goalTile)) {
          Goal g = levelState.getGoal();
          if (g.intersects(player)) {
-            levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.WIN));
+            levelState.getEvents().enqueue(globalState.pool().events().gameplayEvent(GenericEvent.GAMEEVENT_TYPE_WIN));
          }
       }
    }
@@ -222,7 +222,7 @@ public class GameStage extends AbstractStage {
       handleRetry(delta, retry);
 
       if (pausedPressed()) {
-         levelState.getEvents().enqueue(new GameplayEvent(GameplayEventType.PAUSE));
+         levelState.getEvents().enqueue(globalState.pool().events().gameplayEvent(GenericEvent.GAMEEVENT_TYPE_PAUSE));
          return;
       }
 

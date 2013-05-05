@@ -5,7 +5,7 @@ public class EventBase implements IEvent{
    private float time;
    private boolean inUse;
 
-   protected void setTime(float time) {
+   public void setTime(float time) {
       this.time = time;
    }
 

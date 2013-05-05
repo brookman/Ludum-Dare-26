@@ -8,9 +8,24 @@ import eu32k.ludumdare.ld26.level.Tile;
 
 public class GenericEvent extends EventBase{
    public enum GenericEventType{
-      NONE, FADE_COMPLETE
+      NONE, FADE_COMPLETE, GAMEEVENT
    };
    
+
+   public final static int GAMEEVENT_TYPE_START_GAME = 1;
+   public final static int GAMEEVENT_TYPE_PAUSE = 2;
+   public final static int GAMEEVENT_TYPE_RESUME = 3;
+   public final static int GAMEEVENT_TYPE_WIN = 4;
+   public final static int GAMEEVENT_TYPE_LOSE = 5;
+   public final static int GAMEEVENT_TYPE_EXIT = 6;
+   public final static int GAMEEVENT_TYPE_NEXTLEVEL = 7;
+   
+   public final static int GAMEEVENT_LOSE_FALLOFFBOARD = 1;
+   public final static int GAMEEVENT_LOSE_TIMEOUT = 2;
+   public final static int GAMEEVENT_LOSE_SQUASHED = 3;
+
+   public static final int GAMEEVENT_LOSE_TOLOST = 4;
+
    public GenericEventType type;
    public Vector2 vecA;
    public Vector2 vecB;

@@ -5,8 +5,7 @@ import java.util.List;
 
 import eu32k.ludumdare.ld26.effects.IRunningEffect;
 import eu32k.ludumdare.ld26.effects.TileFade;
-import eu32k.ludumdare.ld26.events.messages.GameplayEvent;
-import eu32k.ludumdare.ld26.events.messages.GameplayEvent.GameplayEventType;
+import eu32k.ludumdare.ld26.events.messages.GenericEvent;
 import eu32k.ludumdare.ld26.level.Tile;
 
 public class LevelLosingState extends GameState {
@@ -28,8 +27,8 @@ public class LevelLosingState extends GameState {
 
    @Override
    public void enter() {
-      StateMachine.instance().getState(GlobalState.class).getEvents().enqueue(new GameplayEvent(GameplayEventType.LOSE, 1, GameplayEvent.PARAM_LOSE_TOLOST));
       GlobalState gs = StateMachine.instance().getState(GlobalState.class);
+      gs.getEvents().enqueue(gs.pool().events().gameplayEvent(GenericEvent.GAMEEVENT_TYPE_LOSE, 1, GenericEvent.GAMEEVENT_LOSE_TOLOST));
       LevelState ls = StateMachine.instance().getState(LevelState.class);
       List<Tile> tiles = ls.getLevel().getTiles();
       effects.clear();

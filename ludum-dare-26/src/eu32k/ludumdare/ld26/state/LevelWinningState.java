@@ -1,7 +1,6 @@
 package eu32k.ludumdare.ld26.state;
 
-import eu32k.ludumdare.ld26.events.messages.GameplayEvent;
-import eu32k.ludumdare.ld26.events.messages.GameplayEvent.GameplayEventType;
+import eu32k.ludumdare.ld26.events.messages.GenericEvent;
 
 public class LevelWinningState extends GameState {
 
@@ -16,7 +15,8 @@ public class LevelWinningState extends GameState {
    
    @Override
    public void enter(){
-      StateMachine.instance().getState(GlobalState.class).getEvents().enqueue(new GameplayEvent(GameplayEventType.NEXTLEVEL));
+      GlobalState gs = StateMachine.instance().getState(GlobalState.class);
+      gs.getEvents().enqueue(gs.pool().events().gameplayEvent(GenericEvent.GAMEEVENT_TYPE_NEXTLEVEL));
    }
    
    @Override
