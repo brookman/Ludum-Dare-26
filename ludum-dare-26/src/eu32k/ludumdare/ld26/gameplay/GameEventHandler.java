@@ -52,6 +52,7 @@ public class GameEventHandler implements IEventHandler {
             levelState.goalTile = null;
          }
       }
+      
    }
 
    private void handleGameplayEvent(GameplayEvent event) {

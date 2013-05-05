@@ -28,19 +28,19 @@ public class TileAnimator {
          switch (dir) {
          case N:
             targetX = toShift.getX();
-            targetY = toShift.getY() + toShift.getSprite().getHeight();
+            targetY = toShift.getY() + 1;
             break;
          case E:
-            targetX = toShift.getX() + toShift.getSprite().getWidth();
+            targetX = toShift.getX() + 1;
             targetY = toShift.getY();
             break;
          case S:
             targetX = toShift.getX();
-            targetY = toShift.getY() - toShift.getSprite().getHeight();
+            targetY = toShift.getY() - 1;
             break;
          case W:
          default:
-            targetX = toShift.getX() - toShift.getSprite().getWidth();
+            targetX = toShift.getX() - 1;
             targetY = toShift.getY();
             break;
          }
