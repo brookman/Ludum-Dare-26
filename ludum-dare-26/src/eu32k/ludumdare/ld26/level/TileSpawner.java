@@ -45,6 +45,10 @@ public class TileSpawner implements IEventHandler {
             if (event.getTile().equals(levelState.playerTile)) {
                levelState.playerTile = null;
             }
+            if(event.getTile().equals(levelState.goalTile)){
+               levelState.goalTile = null;
+            }
+            levelState.toPop = null;
             levelState.getEvents().enqueue(new TileEvent(0, event.getTile(), TileEventType.POPPED));
             break;
          case POPPED:
@@ -52,6 +56,7 @@ public class TileSpawner implements IEventHandler {
             break;
          }
       } else if (ev instanceof MoveComplete) {
+         System.out.println("Move complete");
          MoveComplete event = (MoveComplete) ev;
          Tile moved = event.move.getTile();
          if (moved.equals(levelState.toPop)) {

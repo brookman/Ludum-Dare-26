@@ -58,11 +58,11 @@ public class Tile implements IObjectPoolItem {
    public Map<Direction, Tile> getNeighbors() {
       return neighbors;
    }
-
+/*
    public void setNeighbors(Map<Direction, Tile> neighbors) {
       this.neighbors = neighbors;
    }
-
+*/
    public float getX() {
       return x;
    }

@@ -23,6 +23,7 @@ public class TileAnimator {
       LevelState levelState = StateMachine.instance().getState(LevelState.class);
       Direction dir = toShift.getNeighbors().keySet().iterator().next();
       Tile last = toShift;
+      System.out.println("Shifting");
       do {
          float targetX, targetY;
          switch (dir) {
@@ -44,6 +45,7 @@ public class TileAnimator {
             targetY = toShift.getY();
             break;
          }
+         System.out.println("Shifting tile");
          TileMove move = new TileMove();
          move.initMove(toShift, targetX, targetY, speed * levelState.getLevel().getDufficulty());
          levelState.getRunningEffects().add(move);
