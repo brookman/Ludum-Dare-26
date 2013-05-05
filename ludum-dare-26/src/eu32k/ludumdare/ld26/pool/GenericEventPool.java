@@ -3,6 +3,7 @@ package eu32k.ludumdare.ld26.pool;
 import eu32k.ludumdare.ld26.effects.GameObjectMove;
 import eu32k.ludumdare.ld26.effects.TileFade;
 import eu32k.ludumdare.ld26.effects.TileMove;
+import eu32k.ludumdare.ld26.events.IEvent;
 import eu32k.ludumdare.ld26.events.messages.GenericEvent;
 import eu32k.ludumdare.ld26.events.messages.GenericEvent.GenericEventType;
 
@@ -24,9 +25,11 @@ public class GenericEventPool extends ObjectPool<GenericEvent> {
    public GenericEvent gameplayEvent(int eventType) {
       return gameplayEvent(eventType, 0f, 0);
    }
+
    public GenericEvent gameplayEvent(int eventType, float time) {
       return gameplayEvent(eventType, time, 0);
    }
+
    public GenericEvent gameplayEvent(int gameEventType, float time, int paramB) {
       GenericEvent ev = getFreeItem();
       ev.init();
@@ -60,9 +63,20 @@ public class GenericEventPool extends ObjectPool<GenericEvent> {
       ev.objectMove = move;
       return ev;
    }
-@Override
-   public String toString(){
+
+   @Override
+   public String toString() {
       return "Event Pool";
+   }
+
+   public GenericEvent playPartEvent(float time, int song, int part) {
+      GenericEvent ev = getFreeItem();
+      ev.init();
+      ev.type = GenericEventType.PLAY_PART;
+      ev.intA = song;
+      ev.intB = part;
+      ev.setTime(time);
+      return ev;
    }
 
 }

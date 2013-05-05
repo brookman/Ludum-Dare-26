@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Color;
 import eu32k.ludumdare.ld26.events.IEvent;
 import eu32k.ludumdare.ld26.events.IEventHandler;
 import eu32k.ludumdare.ld26.events.messages.GenericEvent;
-import eu32k.ludumdare.ld26.events.messages.PlayPartEvent;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
@@ -66,11 +65,11 @@ public class EffectsManager implements IEventHandler {
    }
 
    public void initBitbreak(int delay) {
-      state.getEvents().enqueue(new PlayPartEvent(1, SONG_BITBREAK, PART_BITBREAK_INTRO));
+      state.getEvents().enqueue(state.pool().events().playPartEvent(1, SONG_BITBREAK, PART_BITBREAK_INTRO));
    }
 
    public void initOtgy(int delay) {
-      state.getEvents().enqueue(new PlayPartEvent(1, SONG_OTGY, PART_OTGY_INTRO));
+      state.getEvents().enqueue(state.pool().events().playPartEvent(1, SONG_OTGY, PART_OTGY_INTRO));
    }
 
    public void update(float delta) {
@@ -81,9 +80,7 @@ public class EffectsManager implements IEventHandler {
 
    @Override
    public void handle(IEvent ev) {
-      if (ev instanceof PlayPartEvent) {
-         handlePlayPartEvent((PlayPartEvent) ev);
-      } else if (ev instanceof GenericEvent) {
+      if (ev instanceof GenericEvent) {
          GenericEvent event = (GenericEvent) ev;
          switch (event.type) {
          case MUSICEVENT:
@@ -97,14 +94,18 @@ public class EffectsManager implements IEventHandler {
                music.setVolume(musicVolume);
             }
             break;
+         case PLAY_PART:
+            System.out.println("Play part");
+            handlePlayPartEvent(event);
+            break;
          }
       }
    }
 
-   private void handlePlayPartEvent(PlayPartEvent ev) {
-      currentSong = ev.song;
-      currentPart = ev.part;
-      switch (ev.song) {
+   private void handlePlayPartEvent(GenericEvent ev) {
+      currentSong = ev.intA;
+      currentPart = ev.intB;
+      switch (ev.intA) {
       default:
          stop();
          break;
@@ -117,8 +118,8 @@ public class EffectsManager implements IEventHandler {
       }
    }
 
-   private void playBitbreakPart(PlayPartEvent ev) {
-      switch (ev.part) {
+   private void playBitbreakPart(GenericEvent ev) {
+      switch (ev.intB) {
       default:
          stop();
          break;
@@ -127,7 +128,7 @@ public class EffectsManager implements IEventHandler {
          colors.setSongIntensity(ColorPulseManager.INTENSITY_BITBREAK_INTRO);
          colors.init();
          play(TRACK_BITBREAK_INTRO, false);
-         state.getEvents().enqueue(new PlayPartEvent(6f, SONG_BITBREAK, PART_BITBREAK_BODY));
+         state.getEvents().enqueue(state.pool().events().playPartEvent(6f, SONG_BITBREAK, PART_BITBREAK_BODY));
          colors.setMinSongIntensity(0f);
          break;
       case PART_BITBREAK_BODY:
@@ -136,7 +137,7 @@ public class EffectsManager implements IEventHandler {
          colors.init();
          play(TRACK_BITBREAK_BODY, false);
          colors.setMinSongIntensity(0.5f);
-         state.getEvents().enqueue(new PlayPartEvent(72, SONG_BITBREAK, PART_BITBREAK_BODY));
+         state.getEvents().enqueue(state.pool().events().playPartEvent(72, SONG_BITBREAK, PART_BITBREAK_BODY));
          break;
       case PART_BITBREAK_OUTRO:
          colors.setBeatIntensity(ColorPulseManager.INTENSITY_BEAT);
@@ -148,8 +149,8 @@ public class EffectsManager implements IEventHandler {
       }
    }
 
-   private void playOtgyPart(PlayPartEvent ev) {
-      switch (ev.part) {
+   private void playOtgyPart(GenericEvent ev) {
+      switch (ev.intB) {
       default:
          stop();
          break;
@@ -158,7 +159,7 @@ public class EffectsManager implements IEventHandler {
          colors.setSongIntensity(ColorPulseManager.INTENSITY_OTGY_INTRO);
          colors.init();
          play(TRACK_OTGY_INTRO, false);
-         state.getEvents().enqueue(new PlayPartEvent(12f, SONG_OTGY, PART_OTGY_BODY));
+         state.getEvents().enqueue(state.pool().events().playPartEvent(12f, SONG_OTGY, PART_OTGY_BODY));
          colors.setMinSongIntensity(0f);
          break;
       case PART_OTGY_BODY:
@@ -167,7 +168,7 @@ public class EffectsManager implements IEventHandler {
          colors.init();
          play(TRACK_OTGY_BODY, false);
          colors.setMinSongIntensity(0.5f);
-         state.getEvents().enqueue(new PlayPartEvent(144f, SONG_OTGY, PART_OTGY_BODY));
+         state.getEvents().enqueue(state.pool().events().playPartEvent(144f, SONG_OTGY, PART_OTGY_BODY));
          break;
       case PART_OTGY_OUTRO:
          colors.setBeatIntensity(ColorPulseManager.INTENSITY_BEAT);
@@ -212,11 +213,11 @@ public class EffectsManager implements IEventHandler {
       float position = music.getPosition() % barLength;
       float timeLeft = barLength - position;
 
-      state.getEvents().enqueue(new PlayPartEvent(timeLeft, currentSong, getOutroPart(currentSong)));
+      state.getEvents().enqueue(state.pool().events().playPartEvent(timeLeft, currentSong, getOutroPart(currentSong)));
       if (nextSong == null) {
-         state.getEvents().enqueue(new PlayPartEvent(timeLeft + getOutroTime(currentSong), 0, 0));
+         state.getEvents().enqueue(state.pool().events().playPartEvent(timeLeft + getOutroTime(currentSong), 0, 0));
       } else {
-         state.getEvents().enqueue(new PlayPartEvent(timeLeft + getOutroTime(currentSong), nextSong, 0));
+         state.getEvents().enqueue(state.pool().events().playPartEvent(timeLeft + getOutroTime(currentSong), nextSong, 0));
       }
    }
 

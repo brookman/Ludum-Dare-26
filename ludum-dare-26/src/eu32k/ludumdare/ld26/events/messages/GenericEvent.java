@@ -11,7 +11,7 @@ import eu32k.ludumdare.ld26.objects.GameObject;
 
 public class GenericEvent extends EventBase{
    public enum GenericEventType{
-      NONE, FADE_COMPLETE, GAMEEVENT, MUSICEVENT, MOVE_COMPLETE, OBJECTMOVE_COMPLETE
+      NONE, FADE_COMPLETE, GAMEEVENT, MUSICEVENT, MOVE_COMPLETE, OBJECTMOVE_COMPLETE, PLAY_PART
    };
    
 
