@@ -150,7 +150,7 @@ public class MenuStage extends AbstractStage {
    }
 
    private void challengeMode() {
-      startGame(54354, 12, 8, 12, 12, 25);
+      startGame(5353, 4, 3, 12, 8, 25);
    }
 
    private void seedMode() {
