@@ -262,7 +262,7 @@ public class LevelState extends GameState {
       p.set(player.getX(), player.getY());
       findSuitableGoalPosition(p, g, tmp);
       GameObjectMove move = new GameObjectMove();
-      move.initMove(goal, g.y + 0.5f, g.x + 0.5f, 5f);
+      move.initMove(goal, g.x + 0.5f, g.y + 0.5f, 5f);
       runningEffects.add(move);
    }
 
