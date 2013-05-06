@@ -18,7 +18,6 @@ import eu32k.ludumdare.ld26.level.Level;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.objects.Goal;
 import eu32k.ludumdare.ld26.objects.Player;
-import eu32k.ludumdare.ld26.rendering.DebugText;
 import eu32k.ludumdare.ld26.rendering.MainRenderer;
 import eu32k.ludumdare.ld26.state.GameState;
 import eu32k.ludumdare.ld26.state.GlobalState;
@@ -222,7 +221,7 @@ public class GameStage extends AbstractStage {
          return;
       }
 
-      boolean escapePressed = Gdx.input.isKeyPressed(Input.Keys.ESCAPE);
+      boolean escapePressed = Gdx.input.isKeyPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyPressed(Input.Keys.MENU);
 
       Vector2 velocity = TempVector2.tmp.set(0.0f, 0.0f);
       if (up) {
@@ -247,13 +246,14 @@ public class GameStage extends AbstractStage {
          factor = MathUtils.clamp(Math.min(velocity.len(), 20.0f) / 20.0f, 0.0f, 1.0f);
       }
 
-      DebugText.text = "p:" + Gdx.input.getPitch() + " r:" + Gdx.input.getRoll() + " f:" + factor;
+      // DebugText.text = "p:" + Gdx.input.getPitch() + " r:" + Gdx.input.getRoll() + " f:" + factor;
 
-      // if (Gdx.input.isTouched()) {
-      // Vector2 touch = TempVector2.tmp.set(Gdx.input.getX(), Gdx.input.getY());
-      // screenToStageCoordinates(touch);
-      // velocity = TempVector2.tmp.set(touch.x - Player.WIDTH / 2, touch.y - Player.HEIGHT / 2).sub(player.position);
-      // }
+      if (Gdx.input.isTouched()) {
+         Vector2 touch = TempVector2.tmp.set(Gdx.input.getX(), Gdx.input.getY());
+         screenToStageCoordinates(touch);
+         velocity = TempVector2.tmp.set(touch.x - Player.WIDTH / 2, touch.y - Player.HEIGHT / 2).sub(player.position);
+         factor = 1.0f;
+      }
 
       velocity.nor();
       velocity.scl(delta * factor);

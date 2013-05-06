@@ -68,15 +68,15 @@ public class PauseStage extends AbstractStage {
 
       int padding = 4;
 
-      table.add(title).fill().pad(padding).colspan(3);
+      table.add(title).fill().pad(padding);
       table.row();
-      table.add(continueButton).fill().pad(padding).colspan(3);
+      table.add(continueButton).fill().pad(padding);
       table.row();
 
       table.add(menuButton).fill().pad(padding);
 
       table.row();
-      table.add(exitButton).fill().pad(padding).colspan(3);
+      table.add(exitButton).fill().pad(padding);
 
       table.row();
 
