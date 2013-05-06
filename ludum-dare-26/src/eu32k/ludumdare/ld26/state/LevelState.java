@@ -194,6 +194,7 @@ public class LevelState extends GameState {
          tileSpawner = new TileSpawner();
       }
       levelRunning = 0f;
+      globalState.pool().tiles().setInUseForAll(false);
       PlayerState ps = StateMachine.instance().getState(PlayerState.class);
       events.clear();
       runningEffects.clear();
