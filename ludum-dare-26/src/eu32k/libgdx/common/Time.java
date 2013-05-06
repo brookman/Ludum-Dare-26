@@ -1,7 +1,7 @@
 package eu32k.libgdx.common;
 
 public class Time {
-   public static final long time = System.currentTimeMillis();
+   private static final long time = System.currentTimeMillis();
 
    public static float getTime() {
       long diff = System.currentTimeMillis() - time;

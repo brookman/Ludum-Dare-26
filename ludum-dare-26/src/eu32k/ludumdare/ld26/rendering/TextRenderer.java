@@ -27,6 +27,7 @@ public class TextRenderer {
 
    public void render() {
       textBatch.begin();
+      textBatch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
       Set<String> keys = textLines.keySet();
       for (String text : keys) {
          Vector2 pos = textPositions.get(text);

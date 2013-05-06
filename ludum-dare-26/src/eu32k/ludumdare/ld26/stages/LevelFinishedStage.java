@@ -88,7 +88,7 @@ public class LevelFinishedStage extends AbstractStage {
       exitButton.setColor(color);
       title.setColor(color);
 
-      Background.getInstance().draw(color, false);
+      Background.draw(color, false);
       super.draw();
    }
 

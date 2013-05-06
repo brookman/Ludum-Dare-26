@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -23,19 +23,16 @@ import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class MenuStage extends AbstractStage {
 
-   private Skin skin;
-
    private Image title;
    private TextButton challengeButton;
    private TextButton seedButton;
    private TextButton exitButton;
-   private TextField size;
+   private List widthList;
+   private List heightList;
    private TextField seed;
 
    public MenuStage(EffectsManager effects) {
       this.effects = effects;
-
-      skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 
       Table table = new Table();
       table.setFillParent(true);
@@ -75,13 +72,10 @@ public class MenuStage extends AbstractStage {
          }
       });
 
-      size = new TextField("10x8", skin) {
-         @Override
-         public float getPrefWidth() {
-            return 50;
-         }
-
-      };
+      widthList = new List(new Object[] { 3, 4, 5, 6, 7, 8, 9, 10, 15 }, skin);
+      heightList = new List(new Object[] { 3, 4, 5, 6, 7, 8, 9, 10, 15 }, skin);
+      widthList.setSelectedIndex(7);
+      heightList.setSelectedIndex(5);
 
       seed = new TextField("31337", skin) {
          @Override
@@ -101,17 +95,20 @@ public class MenuStage extends AbstractStage {
 
       int padding = 4;
 
-      table.add(title).fill().pad(padding).colspan(3);
+      table.add(title).fill().pad(padding).colspan(4);
       table.row();
-      table.add(challengeButton).fill().pad(padding).colspan(3);
+      table.add(challengeButton).fill().pad(padding).colspan(4);
+      table.row();
       table.row();
 
-      table.add(size).fill().pad(padding);
-      table.add(seed).fill().pad(padding);
-      table.add(seedButton).fill().pad(padding);
+      table.add(widthList).fill().pad(padding);
+      table.add(heightList).fill().pad(padding);
+      table.add(seed).fillX().pad(padding);
+      table.add(seedButton).fillX().pad(padding);
 
       table.row();
-      table.add(exitButton).fill().pad(padding).colspan(3);
+      table.row();
+      table.add(exitButton).fill().pad(padding).colspan(4);
 
       table.row();
 
@@ -130,11 +127,12 @@ public class MenuStage extends AbstractStage {
       seedButton.setColor(color);
       exitButton.setColor(color);
       title.setColor(color);
-      size.setColor(color);
+      widthList.setColor(color);
+      heightList.setColor(color);
       seed.setColor(color);
       seed.getStyle().fontColor.a = color.a;
 
-      Background.getInstance().draw(color, false);
+      Background.draw(color, false);
       super.draw();
    }
 
@@ -150,13 +148,13 @@ public class MenuStage extends AbstractStage {
    }
 
    private void challengeMode() {
-      startGame(5353, 4, 3, 12, 8, 25);
+      startGame(43454, 4, 3, 12, 8, 25);
    }
 
    private void seedMode() {
       long seedValue = Long.parseLong(seed.getText());
-      int width = Integer.parseInt(size.getText().split("x")[0]);
-      int height = Integer.parseInt(size.getText().split("x")[1]);
+      int width = Integer.parseInt(widthList.getSelection());
+      int height = Integer.parseInt(heightList.getSelection());
       startGame(seedValue, width, height, width, height, 100);
    }
 
