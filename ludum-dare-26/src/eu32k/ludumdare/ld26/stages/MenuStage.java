@@ -157,7 +157,7 @@ public class MenuStage extends AbstractStage {
       to.width = 12;
       to.height = 8;
       to.spawnDistance = 2;
-      startGame(5353, from, to, 10);
+      startGame(5353, from, to, 25);
    }
 
    private void seedMode() {
@@ -170,7 +170,7 @@ public class MenuStage extends AbstractStage {
       to.width = to.width;
       to.height = to.height;
       to.spawnDistance = 1;
-      startGame(seedValue, from, to, 100);
+      startGame(seedValue, from, to, 50);
    }
 
 }
