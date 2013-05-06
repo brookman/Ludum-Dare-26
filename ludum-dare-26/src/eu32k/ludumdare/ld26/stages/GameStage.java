@@ -125,7 +125,7 @@ public class GameStage extends AbstractStage {
 
       renderer.setPaused(levelState.isPaused());
       // rendering ------------------------------------
-      setViewport(level.getWidth() + 4.0f, level.getHeight() + 4.0f, true);
+      setViewport(level.getWidth() + 2.0f, level.getHeight() + 2.0f, true);
       getCamera().position.x = level.getWidth() / 2.0f;
       getCamera().position.y = level.getHeight() / 2.0f;
       super.draw();
