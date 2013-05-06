@@ -8,10 +8,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import eu32k.libgdx.common.Time;
+import eu32k.libgdx.rendering.AdvancedShader;
+import eu32k.libgdx.rendering.DynamicFrameBuffer;
 import eu32k.ludumdare.ld26.Config;
 import eu32k.ludumdare.ld26.MultiLayerSprite;
 import eu32k.ludumdare.ld26.level.Tile;
@@ -28,19 +29,17 @@ public class MainRenderer {
    private RunText text;
    private BitmapFont fps;
 
-   private FrameBuffer mainBuffer;
-   private FrameBuffer secondaryBuffer;
+   private DynamicFrameBuffer mainBuffer;
+   private DynamicFrameBuffer secondaryBuffer;
 
-   private FrameBuffer blurBuffer1;
+   private DynamicFrameBuffer blurBuffer1;
    private AdvancedShader verticalBlur;
 
-   private FrameBuffer blurBuffer2;
+   private DynamicFrameBuffer blurBuffer2;
    private AdvancedShader horizontalBlur;
    private TextConsole console;
    private AdvancedShader mixerShader;
    private BitmapFont consolasFont;
-
-   private AdvancedShader background;
 
    private TextRenderer textRenderer;
 
@@ -53,21 +52,18 @@ public class MainRenderer {
       fps = new BitmapFont(Gdx.files.internal("fonts/calibri.fnt"), Gdx.files.internal("fonts/calibri.png"), false);
       consolasFont = new BitmapFont(Gdx.files.internal("fonts/consolas.fnt"), Gdx.files.internal("fonts/consolas.png"), false);
       console = new TextConsole(consolasFont, 160.0f, Gdx.graphics.getHeight() - 10.0f, 15f, 5, Color.WHITE);
-      int xScaleDown = Config.X_RESOLUTION / 4;
-      int yScaleDown = Config.Y_RESOLUTION / 4;
 
-      mainBuffer = SomeRenderer.makeFrameBuffer(Config.X_RESOLUTION, Config.Y_RESOLUTION);
-      secondaryBuffer = SomeRenderer.makeFrameBuffer(xScaleDown, yScaleDown);
+      float scaleDown = 0.25f;
+
+      mainBuffer = new DynamicFrameBuffer();
+      secondaryBuffer = new DynamicFrameBuffer(scaleDown);
       mixerShader = new AdvancedShader(Gdx.files.internal("shaders/simple.vsh").readString(), Gdx.files.internal("shaders/mixer.fsh").readString());
 
-      blurBuffer1 = SomeRenderer.makeFrameBuffer(xScaleDown, yScaleDown);
+      blurBuffer1 = new DynamicFrameBuffer(scaleDown);
       verticalBlur = new AdvancedShader(Gdx.files.internal("shaders/simple.vsh").readString(), Gdx.files.internal("shaders/blur_v.fsh").readString());
 
-      blurBuffer2 = SomeRenderer.makeFrameBuffer(xScaleDown, yScaleDown);
+      blurBuffer2 = new DynamicFrameBuffer(scaleDown);
       horizontalBlur = new AdvancedShader(Gdx.files.internal("shaders/simple.vsh").readString(), Gdx.files.internal("shaders/blur_h.fsh").readString());
-
-      background = new AdvancedShader(Gdx.files.internal("shaders/simple.vsh").readString(), Gdx.files.internal("shaders/background.fsh").readString());
-      // System.out.println(background.getLog());
 
       inverseColor = new Color();
    }
@@ -80,11 +76,12 @@ public class MainRenderer {
       render(true, camera, tiles, player, goal, mainColor, playerColor, inverseColor, time);
       // renderDebug(camera, tiles);
 
-      hudBatch.begin();
-      fps.draw(hudBatch, "                           fps: " + Gdx.graphics.getFramesPerSecond(), 30.0f, Gdx.graphics.getHeight() - 30.0f);
-      fps.draw(hudBatch, DebugText.text == null ? "null" : DebugText.text, 30.0f, Gdx.graphics.getHeight() - 60.0f);
+      // hudBatch.begin();
+      // hudBatch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+      // fps.draw(hudBatch, "                           fps: " + Gdx.graphics.getFramesPerSecond(), 30.0f, Gdx.graphics.getHeight() - 30.0f);
+      // fps.draw(hudBatch, DebugText.text == null ? "null" : DebugText.text, 30.0f, Gdx.graphics.getHeight() - 60.0f);
       // console.draw(hudBatch);
-      hudBatch.end();
+      // hudBatch.end();
 
       textRenderer.render();
 
@@ -95,33 +92,33 @@ public class MainRenderer {
       secondaryBuffer.end();
 
       Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
-      secondaryBuffer.getColorBufferTexture().bind();
+      secondaryBuffer.bindTexture();
       verticalBlur.begin();
       verticalBlur.setUniformi("uTexture", 0);
-      verticalBlur.renderToQuad(blurBuffer1);
+      verticalBlur.renderToQuad(blurBuffer1, Config.X_RESOLUTION, Config.Y_RESOLUTION, true);
 
       Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
-      blurBuffer1.getColorBufferTexture().bind();
+      blurBuffer1.bindTexture();
       horizontalBlur.begin();
       horizontalBlur.setUniformi("uTexture", 0);
-      horizontalBlur.renderToQuad(blurBuffer2);
+      horizontalBlur.renderToQuad(blurBuffer2, Config.X_RESOLUTION, Config.Y_RESOLUTION, true);
 
       // --
 
       Gdx.gl.glActiveTexture(GL20.GL_TEXTURE1);
-      mainBuffer.getColorBufferTexture().bind();
+      mainBuffer.bindTexture();
 
       Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
-      blurBuffer2.getColorBufferTexture().bind();
+      blurBuffer2.bindTexture();
 
       mixerShader.begin();
       mixerShader.setUniformi("uTexture1", 1);
       mixerShader.setUniformi("uTexture2", 0);
 
       mixerShader.setUniformf("uFactor1", 1.0f);
-      mixerShader.setUniformf("uFactor2", 2.2f);
+      mixerShader.setUniformf("uFactor2", 1.6f);
 
-      mixerShader.renderToQuad(null, true, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+      mixerShader.renderToScreeQuad(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
       mixerShader.end();
    }
 
@@ -151,7 +148,7 @@ public class MainRenderer {
       Gdx.gl.glEnable(GL20.GL_BLEND);
       Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-      Background.getInstance().draw(mainColor, true, time);
+      Background.draw(mainColor, true, time);
 
       batch.setProjectionMatrix(camera.combined);
       batch.begin();

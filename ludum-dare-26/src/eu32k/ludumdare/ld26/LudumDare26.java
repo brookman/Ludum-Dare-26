@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import eu32k.libgdx.SimpleGame;
+import eu32k.libgdx.rendering.DynamicFrameBuffer;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.effects.SoundButton;
 import eu32k.ludumdare.ld26.level.TileBoundingBoxes;
@@ -105,5 +106,18 @@ public class LudumDare26 extends SimpleGame {
    @Override
    public void dispose() {
       super.dispose();
+   }
+
+   @Override
+   public void resize(int width, int height) {
+      DynamicFrameBuffer.resetAllBuffers(width, height);
+
+      menuStage.setViewport(width, height, false);
+      lostStage.setViewport(width, height, false);
+      finishStage.setViewport(width, height, false);
+      pauseStage.setViewport(width, height, false);
+
+      // aspectRatio = (float) width / (float) height;
+      // resetCamera();
    }
 }

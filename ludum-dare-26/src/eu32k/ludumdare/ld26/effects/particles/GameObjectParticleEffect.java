@@ -21,6 +21,5 @@ public class GameObjectParticleEffect extends ParticleEffect {
       setPosition(gameObject.getX(), gameObject.getY());
       getEmitters().get(0).getTint().setColors(new float[] { color.r, color.g, color.b, 1.0f });
       super.draw(batch, delta);
-
    }
 }

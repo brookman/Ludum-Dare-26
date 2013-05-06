@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
@@ -21,8 +20,6 @@ import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class LostStage extends AbstractStage {
 
-   private Skin skin;
-
    private Image title;
    private TextButton challengeButton;
    private TextButton seedButton;
@@ -30,8 +27,6 @@ public class LostStage extends AbstractStage {
 
    public LostStage(EffectsManager effects) {
       this.effects = effects;
-
-      skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 
       Table table = new Table();
       table.setFillParent(true);
@@ -95,7 +90,7 @@ public class LostStage extends AbstractStage {
       exitButton.setColor(color);
       title.setColor(color);
 
-      Background.getInstance().draw(color, false);
+      Background.draw(color, false);
       super.draw();
    }
 

@@ -5,14 +5,11 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 
 import eu32k.libgdx.common.TempVector2;
-import eu32k.libgdx.common.TempVector3;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.effects.IRunningEffect;
 import eu32k.ludumdare.ld26.events.messages.GenericEvent;
@@ -21,6 +18,7 @@ import eu32k.ludumdare.ld26.level.Level;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.objects.Goal;
 import eu32k.ludumdare.ld26.objects.Player;
+import eu32k.ludumdare.ld26.rendering.DebugText;
 import eu32k.ludumdare.ld26.rendering.MainRenderer;
 import eu32k.ludumdare.ld26.state.GameState;
 import eu32k.ludumdare.ld26.state.GlobalState;
@@ -34,12 +32,11 @@ import eu32k.ludumdare.ld26.state.StateMachine;
 public class GameStage extends AbstractStage {
 
    private static final float ZOOM = 5.55555555555f;
-   private Camera camera;
+   // private Camera camera;
 
    private MainRenderer renderer;
    private Player player;
    private Level level;
-   private GameEventHandler eventHandler;
 
    private LevelState levelState;
 
@@ -54,10 +51,8 @@ public class GameStage extends AbstractStage {
    public GameStage(EffectsManager effects) {
       this.effects = effects;
 
-      float aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
-      camera = new OrthographicCamera(2.0f * aspectRatio * ZOOM, 2.0f * ZOOM);
+      new GameEventHandler();
 
-      eventHandler = new GameEventHandler();
       levelState = StateMachine.instance().getState(LevelState.class);
       globalState = StateMachine.instance().getState(GlobalState.class);
 
@@ -71,6 +66,7 @@ public class GameStage extends AbstractStage {
 
    @Override
    public void draw() {
+
       boolean running = levelState.isRunning();
       float delta = Gdx.graphics.getDeltaTime();
 
@@ -128,13 +124,13 @@ public class GameStage extends AbstractStage {
       }
       // tileAnimator.update(delta);
 
-      camera.position.x = level.getWidth() / 2.0f;
-      camera.position.y = level.getHeight() / 2.0f;
-      camera.update();
-
       renderer.setPaused(levelState.isPaused());
       // rendering ------------------------------------
-      renderer.render(delta, camera, level.getTiles(), player, levelState.getGoal(), mainColor, playerColor, inverseColor);
+      setViewport(level.getWidth() + 4.0f, level.getHeight() + 4.0f, true);
+      getCamera().position.x = level.getWidth() / 2.0f;
+      getCamera().position.y = level.getHeight() / 2.0f;
+      super.draw();
+      renderer.render(delta, getCamera(), level.getTiles(), player, levelState.getGoal(), mainColor, playerColor, inverseColor);
    }
 
    private void drawPauseScreen() {
@@ -161,7 +157,7 @@ public class GameStage extends AbstractStage {
       if (runningEffects.size() > 0) {
          int count = 0;
          boolean movingTileInvolved = false;
-         
+
          for (Tile t : levelState.getLevel().getTiles()) {
             if (t.isInUse()) {
                Vector2 shiftedPosition = player.getShiftedPosition();
@@ -241,13 +237,26 @@ public class GameStage extends AbstractStage {
       if (right) {
          velocity.add(1.0f, 0.0f);
       }
-      if (Gdx.input.isTouched()) {
-         Vector3 touch = TempVector3.tmp.set(Gdx.input.getX(), Gdx.input.getY(), 0.0f);
-         camera.unproject(touch);
-         velocity = TempVector2.tmp.set(touch.x - Player.WIDTH / 2, touch.y - Player.HEIGHT / 2).sub(player.position);
+      float factor = 1.0f;
+
+      if (Gdx.input.getPitch() != 0.0f || Gdx.input.getRoll() != 0.0f) {
+         float x = MathUtils.clamp(-Gdx.input.getPitch(), -20.0f, 20.0f);
+
+         float y = MathUtils.clamp(Gdx.input.getRoll(), -20.0f, 20.0f);
+         velocity = TempVector2.tmp.set(x, y);
+         factor = MathUtils.clamp(Math.min(velocity.len(), 20.0f) / 20.0f, 0.0f, 1.0f);
       }
+
+      DebugText.text = "p:" + Gdx.input.getPitch() + " r:" + Gdx.input.getRoll() + " f:" + factor;
+
+      // if (Gdx.input.isTouched()) {
+      // Vector2 touch = TempVector2.tmp.set(Gdx.input.getX(), Gdx.input.getY());
+      // screenToStageCoordinates(touch);
+      // velocity = TempVector2.tmp.set(touch.x - Player.WIDTH / 2, touch.y - Player.HEIGHT / 2).sub(player.position);
+      // }
+
       velocity.nor();
-      velocity.mul(delta);
+      velocity.scl(delta * factor);
       player.move(velocity.x, velocity.y, level.getTiles());
 
       if (escapePressed) {

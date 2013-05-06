@@ -13,6 +13,10 @@ public class MainActivity extends AndroidApplication {
       AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
       cfg.useGL20 = true;
 
+      Config.SHOW_BACKGROUND = false;
+      Config.SHOW_PARTICLES = true;
+      Config.SHOW_PARTICLES_GLOW = true;
+
       initialize(new LudumDare26(), cfg);
    }
 }

@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 import eu32k.ludumdare.ld26.effects.EffectsManager;
@@ -15,17 +13,12 @@ import eu32k.ludumdare.ld26.rendering.Background;
 import eu32k.ludumdare.ld26.state.PlayerState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
-
 public class FinishStage extends AbstractStage {
-   private Skin skin;
 
    private List<Label> list = new ArrayList<Label>();
 
    public FinishStage(EffectsManager effects) {
       this.effects = effects;
-
-      skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
-
    }
 
    @Override
@@ -51,7 +44,7 @@ public class FinishStage extends AbstractStage {
       addActor(table);
 
       Color color = effects.getCurrentColor();
-      Background.getInstance().draw(color, false);
+      Background.draw(color, false);
       for (Label label : list) {
          label.setColor(color);
       }
