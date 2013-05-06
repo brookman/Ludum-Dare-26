@@ -8,6 +8,7 @@ import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.effects.SoundButton;
 import eu32k.ludumdare.ld26.level.TileBoundingBoxes;
 import eu32k.ludumdare.ld26.level.TileSprites;
+import eu32k.ludumdare.ld26.recorder.Recorder;
 import eu32k.ludumdare.ld26.stages.AbstractStage;
 import eu32k.ludumdare.ld26.stages.FinishStage;
 import eu32k.ludumdare.ld26.stages.GameStage;
@@ -36,8 +37,16 @@ public class LudumDare26 extends SimpleGame {
 
    private AbstractStage pauseStage;
 
+   private Recorder recorder;
+
    public LudumDare26() {
+      this(null);
+   }
+
+   public LudumDare26(Recorder recorder) {
       super(false);
+      this.recorder = recorder;
+
       StateMachine.instance().createState(new GlobalState());
       StateMachine.instance().createState(new MenuState());
       StateMachine.instance().createState(new LevelState());
@@ -87,6 +96,10 @@ public class LudumDare26 extends SimpleGame {
          current.draw();
       }
       SoundButton.draw();
+
+      if (recorder != null) {
+         recorder.record(30);
+      }
    }
 
    @Override

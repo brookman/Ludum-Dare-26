@@ -29,5 +29,6 @@ public class Main {
       cfg.height = Config.Y_RESOLUTION;
 
       LwjglApplication app = new LwjglApplication(new LudumDare26(), cfg);
+      // LwjglApplication app = new LwjglApplication(new LudumDare26(new ScreenshotRecorder()), cfg);
    }
 }
