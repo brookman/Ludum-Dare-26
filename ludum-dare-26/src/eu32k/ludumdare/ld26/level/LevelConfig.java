@@ -4,4 +4,5 @@ public class LevelConfig {
    public long seed;
    public int width;
    public int height;   
+   public int spawnDistance;
 }

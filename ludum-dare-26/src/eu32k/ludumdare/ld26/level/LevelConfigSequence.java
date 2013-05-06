@@ -27,7 +27,7 @@ public class LevelConfigSequence {
       levelIndex = 0;
    }
 
-   public static void addLevelsToSequence(LevelConfigSequence sequence, long sequenceSeed, int minWidth, int minHeight, int maxWidth, int maxHeight, int levels) {
+   public static void addLevelsToSequence(LevelConfigSequence sequence, long sequenceSeed, LevelConfig from, LevelConfig to, int levels) {
       Random random = new Random(sequenceSeed);
       float v = 0;
       float levelsF = levels;
@@ -35,8 +35,9 @@ public class LevelConfigSequence {
          v = index / levelsF;
          LevelConfig c = new LevelConfig();
          c.seed = random.nextLong();
-         c.width = (int) Interpolation.linear.apply(minWidth, maxWidth, v);
-         c.height = (int) Interpolation.linear.apply(minHeight, maxHeight, v);
+         c.width = (int) Interpolation.linear.apply(from.width, to.width, v);
+         c.height = (int) Interpolation.linear.apply(from.height, to.height, v);
+         c.spawnDistance = (int) Interpolation.linear.apply(from.spawnDistance, to.spawnDistance, v);
          sequence.add(c);
       }
    }

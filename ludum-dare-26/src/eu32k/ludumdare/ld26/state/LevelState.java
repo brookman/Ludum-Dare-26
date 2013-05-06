@@ -212,6 +212,7 @@ public class LevelState extends GameState {
       }
       level = new Level(globalState.pool().tiles(), width, height);
       level.setRandom(random);
+      level.setSpawnDistance(cfg.spawnDistance);
       level.generateRandomTiles();
 
       initPlacePlayerAndGoal();

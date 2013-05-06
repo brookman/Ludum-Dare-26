@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
 
 import eu32k.libgdx.rendering.Textures;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
+import eu32k.ludumdare.ld26.level.LevelConfig;
 import eu32k.ludumdare.ld26.level.LevelConfigSequence;
 import eu32k.ludumdare.ld26.rendering.Background;
 import eu32k.ludumdare.ld26.state.LevelInitState;
@@ -138,11 +139,11 @@ public class MenuStage extends AbstractStage {
       super.draw();
    }
 
-   private void startGame(long seed, int minWidth, int minHeight, int maxWidth, int maxHeight, int levelCount) {
+   private void startGame(long seed, LevelConfig from, LevelConfig to, int levelCount) {
       // TODO Auto-generated method stub
       LevelState levelState = StateMachine.instance().getState(LevelState.class);
       LevelConfigSequence levels = new LevelConfigSequence();
-      LevelConfigSequence.addLevelsToSequence(levels, seed, minWidth, minHeight, maxWidth, maxHeight, levelCount);
+      LevelConfigSequence.addLevelsToSequence(levels, seed, from, to, levelCount);
       levelState.setLevels(levels);
       levelState.initGame();
       levelState.initLevel();
@@ -150,14 +151,28 @@ public class MenuStage extends AbstractStage {
    }
 
    private void challengeMode() {
-      startGame(5353, 4, 3, 12, 8, 25);
+      LevelConfig from = new LevelConfig();
+      from.width = 4;
+      from.height = 3;
+      from.spawnDistance = 0;
+      LevelConfig to = new LevelConfig();
+      to.width = 12;
+      to.height = 8;
+      to.spawnDistance = 2;
+      startGame(5353, from, to, 10);
    }
 
    private void seedMode() {
       long seedValue = Long.parseLong(seed.getText());
-      int width = Integer.parseInt(size.getText().split("x")[0]);
-      int height = Integer.parseInt(size.getText().split("x")[1]);
-      startGame(seedValue, width, height, width, height, 100);
+      LevelConfig from = new LevelConfig();
+      from.width = Integer.parseInt(size.getText().split("x")[0]);
+      from.height = Integer.parseInt(size.getText().split("x")[1]);
+      from.spawnDistance = 1;
+      LevelConfig to = new LevelConfig();
+      to.width = to.width;
+      to.height = to.height;
+      to.spawnDistance = 1;
+      startGame(seedValue, from, to, 100);
    }
 
 }
