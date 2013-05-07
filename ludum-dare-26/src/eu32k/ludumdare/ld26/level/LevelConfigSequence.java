@@ -38,6 +38,9 @@ public class LevelConfigSequence {
          c.width = (int) Interpolation.linear.apply(from.width, to.width, v);
          c.height = (int) Interpolation.linear.apply(from.height, to.height, v);
          c.spawnDistance = (int) Interpolation.linear.apply(from.spawnDistance, to.spawnDistance, v);
+         c.firstTileSpawnDelay =  Interpolation.linear.apply(from.firstTileSpawnDelay, to.firstTileSpawnDelay, v);
+         c.tileSpawnInterval = Interpolation.linear.apply(from.tileSpawnInterval, to.tileSpawnInterval, v);
+         c.tileFadeTime = Interpolation.linear.apply(from.tileFadeTime, to.tileFadeTime, v);
          sequence.add(c);
       }
    }

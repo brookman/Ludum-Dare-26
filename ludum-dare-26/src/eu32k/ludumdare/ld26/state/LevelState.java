@@ -214,11 +214,13 @@ public class LevelState extends GameState {
       level = new Level(globalState.pool().tiles(), width, height);
       level.setRandom(random);
       level.setSpawnDistance(cfg.spawnDistance);
+      level.setSpawnInterval(cfg.tileSpawnInterval);
+      level.setTileFadeTime(cfg.tileFadeTime);
       level.generateRandomTiles();
 
       initPlacePlayerAndGoal();
-
-      tileSpawner.spawnTile(5f);
+      
+      tileSpawner.spawnTile(cfg.firstTileSpawnDelay);
 
    }
 

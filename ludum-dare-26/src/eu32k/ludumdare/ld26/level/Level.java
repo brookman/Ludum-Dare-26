@@ -27,6 +27,8 @@ public class Level {
 
    private Random tileRandom;
    private int spawnDistance;
+   private float spawnInterval;
+   private float tileFadeTime;
    // private List<Tile> tiles;
 
    private Tile nextTile;
@@ -309,5 +311,21 @@ public class Level {
 
    public void setSpawnDistance(int spawnDistance) {
       this.spawnDistance = spawnDistance;
+   }
+
+   public float getSpawnInterval() {
+      return spawnInterval;
+   }
+
+   public void setSpawnInterval(float spawnInterval) {
+      this.spawnInterval = spawnInterval;
+   }
+
+   public float getTileFadeTime() {
+      return tileFadeTime;
+   }
+
+   public void setTileFadeTime(float tileFadeTime) {
+      this.tileFadeTime = tileFadeTime;
    }
 }

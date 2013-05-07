@@ -153,11 +153,17 @@ public class MenuStage extends AbstractStage {
       from.width = 4;
       from.height = 3;
       from.spawnDistance = 0;
+      from.firstTileSpawnDelay = 5f;
+      from.tileSpawnInterval = 2f;
+      from.tileFadeTime = 1f;
       LevelConfig to = new LevelConfig();
       to.width = 20;
       to.height = 15;
       to.spawnDistance = 2;
-      startGame(24343, from, to, 25);
+      to.firstTileSpawnDelay = 0f;
+      to.tileSpawnInterval = 0f;
+      to.tileFadeTime = 0.1f;
+      startGame(63463333, from, to, 25);
    }
 
    private void seedMode() {
@@ -166,10 +172,16 @@ public class MenuStage extends AbstractStage {
       from.width = Integer.parseInt(widthList.getSelection());
       from.height = Integer.parseInt(heightList.getSelection());
       from.spawnDistance = 1;
+      from.firstTileSpawnDelay = 5f;
+      from.tileSpawnInterval = 2f;
+      from.tileFadeTime = 1f;
       LevelConfig to = new LevelConfig();
       to.width = to.width;
       to.height = to.height;
       to.spawnDistance = 1;
+      to.firstTileSpawnDelay = 0f;
+      to.tileSpawnInterval = 0f;
+      to.tileFadeTime = 0.1f;
       startGame(seedValue, from, to, 50);
    }
 

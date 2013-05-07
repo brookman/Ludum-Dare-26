@@ -80,7 +80,8 @@ public class TileAnimator {
 
    public void animatePop(Tile popped) {
       TileFade fade = globalState.pool().fades().getFreeItem();
-      fade.init(popped, 1f, 1f, 0f, true);
+      LevelState ls = StateMachine.instance().getState(LevelState.class);
+      fade.init(popped, ls.getLevel().getTileFadeTime(), 1f, 0f, true);
       StateMachine.instance().getState(LevelState.class).getRunningEffects().add(fade);
    }
 

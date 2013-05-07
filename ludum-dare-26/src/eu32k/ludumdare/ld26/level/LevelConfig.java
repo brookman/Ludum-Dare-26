@@ -5,4 +5,7 @@ public class LevelConfig {
    public int width;
    public int height;   
    public int spawnDistance;
+   public float firstTileSpawnDelay;
+   public float tileSpawnInterval;
+   public float tileFadeTime;
 }

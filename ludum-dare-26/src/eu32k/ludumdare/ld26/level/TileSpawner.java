@@ -66,7 +66,7 @@ public class TileSpawner implements IEventHandler {
          levelState.getTileAnimator().animateShift(ev.tile);
          break;
       case GenericEvent.TILEEVENT_POPPED:
-         spawnTile((5f / levelState.getLevel().getDufficulty()));
+         spawnTile(levelState.getLevel().getSpawnInterval());
          break;
       }
    }
