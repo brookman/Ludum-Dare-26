@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
+import eu32k.libgdx.common.Assets;
+
 public class TextRenderer {
 
    private SpriteBatch textBatch;
@@ -22,7 +24,7 @@ public class TextRenderer {
       textBatch = new SpriteBatch();
       textLines = new HashMap<String, String>();
       textPositions = new HashMap<String, Vector2>();
-      font = new BitmapFont(Gdx.files.internal("fonts/calibri.fnt"), Gdx.files.internal("fonts/calibri.png"), false);
+      font = Assets.MANAGER.get("fonts/calibri.fnt", BitmapFont.class);
    }
 
    public void render() {

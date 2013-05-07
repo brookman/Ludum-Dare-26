@@ -2,6 +2,7 @@ package eu32k.ludumdare.ld26.stages;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -9,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
-import eu32k.libgdx.rendering.Textures;
+import eu32k.libgdx.common.Assets;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.rendering.Background;
 import eu32k.ludumdare.ld26.state.LevelState;
@@ -34,7 +35,7 @@ public class LevelFinishedStage extends AbstractStage {
       table.setFillParent(true);
       table.center();
 
-      title = new Image(Textures.get("textures/title.png"));
+      title = new Image(Assets.MANAGER.get("textures/title.png", Texture.class));
 
       challengeButton = new TextButton("Next Level", skin);
       challengeButton.setColor(Color.CYAN);

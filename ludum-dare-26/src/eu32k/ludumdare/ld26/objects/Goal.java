@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import eu32k.libgdx.rendering.Textures;
+import eu32k.libgdx.common.Assets;
 import eu32k.ludumdare.ld26.MultiLayerSprite;
 import eu32k.ludumdare.ld26.effects.particles.GameObjectParticleEffect;
 
@@ -22,8 +22,8 @@ public class Goal extends GameObject {
 
    @Override
    public MultiLayerSprite loadSprite() {
-      Texture layer1tex = Textures.get("textures/square.png");
-      Texture layer2tex = Textures.get("textures/square2.png");
+      Texture layer1tex = Assets.MANAGER.get("textures/square.png", Texture.class);
+      Texture layer2tex = Assets.MANAGER.get("textures/square2.png", Texture.class);
       TextureRegion layer1reg = new TextureRegion(layer1tex);
       TextureRegion layer2reg = new TextureRegion(layer2tex);
 

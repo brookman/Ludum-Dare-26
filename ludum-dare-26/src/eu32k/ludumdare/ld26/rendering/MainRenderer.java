@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+import eu32k.libgdx.common.Assets;
 import eu32k.libgdx.common.Time;
 import eu32k.libgdx.rendering.AdvancedShader;
 import eu32k.libgdx.rendering.DynamicFrameBuffer;
@@ -26,7 +27,6 @@ public class MainRenderer {
    private SpriteBatch batch;
    private SpriteBatch hudBatch;
    private ShapeRenderer debugRenderer;
-   private RunText text;
    private BitmapFont fps;
 
    private DynamicFrameBuffer mainBuffer;
@@ -48,9 +48,9 @@ public class MainRenderer {
       hudBatch = new SpriteBatch();
       debugRenderer = new ShapeRenderer();
       textRenderer = new TextRenderer();
-      text = new RunText("Welcome to the super minimalistic labyrinth game! yay! :D", 5.0f);
-      fps = new BitmapFont(Gdx.files.internal("fonts/calibri.fnt"), Gdx.files.internal("fonts/calibri.png"), false);
-      consolasFont = new BitmapFont(Gdx.files.internal("fonts/consolas.fnt"), Gdx.files.internal("fonts/consolas.png"), false);
+
+      fps = Assets.MANAGER.get("fonts/calibri.fnt", BitmapFont.class);
+      consolasFont = Assets.MANAGER.get("fonts/consolas.fnt", BitmapFont.class);
       console = new TextConsole(consolasFont, 160.0f, Gdx.graphics.getHeight() - 10.0f, 15f, 5, Color.WHITE);
 
       float scaleDown = 0.25f;

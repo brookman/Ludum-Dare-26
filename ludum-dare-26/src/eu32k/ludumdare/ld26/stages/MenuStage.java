@@ -3,6 +3,7 @@ package eu32k.ludumdare.ld26.stages;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -13,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
 
-import eu32k.libgdx.rendering.Textures;
+import eu32k.libgdx.common.Assets;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.level.LevelConfig;
 import eu32k.ludumdare.ld26.level.LevelConfigSequence;
@@ -39,7 +40,7 @@ public class MenuStage extends AbstractStage {
       table.setFillParent(true);
       table.center();
 
-      title = new Image(new TextureRegion(Textures.get("textures/title.png"), 256, 64));
+      title = new Image(new TextureRegion(Assets.MANAGER.get("textures/title.png", Texture.class), 256, 64));
 
       challengeButton = new TextButton("Challenge mode", skin);
       challengeButton.addListener(new InputListener() {

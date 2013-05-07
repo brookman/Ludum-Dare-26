@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
-import eu32k.libgdx.rendering.Textures;
+import eu32k.libgdx.common.Assets;
 import eu32k.ludumdare.ld26.MultiLayerSprite;
 import eu32k.ludumdare.ld26.level.Tile.Rotation;
 import eu32k.ludumdare.ld26.level.Tile.Type;
@@ -29,8 +29,8 @@ public class TileSprites {
    };
 
    public static void init() {
-      Texture layer1tex = Textures.get("textures/tiles2.png");
-      Texture layer2tex = Textures.get("textures/tiles3.png");
+      Texture layer1tex = Assets.MANAGER.get("textures/tiles2.png", Texture.class);
+      Texture layer2tex = Assets.MANAGER.get("textures/tiles3.png", Texture.class);
 
       for (Type type : Type.values()) {
          for (Rotation rotation : Rotation.values()) {

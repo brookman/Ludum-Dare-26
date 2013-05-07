@@ -62,6 +62,8 @@ public class LudumDare26 extends SimpleGame {
 
    @Override
    public void init() {
+      Preloader.preLoad();
+
       TileSprites.init();
       TileBoundingBoxes.init();
       SoundButton.init();

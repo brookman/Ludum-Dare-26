@@ -11,8 +11,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.utils.Disposable;
 
+import eu32k.libgdx.common.Assets;
 import eu32k.libgdx.rendering.DynamicFrameBuffer;
-import eu32k.libgdx.rendering.Textures;
 
 public abstract class SimpleGame implements ApplicationListener, InputProcessor {
 
@@ -128,6 +128,6 @@ public abstract class SimpleGame implements ApplicationListener, InputProcessor 
       for (Disposable disposable : disposables) {
          disposable.dispose();
       }
-      Textures.dispose();
+      Assets.MANAGER.dispose();
    }
 }

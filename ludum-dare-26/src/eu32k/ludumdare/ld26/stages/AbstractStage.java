@@ -10,7 +10,7 @@ import eu32k.ludumdare.ld26.effects.EffectsManager;
 public abstract class AbstractStage extends Stage {
 
    protected EffectsManager effects;
-   protected Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
+   protected static Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 
    public AbstractStage() {
       super();
