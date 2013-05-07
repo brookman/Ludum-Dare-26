@@ -10,6 +10,7 @@ import eu32k.ludumdare.ld26.LudumDare26;
 public class GwtLauncher extends GwtApplication {
    @Override
    public GwtApplicationConfiguration getConfig() {
+      Config.MUSIC_PRELOAD_HACK = true;
       GwtApplicationConfiguration cfg = new GwtApplicationConfiguration(Config.X_RESOLUTION, Config.Y_RESOLUTION);
 
       return cfg;

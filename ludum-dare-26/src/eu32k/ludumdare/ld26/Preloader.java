@@ -33,6 +33,26 @@ public class Preloader {
       am.load(EffectsManager.TRACK_OTGY_OUTRO, Music.class);
 
       wait(am);
+
+      preloadMusic(am, EffectsManager.TRACK_BITBREAK_INTRO);
+      preloadMusic(am, EffectsManager.TRACK_BITBREAK_BODY);
+      preloadMusic(am, EffectsManager.TRACK_BITBREAK_OUTRO);
+      preloadMusic(am, EffectsManager.TRACK_OTGY_INTRO);
+      preloadMusic(am, EffectsManager.TRACK_OTGY_BODY);
+      preloadMusic(am, EffectsManager.TRACK_OTGY_OUTRO);
+
+   }
+
+   private static void preloadMusic(AssetManager am, String path) {
+      Music music = am.get(path, Music.class);
+      music.setVolume(0.0f);
+      music.play();
+      try {
+         Thread.sleep(Config.MUSIC_PRELOAD_HACK ? 100 : 1);
+      } catch (InterruptedException e) {
+         e.printStackTrace();
+      }
+      music.stop();
    }
 
    private static void wait(AssetManager am) {
