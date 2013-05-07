@@ -81,8 +81,8 @@ public class LevelInitState extends GameState {
    public void setColors(Color mainColor, Color playerColor, Color inverseColor) {
       float value = timeSinceEnter / fadeInLength;
       setColor(mainColor, Interpolation.linear, value);
-      setColor(playerColor, Interpolation.linear, value / 100f);
-      setColor(inverseColor, Interpolation.linear, value / 10f + 0.9f);
+      setColor(playerColor, Interpolation.linear, value );
+      setColor(inverseColor, Interpolation.linear, value );
 
    }
 
