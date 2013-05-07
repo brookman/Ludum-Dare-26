@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<module>
-    <entry-point class="eu32k.ludumdare.ld26.client.GwtLauncher"/>
-    <set-configuration-property name="gdx.assetpath" value="../ludum-dare-26-android/assets"/>
-    <inherits name="com.badlogic.gdx.backends.gdx_backends_gwt"/>
-</module>

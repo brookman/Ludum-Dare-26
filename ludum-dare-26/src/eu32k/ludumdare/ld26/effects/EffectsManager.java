@@ -1,10 +1,9 @@
 package eu32k.ludumdare.ld26.effects;
 
-import com.badlogic.gdx.Files.FileType;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 
+import eu32k.libgdx.common.Assets;
 import eu32k.ludumdare.ld26.events.IEvent;
 import eu32k.ludumdare.ld26.events.IEventHandler;
 import eu32k.ludumdare.ld26.events.messages.GenericEvent;
@@ -183,7 +182,7 @@ public class EffectsManager implements IEventHandler {
       if (music != null && music.isPlaying()) {
          music.stop();
       }
-      music = Gdx.audio.newMusic(Gdx.files.getFileHandle(track, FileType.Internal));
+      music = Assets.MANAGER.get(track, Music.class);
       music.setLooping(loop);
       music.setVolume(musicVolume);
       music.play();
