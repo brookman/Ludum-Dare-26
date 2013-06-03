@@ -1,14 +1,13 @@
 package eu32k.ludumdare.ld26.state;
 
 
-
-public class MenuState extends GameState {
+public class SeedState extends GameState {
 
    @Override
 	public void init() {
 		transitions.add(LevelState.class);
 		transitions.add(LevelInitState.class);
-		transitions.add(SeedState.class);
+		transitions.add(MenuState.class);
 	}
 
 	@Override

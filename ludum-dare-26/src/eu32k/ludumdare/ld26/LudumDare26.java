@@ -17,6 +17,7 @@ import eu32k.ludumdare.ld26.stages.GameStage;
 import eu32k.ludumdare.ld26.stages.LostStage;
 import eu32k.ludumdare.ld26.stages.MenuStage;
 import eu32k.ludumdare.ld26.stages.PauseStage;
+import eu32k.ludumdare.ld26.stages.SeedStage;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelInitState;
 import eu32k.ludumdare.ld26.state.LevelLosingState;
@@ -26,6 +27,7 @@ import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.LevelWinningState;
 import eu32k.ludumdare.ld26.state.LevelWonState;
 import eu32k.ludumdare.ld26.state.MenuState;
+import eu32k.ludumdare.ld26.state.SeedState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class LudumDare26 extends SimpleGame {
@@ -36,6 +38,7 @@ public class LudumDare26 extends SimpleGame {
    private GameStage gameStage;
    private LostStage lostStage;
    private FinishStage finishStage;
+   private SeedStage seedStage;
 
    private AbstractStage pauseStage;
 
@@ -58,6 +61,7 @@ public class LudumDare26 extends SimpleGame {
       StateMachine.instance().createState(new LevelLosingState());
       StateMachine.instance().createState(new LevelPauseState());
       StateMachine.instance().createState(new LevelInitState());
+      StateMachine.instance().createState(new SeedState());
    }
 
    @Override
@@ -77,7 +81,9 @@ public class LudumDare26 extends SimpleGame {
       lostStage = new LostStage(effects);
       finishStage = new FinishStage(effects);
       pauseStage = new PauseStage(effects);
+      seedStage = new SeedStage(effects);
       StateMachine.instance().getState(MenuState.class).setStage(menuStage);
+      StateMachine.instance().getState(SeedState.class).setStage(seedStage);
       StateMachine.instance().getState(LevelState.class).setStage(gameStage);
       StateMachine.instance().getState(LevelWinningState.class).setStage(gameStage);
       StateMachine.instance().getState(LevelLosingState.class).setStage(gameStage);

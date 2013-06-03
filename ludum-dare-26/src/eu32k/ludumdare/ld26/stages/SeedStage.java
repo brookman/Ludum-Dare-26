@@ -21,17 +21,19 @@ import eu32k.ludumdare.ld26.level.LevelConfigSequence;
 import eu32k.ludumdare.ld26.rendering.Background;
 import eu32k.ludumdare.ld26.state.LevelInitState;
 import eu32k.ludumdare.ld26.state.LevelState;
-import eu32k.ludumdare.ld26.state.SeedState;
+import eu32k.ludumdare.ld26.state.MenuState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
-public class MenuStage extends AbstractStage {
+public class SeedStage extends AbstractStage {
 
    private Image title;
    private TextButton challengeButton;
-   private TextButton seedButton;
    private TextButton exitButton;
+   private List widthList;
+   private List heightList;
+   private TextField seed;
 
-   public MenuStage(EffectsManager effects) {
+   public SeedStage(EffectsManager effects) {
       this.effects = effects;
 
       Table table = new Table();
@@ -44,18 +46,8 @@ public class MenuStage extends AbstractStage {
       challengeButton.addListener(new InputListener() {
          @Override
          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            // TODO: Move this shit into levelstate
-            challengeMode();
-            return false;
-         }
-      });
-
-      seedButton = new TextButton("Seed mode", skin);
-      seedButton.addListener(new InputListener() {
-         @Override
-         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             try {
-               StateMachine.instance().enterState(SeedState.class);
+               seedMode();
             } catch (Exception e) {
                // ignore
             }
@@ -63,28 +55,52 @@ public class MenuStage extends AbstractStage {
          }
       });
 
-      exitButton = new TextButton("Exit", skin);
+      exitButton = new TextButton("Return to Main Menu", skin);
       exitButton.addListener(new InputListener() {
          @Override
          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            Gdx.app.exit();
+            StateMachine.instance().enterState(MenuState.class);
+
             return false;
+         }
+      });
+
+      widthList = new List(new Object[] { 3, 4, 5, 6, 7, 8, 9, 10, 15 }, skin);
+      heightList = new List(new Object[] { 3, 4, 5, 6, 7, 8, 9, 10, 15 }, skin);
+      widthList.setSelectedIndex(7);
+      heightList.setSelectedIndex(5);
+
+      seed = new TextField("31337", skin) {
+         @Override
+         public float getPrefWidth() {
+            return 100;
+         }
+
+      };
+
+      seed.setTextFieldFilter(new TextFieldFilter() {
+         @Override
+         public boolean acceptChar(TextField textField, char key) {
+            int code = key;
+            return code >= 48 && code <= 57;
          }
       });
 
       int padding = 4;
 
-      table.add(title).fill().pad(padding);
+      table.add(title).fill().pad(padding).colspan(3);
       table.row();
-      table.add(challengeButton).fill().pad(padding);
+      table.add(challengeButton).fill().pad(padding).colspan(3);
       table.row();
       table.row();
 
-      table.add(seedButton).fillX().pad(padding);
+      table.add(widthList).fill().pad(padding);
+      table.add(heightList).fill().pad(padding);
+      table.add(seed).fillX().pad(padding);
 
       table.row();
       table.row();
-      table.add(exitButton).fill().pad(padding);
+      table.add(exitButton).fill().pad(padding).colspan(3);
 
       table.row();
 
@@ -94,15 +110,18 @@ public class MenuStage extends AbstractStage {
    @Override
    public void draw() {
       if (Gdx.input.isKeyPressed(Input.Keys.C)) {
-         challengeMode();
+         //challengeMode();
       } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
          // seedMode();
       }
       Color color = effects.getCurrentColor();
       challengeButton.setColor(color);
-      seedButton.setColor(color);
       exitButton.setColor(color);
       title.setColor(color);
+      widthList.setColor(color);
+      heightList.setColor(color);
+      seed.setColor(color);
+      seed.getStyle().fontColor.a = color.a;
 
       Background.draw(color, false);
       super.draw();
@@ -119,24 +138,23 @@ public class MenuStage extends AbstractStage {
       StateMachine.instance().enterState(LevelInitState.class);
    }
 
-   private void challengeMode() {
+   private void seedMode() {
+      long seedValue = Long.parseLong(seed.getText());
       LevelConfig from = new LevelConfig();
-      from.width = 4;
-      from.height = 3;
-      from.spawnDistance = 0;
+      from.width = Integer.parseInt(widthList.getSelection());
+      from.height = Integer.parseInt(heightList.getSelection());
+      from.spawnDistance = 1;
       from.firstTileSpawnDelay = 5f;
       from.tileSpawnInterval = 2f;
       from.tileFadeTime = 1f;
       LevelConfig to = new LevelConfig();
-      to.width = 20;
-      to.height = 15;
-      to.spawnDistance = 2;
+      to.width = to.width;
+      to.height = to.height;
+      to.spawnDistance = 1;
       to.firstTileSpawnDelay = 0f;
       to.tileSpawnInterval = 0f;
       to.tileFadeTime = 0.1f;
-      startGame(63463333, from, to, 25);
+      startGame(seedValue, from, to, 50);
    }
-
-  
 
 }
