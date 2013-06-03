@@ -5,10 +5,15 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -26,12 +31,31 @@ import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class SeedStage extends AbstractStage {
 
+   private static final float TO_TILEFADETIME = 0.1f;
+   private static final float FROM_TILEFADETIME = 1f;
+   private static final float FROM_SPAWNINTERVAL = 2f;
+   private static final float TO_SPAWNINTERVAL = 0f;
+   private static final float TO_FIRSTSPAWN = 0f;
+   private static final float FROM_FIRSTSPAWN = 5f;
    private Image title;
    private TextButton challengeButton;
    private TextButton exitButton;
    private List widthList;
    private List heightList;
    private TextField seed;
+   private Slider minWidthSlider;
+   private Slider maxWidthSlider;
+   private Slider minHeightSlider;
+   private Slider maxHeightSlider;
+   private Slider levelCountSlider;
+   private Slider startingSpeedSlider;
+   private Label minWidthLabel;
+   private Label maxWidthLabel;
+   private Label minHeightLabel;
+   private Label maxHeightLabel;
+   private Label seedLabel;
+   private Label levelCountLabel;
+   private Label startingSpeedLabel;
 
    public SeedStage(EffectsManager effects) {
       this.effects = effects;
@@ -42,7 +66,7 @@ public class SeedStage extends AbstractStage {
 
       title = new Image(new TextureRegion(Assets.MANAGER.get("textures/title.png", Texture.class), 256, 64));
 
-      challengeButton = new TextButton("Challenge mode", skin);
+      challengeButton = new TextButton("Start Seed Mode", skin);
       challengeButton.addListener(new InputListener() {
          @Override
          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -69,6 +93,35 @@ public class SeedStage extends AbstractStage {
       heightList = new List(new Object[] { 3, 4, 5, 6, 7, 8, 9, 10, 15 }, skin);
       widthList.setSelectedIndex(7);
       heightList.setSelectedIndex(5);
+      minWidthSlider = new Slider(3, 20, 1, false, skin);
+      maxWidthSlider = new Slider(3, 20, 1, false, skin);
+      minHeightSlider = new Slider(3, 15, 1, false, skin);
+      maxHeightSlider = new Slider(3, 15, 1, false, skin);
+      levelCountSlider = new Slider(5, 100, 5, false, skin);
+      startingSpeedSlider = new Slider(0f, 1f, 0.1f, false, skin);
+
+      minWidthSlider.setValue(4);
+      maxWidthSlider.setValue(20);
+      minHeightSlider.setValue(3);
+      maxHeightSlider.setValue(15);
+      startingSpeedSlider.setValue(0);
+      levelCountSlider.setValue(25);
+      
+      addSliderListener(minWidthSlider);
+      addSliderListener(maxWidthSlider);
+      addSliderListener(minHeightSlider);
+      addSliderListener(maxHeightSlider);
+      addSliderListener(startingSpeedSlider);
+      addSliderListener(levelCountSlider);
+
+      
+      minWidthLabel = new Label("Min Width", skin);
+      maxWidthLabel = new Label("Max Width", skin);
+      minHeightLabel = new Label("Min Height", skin);
+      maxHeightLabel = new Label("Max Height", skin);
+      levelCountLabel = new Label("", skin);
+      startingSpeedLabel = new Label("", skin);
+      seedLabel = new Label("Seed", skin);
 
       seed = new TextField("31337", skin) {
          @Override
@@ -88,23 +141,81 @@ public class SeedStage extends AbstractStage {
 
       int padding = 4;
 
-      table.add(title).fill().pad(padding).colspan(3);
+      table.add(title).fill().pad(padding).colspan(2);
       table.row();
-      table.add(challengeButton).fill().pad(padding).colspan(3);
+      table.add(challengeButton).fill().pad(padding).colspan(2);
       table.row();
+      
+      table.add(minWidthLabel).pad(padding);
+      table.add(minWidthSlider).fill().pad(padding);
       table.row();
+      table.add(maxWidthLabel).pad(padding);
+      table.add(maxWidthSlider).fill().pad(padding);
+      table.row();
+      table.add(minHeightLabel).pad(padding);
+      table.add(minHeightSlider).fill().pad(padding);
+      table.row();
+      table.add(maxHeightLabel).pad(padding);
+      table.add(maxHeightSlider).fill().pad(padding);
+      table.row();
+      table.add(levelCountLabel).pad(padding);
+      table.add(levelCountSlider).fill().pad(padding);
+      table.row();
+      table.add(startingSpeedLabel).pad(padding);
+      table.add(startingSpeedSlider).fill().pad(padding);
+      table.row();
+      table.add(seedLabel).pad(padding);
+      table.add(seed).fill().pad(padding);
 
-      table.add(widthList).fill().pad(padding);
-      table.add(heightList).fill().pad(padding);
-      table.add(seed).fillX().pad(padding);
+      table.row();
+      table.add(exitButton).fill().pad(padding).colspan(2);
 
       table.row();
-      table.row();
-      table.add(exitButton).fill().pad(padding).colspan(3);
-
-      table.row();
+      //table.setWidth(2f);
 
       addActor(table);
+      setLabels();
+   }
+
+   private void addSliderListener(Slider s) {
+      s.addListener(new EventListener() {         
+         @Override
+         public boolean handle(Event event) {
+            setLabels();
+            return false;
+         }
+      });
+   }
+
+   private void setLabels() {
+      minWidthLabel.setText("Min Width: " + ((int)minWidthSlider.getValue()));
+      maxWidthLabel.setText("Max Width: " + ((int)maxWidthSlider.getValue()));
+      minHeightLabel.setText("Min Height: " + ((int)minHeightSlider.getValue()));
+      maxHeightLabel.setText("Max Height: " + ((int)maxHeightSlider.getValue()));
+      levelCountLabel.setText("Levels: " + ((int) levelCountSlider.getValue()));
+      startingSpeedLabel.setText("Game Speed: " + getGameSpeedName());
+   }
+
+   private String getGameSpeedName() {
+      String speedName = "";
+      float speed = startingSpeedSlider.getValue();
+      if(speed <= 0.2f)
+      {
+         speedName = "Slow";
+      }
+      else if(speed <= 0.5f)
+      {
+         speedName = "Medium";
+      }
+      else if(speed <= 0.8f)
+      {
+         speedName = "Fast";
+      }
+      else
+      {
+         speedName = "Insane";
+      }
+      return speedName;
    }
 
    @Override
@@ -122,7 +233,12 @@ public class SeedStage extends AbstractStage {
       heightList.setColor(color);
       seed.setColor(color);
       seed.getStyle().fontColor.a = color.a;
-
+      minWidthSlider.setColor(color);
+      maxWidthSlider.setColor(color);
+      minHeightSlider.setColor(color);
+      maxHeightSlider.setColor(color);
+      levelCountSlider.setColor(color);
+      startingSpeedSlider.setColor(color);
       Background.draw(color, false);
       super.draw();
    }
@@ -139,22 +255,27 @@ public class SeedStage extends AbstractStage {
    }
 
    private void seedMode() {
+      float speed = startingSpeedSlider.getValue();
+      float sDelay = Interpolation.linear.apply(FROM_FIRSTSPAWN, TO_FIRSTSPAWN, speed);
+      float sInterval = Interpolation.linear.apply(FROM_SPAWNINTERVAL, TO_SPAWNINTERVAL, speed);
+      float sFade = Interpolation.linear.apply(FROM_TILEFADETIME, TO_TILEFADETIME, speed);
+      
       long seedValue = Long.parseLong(seed.getText());
       LevelConfig from = new LevelConfig();
-      from.width = Integer.parseInt(widthList.getSelection());
-      from.height = Integer.parseInt(heightList.getSelection());
+      from.width = (int)minWidthSlider.getValue();
+      from.height = (int)minHeightSlider.getValue();
       from.spawnDistance = 1;
-      from.firstTileSpawnDelay = 5f;
-      from.tileSpawnInterval = 2f;
-      from.tileFadeTime = 1f;
+      from.firstTileSpawnDelay = sDelay;
+      from.tileSpawnInterval = sInterval;
+      from.tileFadeTime = sFade;
       LevelConfig to = new LevelConfig();
-      to.width = to.width;
-      to.height = to.height;
+      to.width = (int)maxWidthSlider.getValue();
+      to.height = (int)maxHeightSlider.getValue();
       to.spawnDistance = 1;
-      to.firstTileSpawnDelay = 0f;
-      to.tileSpawnInterval = 0f;
-      to.tileFadeTime = 0.1f;
-      startGame(seedValue, from, to, 50);
+      to.firstTileSpawnDelay = TO_FIRSTSPAWN;
+      to.tileSpawnInterval = TO_SPAWNINTERVAL;
+      to.tileFadeTime = TO_TILEFADETIME;
+      startGame(seedValue, from, to, (int)levelCountSlider.getValue());
    }
 
 }
