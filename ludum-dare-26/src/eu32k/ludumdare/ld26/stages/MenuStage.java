@@ -158,6 +158,7 @@ public class MenuStage extends AbstractStage {
    }
    private void exitGame() {
       Gdx.app.exit();
+
    }
 
    @Override

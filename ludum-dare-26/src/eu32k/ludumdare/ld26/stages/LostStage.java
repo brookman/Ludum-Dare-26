@@ -23,8 +23,8 @@ import eu32k.ludumdare.ld26.state.StateMachine;
 public class LostStage extends AbstractStage {
 
    private Image title;
-   private TextButton challengeButton;
-   private TextButton seedButton;
+   private TextButton retryButton;
+   private TextButton backToMenuButton;
    private TextButton exitButton;
 
    private KeyPressEvent keyBackToMenu;
@@ -77,9 +77,9 @@ public class LostStage extends AbstractStage {
 
       title = new Image(new TextureRegion(Assets.MANAGER.get("textures/title.png", Texture.class), 256, 64));
 
-      challengeButton = new TextButton("Retry", skin);
-      challengeButton.setColor(Color.CYAN);
-      challengeButton.addListener(new InputListener() {
+      retryButton = new TextButton("Retry", skin);
+      retryButton.setColor(Color.CYAN);
+      retryButton.addListener(new InputListener() {
          @Override
          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             retry();
@@ -87,9 +87,9 @@ public class LostStage extends AbstractStage {
          }
       });
 
-      seedButton = new TextButton("Back to Menu", skin);
-      seedButton.setColor(Color.CYAN);
-      seedButton.addListener(new InputListener() {
+      backToMenuButton = new TextButton("Back to Menu", skin);
+      backToMenuButton.setColor(Color.CYAN);
+      backToMenuButton.addListener(new InputListener() {
          @Override
          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             backToMenu();
@@ -112,11 +112,9 @@ public class LostStage extends AbstractStage {
 
       table.add(title).fill().pad(padding);
       table.row();
-      table.add(challengeButton).fill().pad(padding);
+      table.add(retryButton).fill().pad(padding);
       table.row();
-      table.add(seedButton).fill().pad(padding);
-      table.row();
-      table.add(exitButton).fill().pad(padding);
+      table.add(backToMenuButton).fill().pad(padding).padTop(padding * 8);
       table.row();
 
       addActor(table);
@@ -133,8 +131,8 @@ public class LostStage extends AbstractStage {
       keyAndroidBack.update();
       keyAndroidMenu.update();
       Color color = effects.getCurrentColor();
-      challengeButton.setColor(color);
-      seedButton.setColor(color);
+      retryButton.setColor(color);
+      backToMenuButton.setColor(color);
       exitButton.setColor(color);
       title.setColor(color);
 
