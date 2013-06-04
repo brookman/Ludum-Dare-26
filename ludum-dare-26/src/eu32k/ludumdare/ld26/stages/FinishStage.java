@@ -97,6 +97,9 @@ public class FinishStage extends AbstractStage {
    }
 
    private void backToMainMenu() {
+      if(runningTime < 2f){
+         return;
+      }
       StateMachine.instance().enterState(MenuState.class);
    }
 }
