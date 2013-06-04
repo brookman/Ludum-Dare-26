@@ -93,10 +93,11 @@ public class MenuStage extends AbstractStage {
 
    @Override
    public void draw() {
-      if (Gdx.input.isKeyPressed(Input.Keys.C)) {
+      if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
          challengeMode();
       } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-         // seedMode();
+         StateMachine.instance().enterState(SeedState.class);
+         //StateseedMode();
       }
       Color color = effects.getCurrentColor();
       challengeButton.setColor(color);

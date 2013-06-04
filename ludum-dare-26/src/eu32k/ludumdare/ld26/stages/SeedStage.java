@@ -223,10 +223,10 @@ public class SeedStage extends AbstractStage {
 
    @Override
    public void draw() {
-      if (Gdx.input.isKeyPressed(Input.Keys.C)) {
-         //challengeMode();
-      } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-         // seedMode();
+      if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+         StateMachine.instance().enterState(MenuState.class);
+      } else if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
+          seedMode();
       }
       Color color = effects.getCurrentColor();
       challengeButton.setColor(color);
