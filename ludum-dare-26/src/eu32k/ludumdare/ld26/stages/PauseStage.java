@@ -1,5 +1,6 @@
 package eu32k.ludumdare.ld26.stages;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -15,6 +16,7 @@ import eu32k.libgdx.common.Assets;
 import eu32k.libgdx.common.KeyPressEvent;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.rendering.Background;
+import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.MenuState;
 import eu32k.ludumdare.ld26.state.StateMachine;
@@ -23,6 +25,7 @@ public class PauseStage extends AbstractStage {
    private Image title;
    private TextButton continueButton;
    private TextButton menuButton;
+   private TextButton gravityButton;
    private TextButton exitButton;
 
    private KeyPressEvent keyPause;
@@ -97,6 +100,14 @@ public class PauseStage extends AbstractStage {
             return false;
          }
       });
+      gravityButton = new TextButton("Gravity Sensor: Enabled", skin);
+      gravityButton.addListener(new InputListener() {
+         @Override
+         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            toggleGravitySensor();
+            return false;
+         }
+      });
 
       exitButton = new TextButton("Exit", skin);
       exitButton.addListener(new InputListener() {
@@ -113,15 +124,28 @@ public class PauseStage extends AbstractStage {
       table.row();
       table.add(continueButton).fill().pad(padding);
       table.row();
-
       table.add(menuButton).fill().pad(padding);
 
+    if(Gdx.app.getType() == ApplicationType.Android){
       table.row();
-      table.add(exitButton).fill().pad(padding);
+      table.add(gravityButton).fill().pad(padding).padTop(padding * 8);
+     }
+
 
       table.row();
 
       addActor(table);
+   }
+
+   protected void toggleGravitySensor() {
+      GlobalState state = StateMachine.instance().getState(GlobalState.class);
+      state.setGravitySensorEnabled(!state.isGravitySensorEnabled());
+      updateGravityButtonText();
+   }
+   
+   public void updateGravityButtonText() {
+      GlobalState state = StateMachine.instance().getState(GlobalState.class);
+      gravityButton.setText("Gravity Sensor: " + (state.isGravitySensorEnabled() ? "Enabled" : "Disabled"));
    }
 
    public void doContinue() {

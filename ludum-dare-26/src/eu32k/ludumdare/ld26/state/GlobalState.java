@@ -4,11 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Application.ApplicationType;
+
 import eu32k.ludumdare.ld26.events.EventQueue;
 import eu32k.ludumdare.ld26.pool.GamePool;
 
 public class GlobalState extends GameState {
-
+   private boolean isGravitySensorEnabled;
+   
    private Random masterRandom;
 
    private Map<String, Random> randoms;
@@ -56,6 +60,14 @@ public class GlobalState extends GameState {
    
    public EventQueue getEvents() {
       return events;
+   }
+
+   public boolean isGravitySensorEnabled() {
+      return isGravitySensorEnabled;
+   }
+
+   public void setGravitySensorEnabled(boolean isGravitySensorEnabled) {
+      this.isGravitySensorEnabled = isGravitySensorEnabled;
    }
 
 }

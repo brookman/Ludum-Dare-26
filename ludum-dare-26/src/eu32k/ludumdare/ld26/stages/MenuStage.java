@@ -2,9 +2,12 @@ package eu32k.ludumdare.ld26.stages;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -17,6 +20,7 @@ import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.level.LevelConfig;
 import eu32k.ludumdare.ld26.level.LevelConfigSequence;
 import eu32k.ludumdare.ld26.rendering.Background;
+import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelInitState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.SeedState;
@@ -27,6 +31,7 @@ public class MenuStage extends AbstractStage {
    private Image title;
    private TextButton challengeButton;
    private TextButton seedButton;
+   private TextButton gravitySensorButton;
    private TextButton exitButton;
 
    private KeyPressEvent keyStartGame;
@@ -91,6 +96,15 @@ public class MenuStage extends AbstractStage {
          }
       });
 
+      gravitySensorButton = new TextButton("Gravity Sensor: Enabled", skin);
+      gravitySensorButton.addListener(new InputListener() {         
+         @Override
+         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            toggleGravitySensor();
+            return false;
+         }
+      });
+      
       exitButton = new TextButton("Exit", skin);
       exitButton.addListener(new InputListener() {
          @Override
@@ -107,17 +121,29 @@ public class MenuStage extends AbstractStage {
       table.row();
       table.add(challengeButton).fill().pad(padding);
       table.row();
-      table.row();
 
       table.add(seedButton).fillX().pad(padding);
+      if(Gdx.app.getType() == ApplicationType.Android){
+         table.row();
+         table.add(gravitySensorButton).fill().pad(padding).padTop(padding * 8);
+      }
 
+      
       table.row();
-      table.row();
-      table.add(exitButton).fill().pad(padding);
+      table.add(exitButton).fill().pad(padding).padTop(padding * 8);
 
       table.row();
 
       addActor(table);
+   }
+   protected void toggleGravitySensor() {
+      GlobalState state = StateMachine.instance().getState(GlobalState.class);
+      state.setGravitySensorEnabled(!state.isGravitySensorEnabled());
+      updateGravityButtonText();
+   }
+   public void updateGravityButtonText() {
+      GlobalState state = StateMachine.instance().getState(GlobalState.class);
+      gravitySensorButton.setText("Gravity Sensor: " + (state.isGravitySensorEnabled() ? "Enabled" : "Disabled"));
    }
    private void exitGame() {
       Gdx.app.exit();
@@ -143,6 +169,7 @@ public class MenuStage extends AbstractStage {
       seedButton.setColor(color);
       exitButton.setColor(color);
       title.setColor(color);
+      gravitySensorButton.setColor(color);
 
       Background.draw(color, false);
       super.draw();

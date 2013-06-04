@@ -1,6 +1,7 @@
 package eu32k.ludumdare.ld26;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
@@ -93,6 +94,8 @@ public class LudumDare26 extends SimpleGame {
       StateMachine.instance().getState(LevelWonState.class).setStage(finishStage);
       StateMachine.instance().getState(LevelPauseState.class).setStage(pauseStage);
       StateMachine.instance().enterState(MenuState.class);
+      GlobalState gs = StateMachine.instance().getState(GlobalState.class);
+      gs.setGravitySensorEnabled(Gdx.app.getType() == ApplicationType.Android);
    }
 
    @Override

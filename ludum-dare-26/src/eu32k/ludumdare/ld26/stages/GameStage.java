@@ -267,7 +267,8 @@ public class GameStage extends AbstractStage {
       }
       float factor = 1.0f;
 
-      if (Gdx.input.getPitch() != 0.0f || Gdx.input.getRoll() != 0.0f) {
+      
+      if (globalState.isGravitySensorEnabled() && ( Gdx.input.getPitch() != 0.0f || Gdx.input.getRoll() != 0.0f)) {
          float x = MathUtils.clamp(-Gdx.input.getPitch(), -20.0f, 20.0f);
 
          float y = MathUtils.clamp(Gdx.input.getRoll(), -20.0f, 20.0f);
