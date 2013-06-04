@@ -19,12 +19,6 @@ public class FinishStage extends AbstractStage {
 
    public FinishStage(EffectsManager effects) {
       this.effects = effects;
-   }
-
-   @Override
-   public void draw() {
-      clear();
-
       Map<String, Integer> genericStatistics = StateMachine.instance().getState(PlayerState.class).genericStatistics;
 
       Table table = new Table();
@@ -40,8 +34,16 @@ public class FinishStage extends AbstractStage {
          table.add(valueField).fill().pad(4);
          table.row();
       }
-
+      Label tap = new Label("Tap screen or press key to continue", skin);
+      list.add(tap);
+      table.add(tap).fill().colspan(2);
       addActor(table);
+  }
+   
+   @Override
+   public void draw() {
+      clear();
+
 
       Color color = effects.getCurrentColor();
       Background.draw(color, false);

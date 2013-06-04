@@ -249,10 +249,17 @@ public class LevelState extends GameState {
    }
 
    private void findSuitableGoalPosition(Vector2 p, Vector2 g, Vector2 tmp) {
+      int retries = 0;
       do {
          g.set(random.nextInt(width), random.nextInt(height));
          tmp.set(g);
-      } while (tmp.sub(p).len() < 1.5f);
+      } while (tmp.sub(p).len() < 1.5f && retries++ < 20);
+      if(retries >= 20){
+         do {
+            g.set(random.nextInt(width), random.nextInt(height));
+         } while (g.x == p.x && g.y == p.y);
+
+      }
    }
 
    public void repositionGoal() {
