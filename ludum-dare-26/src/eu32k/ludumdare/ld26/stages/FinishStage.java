@@ -18,7 +18,9 @@ import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class FinishStage extends AbstractStage {
 
+   private static final String TAP_MESSAGE = "Tap screen or press key to continue";
    private List<Label> list = new ArrayList<Label>();
+   private Label tapLabel;
 
    public FinishStage(EffectsManager effects) {
       this.effects = effects;
@@ -44,10 +46,10 @@ public class FinishStage extends AbstractStage {
          table.add(valueField).fill().pad(4);
          table.row();
       }
-      Label tap = new Label("Tap screen or press key to continue", skin);
-      list.add(tap);
+      tapLabel = new Label("", skin);
+      list.add(tapLabel);
       table.row();
-      table.add(tap).fill().colspan(2);
+      table.add(tapLabel).fill().colspan(2);
       addActor(table);
    }
    
@@ -58,6 +60,7 @@ public class FinishStage extends AbstractStage {
             StateMachine.instance().enterState(MenuState.class);
             
          }
+         tapLabel.setText(TAP_MESSAGE);
       }
       
       Color color = effects.getCurrentColor();
