@@ -71,7 +71,7 @@ public class FinishStage extends AbstractStage {
       table.row();
       table.add(emptyLabel).fill().colspan(2);
       table.row();
-      table.add(tapLabel).fill().colspan(2);
+      table.add(tapLabel).fill().padTop(16).colspan(2);
       tapLabel.setText("");
       addActor(table);
    }

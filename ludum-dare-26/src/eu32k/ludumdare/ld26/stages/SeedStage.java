@@ -206,7 +206,7 @@ public class SeedStage extends AbstractStage {
       table.add(spanLabel).fill();
       table.add(emptyLabel);
       table.row();
-      table.add(exitButton).fill().pad(padding).colspan(4);
+      table.add(exitButton).fill().pad(padding).padTop(padding * 4).colspan(4);
 
       table.row();
       //table.setWidth(2f);
