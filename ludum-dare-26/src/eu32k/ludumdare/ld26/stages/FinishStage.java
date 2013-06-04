@@ -21,10 +21,12 @@ public class FinishStage extends AbstractStage {
    private static final String TAP_MESSAGE = "Tap screen or press key to continue";
    private List<Label> list = new ArrayList<Label>();
    private Label tapLabel;
+   private Label emptyLabel;
 
    public FinishStage(EffectsManager effects) {
       this.effects = effects;
-
+      tapLabel = new Label("", skin);
+      emptyLabel = new Label("                                                  ", skin);
       
       setStatistics();
   }
@@ -46,10 +48,12 @@ public class FinishStage extends AbstractStage {
          table.add(valueField).fill().pad(4);
          table.row();
       }
-      tapLabel = new Label("", skin);
       list.add(tapLabel);
       table.row();
+      table.add(emptyLabel).fill().colspan(2);
+      table.row();
       table.add(tapLabel).fill().colspan(2);
+      tapLabel.setText("");
       addActor(table);
    }
    
