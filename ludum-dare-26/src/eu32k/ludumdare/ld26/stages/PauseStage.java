@@ -1,6 +1,7 @@
 package eu32k.ludumdare.ld26.stages;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -15,10 +16,10 @@ import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.rendering.Background;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.MenuState;
+import eu32k.ludumdare.ld26.state.SeedState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class PauseStage extends AbstractStage {
-
    private Image title;
    private TextButton continueButton;
    private TextButton menuButton;
@@ -35,14 +36,12 @@ public class PauseStage extends AbstractStage {
       levelState = StateMachine.instance().getState(LevelState.class);
 
       title = new Image(new TextureRegion(Assets.MANAGER.get("textures/title.png", Texture.class), 256, 64));
-
+      final PauseStage stage = this;
       continueButton = new TextButton("Continue", skin);
       continueButton.addListener(new InputListener() {
          @Override
          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            levelState.setRunning(true);
-            levelState.setPaused(false);
-            StateMachine.instance().enterState(LevelState.class);
+            stage.doContinue();
             return false;
          }
       });
@@ -51,9 +50,7 @@ public class PauseStage extends AbstractStage {
       menuButton.addListener(new InputListener() {
          @Override
          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            levelState.setRunning(false);
-            levelState.setPaused(true);
-            StateMachine.instance().enterState(MenuState.class);
+            stage.doExit();
             return false;
          }
       });
@@ -84,8 +81,27 @@ public class PauseStage extends AbstractStage {
       addActor(table);
    }
 
+   public void doContinue() {
+      levelState.setRunning(true);
+      levelState.setPaused(false);
+      StateMachine.instance().enterState(LevelState.class);
+   }
+
+   public void doExit() {
+      levelState.setRunning(false);
+      levelState.setPaused(true);
+      StateMachine.instance().enterState(MenuState.class);
+   }
+
    @Override
    public void draw() {
+      if (getRunningTimeSinceEnter() > 0.5f) {
+         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            doContinue();
+         } else if (Gdx.input.isKeyPressed(Input.Keys.Q) || Gdx.input.isKeyPressed(Input.Keys.X)) {
+            doExit();
+         }
+      }
       Color color = effects.getCurrentColor();
       continueButton.setColor(color);
       menuButton.setColor(color);

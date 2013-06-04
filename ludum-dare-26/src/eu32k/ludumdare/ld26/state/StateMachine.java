@@ -3,6 +3,8 @@ package eu32k.ludumdare.ld26.state;
 import java.util.HashMap;
 import java.util.Map;
 
+import eu32k.ludumdare.ld26.stages.AbstractStage;
+
 public class StateMachine {
 
    private static StateMachine INSTANCE;
@@ -53,12 +55,13 @@ public class StateMachine {
    }
 
    private <T extends GameState> void changeCurrentState(Class<T> stateClass) {
-      if (current != null) {
-         current.leave();
+      GameState old = current;
+      if (old != null) {
+         old.leave();
       }
       current = states.get(stateClass);
       if (current != null) {
-         current.enter();
+         current.doEnter(old);
       }
    }
 

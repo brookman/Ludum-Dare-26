@@ -105,10 +105,10 @@ public class LudumDare26 extends SimpleGame {
       Gdx.gl.glEnable(GL20.GL_BLEND);
       Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-      Stage current = StateMachine.instance().getCurrentState().getStage();
+      AbstractStage current = StateMachine.instance().getCurrentState().getStage();
       if (current != null) {
          Gdx.input.setInputProcessor(current);
-         current.draw();
+         current.drawStage();
       }
       SoundButton.draw();
 

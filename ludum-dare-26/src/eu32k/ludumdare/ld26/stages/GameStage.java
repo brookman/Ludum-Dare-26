@@ -42,10 +42,10 @@ public class GameStage extends AbstractStage {
    private PlayerState playerState;
 
    private GlobalState globalState;
-   private float pauseTimer;
 
    private boolean quickRetry;
    private float retryTimer;
+   
 
    public GameStage(EffectsManager effects) {
       this.effects = effects;
@@ -78,7 +78,6 @@ public class GameStage extends AbstractStage {
 
       printLevelProgress();
 
-      pauseTimer -= delta;
 
       if (running) {
 
@@ -93,14 +92,7 @@ public class GameStage extends AbstractStage {
          checkGameConditions(delta);
 
          updatePlayerInput(delta);
-      } else if (levelState.isPaused()) {
-         drawPauseScreen();
-         if (pausedPressed()) {
-            globalState.getEvents().enqueue(globalState.pool().events().gameplayEvent(GenericEvent.GAMEEVENT_TYPE_RESUME));
-            return;
-         }
-
-      }
+      } 
       Color mainColor = effects.getCurrentColor();
       Color inverseColor = new Color();
       inverseColor.r = 1f - mainColor.r;
@@ -218,10 +210,10 @@ public class GameStage extends AbstractStage {
 
       if (pausedPressed()) {
          levelState.getEvents().enqueue(globalState.pool().events().gameplayEvent(GenericEvent.GAMEEVENT_TYPE_PAUSE));
+         resetEnteredTimer();
          return;
       }
 
-      boolean escapePressed = Gdx.input.isKeyPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyPressed(Input.Keys.MENU);
 
       Vector2 velocity = TempVector2.tmp.set(0.0f, 0.0f);
       if (up) {
@@ -259,9 +251,6 @@ public class GameStage extends AbstractStage {
       velocity.scl(delta * factor);
       player.move(velocity.x, velocity.y, level.getTiles());
 
-      if (escapePressed) {
-         StateMachine.instance().enterState(LevelPauseState.class);
-      }
    }
 
    private void handleRetry(float delta, boolean retry) {
@@ -279,14 +268,10 @@ public class GameStage extends AbstractStage {
    }
 
    private boolean pausedPressed() {
-      boolean pause = Gdx.input.isKeyPressed(Input.Keys.P);
-      if (pause) {
-         if (pauseTimer <= 0) {
-            pauseTimer = 0.5f;
-            return true;
-         }
+      if(getRunningTimeSinceEnter() < 0.5f){
+         return false;
       }
-      return false;
+      return Gdx.input.isKeyPressed(Input.Keys.P) || Gdx.input.isKeyPressed(Input.Keys.ESCAPE);
    }
 
    private void setPlayerAndGoalTile() {

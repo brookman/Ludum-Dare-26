@@ -32,12 +32,18 @@ public abstract class GameState {
 	
 	public abstract void init();
 
+	
+	public void doEnter(GameState oldState){
+      stage.resetEnteredTimer();
+	   enter();
+	}
+	
 	public void enter() {
 	}
 	
 	public abstract void destroy();
 
-   public Stage getStage() {
+   public AbstractStage getStage() {
       return stage;
    }
 

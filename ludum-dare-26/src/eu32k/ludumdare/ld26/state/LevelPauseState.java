@@ -1,5 +1,7 @@
 package eu32k.ludumdare.ld26.state;
 
+import eu32k.ludumdare.ld26.stages.PauseStage;
+
 
 public class LevelPauseState extends GameState {
 
@@ -15,6 +17,8 @@ public class LevelPauseState extends GameState {
       LevelState levelState = StateMachine.instance().getState(LevelState.class);
       levelState .setRunning(false);
       levelState.setPaused(true);
+      PauseStage pauseStage = (PauseStage) stage;
+      pauseStage.resetEnteredTimer();
    }
 
 	@Override
