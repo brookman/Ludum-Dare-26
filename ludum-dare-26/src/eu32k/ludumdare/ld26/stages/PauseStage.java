@@ -96,7 +96,7 @@ public class PauseStage extends AbstractStage {
    @Override
    public void draw() {
       if (getRunningTimeSinceEnter() > 0.5f) {
-         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyPressed(Input.Keys.P)) {
             doContinue();
          } else if (Gdx.input.isKeyPressed(Input.Keys.Q) || Gdx.input.isKeyPressed(Input.Keys.X)) {
             doExit();
