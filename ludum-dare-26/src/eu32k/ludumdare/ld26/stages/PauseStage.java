@@ -192,6 +192,7 @@ public class PauseStage extends AbstractStage {
       continueButton.setColor(color);
       menuButton.setColor(color);
       exitButton.setColor(color);
+      gravityButton.setColor(color);
       title.setColor(color);
 
       Background.draw(color, false);
