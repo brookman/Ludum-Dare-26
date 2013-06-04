@@ -74,7 +74,7 @@ public class MenuStage extends AbstractStage {
 
       int padding = 4;
 
-      table.add(title).fill().pad(padding);
+      table.add(title).center().pad(padding);
       table.row();
       table.add(challengeButton).fill().pad(padding);
       table.row();

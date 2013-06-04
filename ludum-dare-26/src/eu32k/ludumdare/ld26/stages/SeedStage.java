@@ -56,7 +56,8 @@ public class SeedStage extends AbstractStage {
    private Label seedLabel;
    private Label levelCountLabel;
    private Label startingSpeedLabel;
-
+   private Label spanLabel;
+   private Label emptyLabel;
    public SeedStage(EffectsManager effects) {
       this.effects = effects;
 
@@ -122,7 +123,8 @@ public class SeedStage extends AbstractStage {
       levelCountLabel = new Label("", skin);
       startingSpeedLabel = new Label("", skin);
       seedLabel = new Label("Seed", skin);
-
+      spanLabel = new Label("                                          ", skin);
+      emptyLabel = new Label("", skin);
       seed = new TextField("31337", skin) {
          @Override
          public float getPrefWidth() {
@@ -141,7 +143,7 @@ public class SeedStage extends AbstractStage {
 
       int padding = 4;
 
-      table.add(title).fill().pad(padding).colspan(2);
+      table.add(title).center().pad(padding).colspan(4);
       table.row();
       table.add(challengeButton).fill().pad(padding).colspan(4);
       table.row();
@@ -163,7 +165,11 @@ public class SeedStage extends AbstractStage {
       table.row();
       table.add(seedLabel).pad(padding);
       table.add(seed).fill().pad(padding).colspan(3);
-
+      table.row();
+      table.add(spanLabel).fill();
+      table.add(emptyLabel);
+      table.add(spanLabel).fill();
+      table.add(emptyLabel);
       table.row();
       table.add(exitButton).fill().pad(padding).colspan(4);
 
