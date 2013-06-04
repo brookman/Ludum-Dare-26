@@ -61,7 +61,7 @@ public class StateMachine {
       }
       current = states.get(stateClass);
       if (current != null) {
-         current.doEnter(old);
+         current.enter();
       }
    }
 

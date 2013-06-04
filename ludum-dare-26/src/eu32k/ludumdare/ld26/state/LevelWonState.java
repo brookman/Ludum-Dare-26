@@ -16,6 +16,7 @@ public class LevelWonState extends GameState {
    public void enter() {
       FinishStage fs = (FinishStage) getStage();
       fs.setStatistics();
+      fs.resetRunningTime();
    }
 
 	@Override

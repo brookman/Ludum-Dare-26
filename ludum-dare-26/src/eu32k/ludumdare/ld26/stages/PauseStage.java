@@ -12,11 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import eu32k.libgdx.common.Assets;
+import eu32k.libgdx.common.KeyPressEvent;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.rendering.Background;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.MenuState;
-import eu32k.ludumdare.ld26.state.SeedState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class PauseStage extends AbstractStage {
@@ -25,10 +25,54 @@ public class PauseStage extends AbstractStage {
    private TextButton menuButton;
    private TextButton exitButton;
 
+   private KeyPressEvent keyPause;
+   private KeyPressEvent keyPause2;
+   private KeyPressEvent keyMainMenu;
+   private KeyPressEvent keyMainMenu2;
+   
    private LevelState levelState;
 
    public PauseStage(EffectsManager effects) {
       this.effects = effects;
+      
+      keyPause = new KeyPressEvent(Input.Keys.ESCAPE) {         
+         @Override
+         public void onRelease() {
+            doContinue();
+         }
+         @Override
+         public void onPress() {
+         }
+      };
+      keyPause2 = new KeyPressEvent(Input.Keys.P) {         
+         @Override
+         public void onRelease() {
+            doContinue();
+         }
+         @Override
+         public void onPress() {
+         }
+      };
+      
+      keyMainMenu = new KeyPressEvent(Input.Keys.X) {
+         @Override
+         public void onRelease() {
+            doExit();
+         }       
+         @Override
+         public void onPress() {
+         }
+      };
+
+      keyMainMenu2 = new KeyPressEvent(Input.Keys.Q) {
+         @Override
+         public void onRelease() {
+            doExit();
+         }       
+         @Override
+         public void onPress() {
+         }
+      };
 
       Table table = new Table();
       table.setFillParent(true);
@@ -36,12 +80,11 @@ public class PauseStage extends AbstractStage {
       levelState = StateMachine.instance().getState(LevelState.class);
 
       title = new Image(new TextureRegion(Assets.MANAGER.get("textures/title.png", Texture.class), 256, 64));
-      final PauseStage stage = this;
       continueButton = new TextButton("Continue", skin);
       continueButton.addListener(new InputListener() {
          @Override
          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            stage.doContinue();
+            doContinue();
             return false;
          }
       });
@@ -50,7 +93,7 @@ public class PauseStage extends AbstractStage {
       menuButton.addListener(new InputListener() {
          @Override
          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            stage.doExit();
+            doExit();
             return false;
          }
       });
@@ -95,13 +138,10 @@ public class PauseStage extends AbstractStage {
 
    @Override
    public void draw() {
-      if (getRunningTimeSinceEnter() > 0.5f) {
-         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyPressed(Input.Keys.P)) {
-            doContinue();
-         } else if (Gdx.input.isKeyPressed(Input.Keys.Q) || Gdx.input.isKeyPressed(Input.Keys.X)) {
-            doExit();
-         }
-      }
+      keyMainMenu.update();
+      keyMainMenu2.update();
+      keyPause.update();
+      keyPause2.update();
       Color color = effects.getCurrentColor();
       continueButton.setColor(color);
       menuButton.setColor(color);

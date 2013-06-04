@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
+import eu32k.libgdx.common.KeyPressEvent;
 import eu32k.libgdx.common.TempVector2;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.effects.IRunningEffect;
@@ -23,7 +24,6 @@ import eu32k.ludumdare.ld26.state.GameState;
 import eu32k.ludumdare.ld26.state.GlobalState;
 import eu32k.ludumdare.ld26.state.LevelInitState;
 import eu32k.ludumdare.ld26.state.LevelLosingState;
-import eu32k.ludumdare.ld26.state.LevelPauseState;
 import eu32k.ludumdare.ld26.state.LevelState;
 import eu32k.ludumdare.ld26.state.PlayerState;
 import eu32k.ludumdare.ld26.state.StateMachine;
@@ -42,14 +42,55 @@ public class GameStage extends AbstractStage {
    private PlayerState playerState;
 
    private GlobalState globalState;
-
-   private boolean quickRetry;
-   private float retryTimer;
    
-
+   private KeyPressEvent keyPause;
+   private KeyPressEvent keyPause2;
+   private KeyPressEvent keyRetry;
+   
    public GameStage(EffectsManager effects) {
       this.effects = effects;
 
+      keyPause = new KeyPressEvent(Input.Keys.P) {
+         
+         @Override
+         public void onRelease() {
+            // TODO Auto-generated method stub
+            pause();
+         }
+         
+         @Override
+         public void onPress() {
+            // TODO Auto-generated method stub
+            
+         }
+      };
+      keyPause2 = new KeyPressEvent(Input.Keys.ESCAPE) {
+         
+         @Override
+         public void onRelease() {
+            pause();            
+         }
+         
+         @Override
+         public void onPress() {
+            // TODO Auto-generated method stub
+            
+         }
+      };
+      keyRetry = new KeyPressEvent(Input.Keys.R){
+         
+         @Override
+         public void onRelease() {
+            retry();            
+         }
+         
+         @Override
+         public void onPress() {
+            // TODO Auto-generated method stub
+            
+         }
+      };
+      
       new GameEventHandler();
 
       levelState = StateMachine.instance().getState(LevelState.class);
@@ -65,10 +106,14 @@ public class GameStage extends AbstractStage {
 
    @Override
    public void draw() {
-
+      
       boolean running = levelState.isRunning();
       float delta = Gdx.graphics.getDeltaTime();
 
+      keyRetry.update();
+      keyPause.update();
+      keyPause2.update();
+      
       if (!levelState.ready()) {
          return;
       }
@@ -81,7 +126,7 @@ public class GameStage extends AbstractStage {
 
       if (running) {
 
-         clearPauseScreen();
+//         clearPauseScreen();
 
          repositionGoal();
 
@@ -124,6 +169,7 @@ public class GameStage extends AbstractStage {
       renderer.render(delta, getCamera(), level.getTiles(), player, levelState.getGoal(), mainColor, playerColor, inverseColor);
    }
 
+   /*
    private void drawPauseScreen() {
       renderer.getTextRenderer().addText("paused", "Paused", Gdx.graphics.getWidth() / 2 - 48, Gdx.graphics.getHeight() / 2 + 10);
    }
@@ -131,7 +177,7 @@ public class GameStage extends AbstractStage {
    private void clearPauseScreen() {
       renderer.getTextRenderer().removeText("paused");
    }
-
+*/
    private void printLevelProgress() {
       renderer.getTextRenderer().addText("level", "Level " + (levelState.getCurrentLevelIndex() + 1) + " / " + levelState.getLevels().size(), 30, Gdx.graphics.getHeight() - 30);
    }
@@ -204,15 +250,6 @@ public class GameStage extends AbstractStage {
       boolean down = Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN);
       boolean left = Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT);
       boolean right = Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT);
-      boolean retry = Gdx.input.isKeyPressed(Input.Keys.R) && !quickRetry;
-
-      handleRetry(delta, retry);
-
-      if (pausedPressed()) {
-         levelState.getEvents().enqueue(globalState.pool().events().gameplayEvent(GenericEvent.GAMEEVENT_TYPE_PAUSE));
-         resetEnteredTimer();
-         return;
-      }
 
 
       Vector2 velocity = TempVector2.tmp.set(0.0f, 0.0f);
@@ -253,26 +290,11 @@ public class GameStage extends AbstractStage {
 
    }
 
-   private void handleRetry(float delta, boolean retry) {
-      retryTimer += delta;
-      if (retry) {
-         retry();
-         quickRetry = true;
-         return;
-      } else {
-         if (retryTimer > 0.05f) {
-            retryTimer = 0;
-         }
-      }
-      quickRetry = false;
+   private void pause() {
+      levelState.getEvents().enqueue(globalState.pool().events().gameplayEvent(GenericEvent.GAMEEVENT_TYPE_PAUSE));
    }
 
-   private boolean pausedPressed() {
-      if(getRunningTimeSinceEnter() < 0.5f){
-         return false;
-      }
-      return Gdx.input.isKeyPressed(Input.Keys.P) || Gdx.input.isKeyPressed(Input.Keys.ESCAPE);
-   }
+
 
    private void setPlayerAndGoalTile() {
       float px = player.position.x;

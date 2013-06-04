@@ -8,13 +8,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
 
 import eu32k.libgdx.common.Assets;
+import eu32k.libgdx.common.KeyPressEvent;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.level.LevelConfig;
 import eu32k.ludumdare.ld26.level.LevelConfigSequence;
@@ -31,9 +29,39 @@ public class MenuStage extends AbstractStage {
    private TextButton seedButton;
    private TextButton exitButton;
 
+   private KeyPressEvent keyStartGame;
+   private KeyPressEvent keySeed;
+   private KeyPressEvent keyExit;
+   
    public MenuStage(EffectsManager effects) {
       this.effects = effects;
 
+      keyStartGame = new KeyPressEvent(Input.Keys.ENTER) {
+         @Override
+         public void onRelease() {
+            challengeMode();
+         }
+         @Override
+         public void onPress() {}
+      };
+      
+      keySeed = new KeyPressEvent(Input.Keys.S) {
+         @Override
+         public void onRelease() {
+            enterSeedMode();
+         }
+         @Override
+         public void onPress() {}
+      };
+      keyExit = new KeyPressEvent(Input.Keys.ESCAPE) {
+         @Override
+         public void onRelease() {
+            exitGame();
+         }
+         @Override
+         public void onPress() {}
+      };
+      
       Table table = new Table();
       table.setFillParent(true);
       table.center();
@@ -55,7 +83,7 @@ public class MenuStage extends AbstractStage {
          @Override
          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             try {
-               StateMachine.instance().enterState(SeedState.class);
+               enterSeedMode();
             } catch (Exception e) {
                // ignore
             }
@@ -67,9 +95,10 @@ public class MenuStage extends AbstractStage {
       exitButton.addListener(new InputListener() {
          @Override
          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            Gdx.app.exit();
+            exitGame();
             return false;
          }
+
       });
 
       int padding = 4;
@@ -90,17 +119,25 @@ public class MenuStage extends AbstractStage {
 
       addActor(table);
    }
+   private void exitGame() {
+      Gdx.app.exit();
+   }
 
    @Override
    public void draw() {
+/*
       if (getRunningTimeSinceEnter() >= 0.5f) {
          if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
             challengeMode();
          } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            StateMachine.instance().enterState(SeedState.class);
+            enterSeedMode();
             // StateseedMode();
          }
       }
+      */
+      keyStartGame.update();
+      keySeed.update();
+      keyExit.update();
       Color color = effects.getCurrentColor();
       challengeButton.setColor(color);
       seedButton.setColor(color);
@@ -109,6 +146,10 @@ public class MenuStage extends AbstractStage {
 
       Background.draw(color, false);
       super.draw();
+   }
+
+   private void enterSeedMode() {
+      StateMachine.instance().enterState(SeedState.class);
    }
 
    private void startGame(long seed, LevelConfig from, LevelConfig to, int levelCount) {

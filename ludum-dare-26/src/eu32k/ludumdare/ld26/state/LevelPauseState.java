@@ -18,7 +18,6 @@ public class LevelPauseState extends GameState {
       levelState .setRunning(false);
       levelState.setPaused(true);
       PauseStage pauseStage = (PauseStage) stage;
-      pauseStage.resetEnteredTimer();
    }
 
 	@Override

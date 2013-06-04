@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
+import eu32k.libgdx.common.KeyPressEvent;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.rendering.Background;
 import eu32k.ludumdare.ld26.state.MenuState;
@@ -17,20 +18,38 @@ import eu32k.ludumdare.ld26.state.PlayerState;
 import eu32k.ludumdare.ld26.state.StateMachine;
 
 public class FinishStage extends AbstractStage {
-
+   private float runningTime;
+   
+   
    private static final String TAP_MESSAGE = "Tap screen or press key to continue";
    private List<Label> list = new ArrayList<Label>();
    private Label tapLabel;
    private Label emptyLabel;
 
+   private KeyPressEvent keyTap;
+   
    public FinishStage(EffectsManager effects) {
       this.effects = effects;
       tapLabel = new Label("", skin);
       emptyLabel = new Label("                                                  ", skin);
       
       setStatistics();
+      keyTap = new KeyPressEvent(Input.Keys.ANY_KEY) {
+         
+         @Override
+         public void onRelease() {
+            backToMainMenu();            
+         }
+         @Override
+         public void onPress() {            
+         }
+      };
   }
 
+   public void resetRunningTime(){
+      runningTime = 0f;
+   }
+   
    public void setStatistics() {
       clear();
       Map<String, Integer> genericStatistics = StateMachine.instance().getState(PlayerState.class).genericStatistics;
@@ -59,10 +78,12 @@ public class FinishStage extends AbstractStage {
    
    @Override
    public void draw() {
-      if(getRunningTimeSinceEnter() > 2f){
-         if(Gdx.input.isTouched() || Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)){
-            StateMachine.instance().enterState(MenuState.class);
-            
+      keyTap.update();
+      runningTime += Gdx.graphics.getDeltaTime();
+      if(runningTime > 2f){
+         if(Gdx.input.isTouched()){
+            backToMainMenu();
+
          }
          tapLabel.setText(TAP_MESSAGE);
       }
@@ -73,5 +94,9 @@ public class FinishStage extends AbstractStage {
          label.setColor(color);
       }
       super.draw();
+   }
+
+   private void backToMainMenu() {
+      StateMachine.instance().enterState(MenuState.class);
    }
 }

@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
 
 import eu32k.libgdx.common.Assets;
+import eu32k.libgdx.common.KeyPressEvent;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.level.LevelConfig;
 import eu32k.ludumdare.ld26.level.LevelConfigSequence;
@@ -58,9 +59,43 @@ public class SeedStage extends AbstractStage {
    private Label startingSpeedLabel;
    private Label spanLabel;
    private Label emptyLabel;
+   
+   private KeyPressEvent keyBack;
+   private KeyPressEvent keyStart;
+   
    public SeedStage(EffectsManager effects) {
       this.effects = effects;
 
+      keyBack = new KeyPressEvent(Input.Keys.ESCAPE) {
+         
+         @Override
+         public void onRelease() {
+            backToMainMenu();
+         }
+         
+         @Override
+         public void onPress() {
+            // TODO Auto-generated method stub
+            
+         }
+      };
+      
+      keyStart = new KeyPressEvent(Input.Keys.ENTER) {
+         
+         @Override
+         public void onRelease() {
+            seedMode();
+         }
+         
+         @Override
+         public void onPress() {
+            
+            
+         }
+      };
+      
+      
+      
       Table table = new Table();
       table.setFillParent(true);
       table.center();
@@ -84,7 +119,7 @@ public class SeedStage extends AbstractStage {
       exitButton.addListener(new InputListener() {
          @Override
          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            StateMachine.instance().enterState(MenuState.class);
+            backToMainMenu();
 
             return false;
          }
@@ -223,11 +258,9 @@ public class SeedStage extends AbstractStage {
 
    @Override
    public void draw() {
-      if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-         StateMachine.instance().enterState(MenuState.class);
-      } else if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
-          seedMode();
-      }
+
+      keyStart.update();
+      keyBack.update();
       Color color = effects.getCurrentColor();
       challengeButton.setColor(color);
       exitButton.setColor(color);
@@ -279,6 +312,10 @@ public class SeedStage extends AbstractStage {
       to.tileSpawnInterval = TO_SPAWNINTERVAL;
       to.tileFadeTime = TO_TILEFADETIME;
       startGame(seedValue, from, to, (int)levelCountSlider.getValue());
+   }
+
+   private void backToMainMenu() {
+      StateMachine.instance().enterState(MenuState.class);
    }
 
 }

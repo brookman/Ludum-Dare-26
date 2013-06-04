@@ -108,7 +108,7 @@ public class LudumDare26 extends SimpleGame {
       AbstractStage current = StateMachine.instance().getCurrentState().getStage();
       if (current != null) {
          Gdx.input.setInputProcessor(current);
-         current.drawStage();
+         current.draw();
       }
       SoundButton.draw();
 
