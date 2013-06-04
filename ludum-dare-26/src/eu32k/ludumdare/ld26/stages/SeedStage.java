@@ -143,32 +143,29 @@ public class SeedStage extends AbstractStage {
 
       table.add(title).fill().pad(padding).colspan(2);
       table.row();
-      table.add(challengeButton).fill().pad(padding).colspan(2);
+      table.add(challengeButton).fill().pad(padding).colspan(4);
       table.row();
       
       table.add(minWidthLabel).pad(padding);
       table.add(minWidthSlider).fill().pad(padding);
-      table.row();
       table.add(maxWidthLabel).pad(padding);
       table.add(maxWidthSlider).fill().pad(padding);
       table.row();
       table.add(minHeightLabel).pad(padding);
       table.add(minHeightSlider).fill().pad(padding);
-      table.row();
       table.add(maxHeightLabel).pad(padding);
       table.add(maxHeightSlider).fill().pad(padding);
       table.row();
       table.add(levelCountLabel).pad(padding);
       table.add(levelCountSlider).fill().pad(padding);
-      table.row();
       table.add(startingSpeedLabel).pad(padding);
       table.add(startingSpeedSlider).fill().pad(padding);
       table.row();
       table.add(seedLabel).pad(padding);
-      table.add(seed).fill().pad(padding);
+      table.add(seed).fill().pad(padding).colspan(3);
 
       table.row();
-      table.add(exitButton).fill().pad(padding).colspan(2);
+      table.add(exitButton).fill().pad(padding).colspan(4);
 
       table.row();
       //table.setWidth(2f);
