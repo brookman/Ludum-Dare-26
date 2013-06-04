@@ -93,11 +93,13 @@ public class MenuStage extends AbstractStage {
 
    @Override
    public void draw() {
-      if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
-         challengeMode();
-      } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-         StateMachine.instance().enterState(SeedState.class);
-         //StateseedMode();
+      if (getRunningTimeSinceEnter() >= 0.5f) {
+         if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
+            challengeMode();
+         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            StateMachine.instance().enterState(SeedState.class);
+            // StateseedMode();
+         }
       }
       Color color = effects.getCurrentColor();
       challengeButton.setColor(color);
@@ -137,7 +139,5 @@ public class MenuStage extends AbstractStage {
       to.tileFadeTime = 0.1f;
       startGame(63463333, from, to, 25);
    }
-
-  
 
 }

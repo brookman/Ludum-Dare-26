@@ -1,5 +1,7 @@
 package eu32k.ludumdare.ld26.state;
 
+import eu32k.ludumdare.ld26.stages.FinishStage;
+
 
 
 public class LevelWonState extends GameState {
@@ -12,7 +14,8 @@ public class LevelWonState extends GameState {
 	}
    
    public void enter() {
-      stage.getEffects().stopSong(null);
+      FinishStage fs = (FinishStage) getStage();
+      fs.setStatistics();
    }
 
 	@Override
