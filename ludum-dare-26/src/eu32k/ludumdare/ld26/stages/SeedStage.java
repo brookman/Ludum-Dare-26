@@ -1,6 +1,5 @@
 package eu32k.ludumdare.ld26.stages;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -62,6 +61,7 @@ public class SeedStage extends AbstractStage {
    
    private KeyPressEvent keyBack;
    private KeyPressEvent keyStart;
+   private KeyPressEvent keyAndroidBack;
    
    public SeedStage(EffectsManager effects) {
       this.effects = effects;
@@ -94,7 +94,20 @@ public class SeedStage extends AbstractStage {
          }
       };
       
-      
+      keyAndroidBack = new KeyPressEvent(Input.Keys.BACK) {
+         
+         @Override
+         public void onRelease() {
+            backToMainMenu();
+         }
+         
+         @Override
+         public void onPress() {
+            // TODO Auto-generated method stub
+            
+         }
+      };
+     
       
       Table table = new Table();
       table.setFillParent(true);
@@ -261,6 +274,7 @@ public class SeedStage extends AbstractStage {
 
       keyStart.update();
       keyBack.update();
+      keyAndroidBack.update();
       Color color = effects.getCurrentColor();
       challengeButton.setColor(color);
       exitButton.setColor(color);

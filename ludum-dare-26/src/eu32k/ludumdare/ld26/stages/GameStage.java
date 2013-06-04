@@ -47,6 +47,9 @@ public class GameStage extends AbstractStage {
    private KeyPressEvent keyPause2;
    private KeyPressEvent keyRetry;
    
+   private KeyPressEvent keyAndroidBack;
+   private KeyPressEvent keyAndroidMenu;
+   
    public GameStage(EffectsManager effects) {
       this.effects = effects;
 
@@ -90,6 +93,32 @@ public class GameStage extends AbstractStage {
             
          }
       };
+      keyAndroidBack = new KeyPressEvent(Input.Keys.BACK){
+         
+         @Override
+         public void onRelease() {
+            retry();            
+         }
+         
+         @Override
+         public void onPress() {
+            // TODO Auto-generated method stub
+            
+         }
+      };
+      keyAndroidMenu = new KeyPressEvent(Input.Keys.MENU) {
+         
+         @Override
+         public void onRelease() {
+            pause();            
+         }
+         
+         @Override
+         public void onPress() {
+            // TODO Auto-generated method stub
+            
+         }
+      };
       
       new GameEventHandler();
 
@@ -113,6 +142,8 @@ public class GameStage extends AbstractStage {
       keyRetry.update();
       keyPause.update();
       keyPause2.update();
+      keyAndroidBack.update();
+      keyAndroidMenu.update();
       
       if (!levelState.ready()) {
          return;

@@ -38,6 +38,9 @@ public class MenuStage extends AbstractStage {
    private KeyPressEvent keySeed;
    private KeyPressEvent keyExit;
    
+   private KeyPressEvent keyAndroidBack;
+   
+   
    public MenuStage(EffectsManager effects) {
       this.effects = effects;
 
@@ -59,6 +62,14 @@ public class MenuStage extends AbstractStage {
          public void onPress() {}
       };
       keyExit = new KeyPressEvent(Input.Keys.ESCAPE) {
+         @Override
+         public void onRelease() {
+            exitGame();
+         }
+         @Override
+         public void onPress() {}
+      };
+      keyAndroidBack = new KeyPressEvent(Input.Keys.BACK) {
          @Override
          public void onRelease() {
             exitGame();
@@ -164,6 +175,7 @@ public class MenuStage extends AbstractStage {
       keyStartGame.update();
       keySeed.update();
       keyExit.update();
+      keyAndroidBack.update();
       Color color = effects.getCurrentColor();
       challengeButton.setColor(color);
       seedButton.setColor(color);

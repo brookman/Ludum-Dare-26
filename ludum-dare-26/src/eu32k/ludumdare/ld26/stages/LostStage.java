@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import eu32k.libgdx.common.Assets;
+import eu32k.libgdx.common.KeyPressEvent;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.rendering.Background;
 import eu32k.ludumdare.ld26.state.LevelInitState;
@@ -26,9 +27,50 @@ public class LostStage extends AbstractStage {
    private TextButton seedButton;
    private TextButton exitButton;
 
+   private KeyPressEvent keyBackToMenu;
+   private KeyPressEvent keyRetry;
+   private KeyPressEvent keyAndroidBack;
+   private KeyPressEvent keyAndroidMenu;
+
    public LostStage(EffectsManager effects) {
       this.effects = effects;
 
+      keyBackToMenu = new KeyPressEvent(Input.Keys.ESCAPE) {
+         @Override
+         public void onRelease() {
+            backToMenu();
+         }
+         @Override
+         public void onPress() {
+         }
+      };
+      keyRetry = new KeyPressEvent(Input.Keys.R) {
+         @Override
+         public void onRelease() {
+            retry();
+         }
+         @Override
+         public void onPress() {
+         }
+      };
+      keyAndroidMenu= new KeyPressEvent(Input.Keys.MENU) {
+         @Override
+         public void onRelease() {
+            backToMenu();
+         }
+         @Override
+         public void onPress() {
+         }
+      };
+      keyAndroidBack = new KeyPressEvent(Input.Keys.BACK) {
+         @Override
+         public void onRelease() {
+            retry();
+         }
+         @Override
+         public void onPress() {
+         }
+      };
       Table table = new Table();
       table.setFillParent(true);
       table.center();
@@ -50,9 +92,10 @@ public class LostStage extends AbstractStage {
       seedButton.addListener(new InputListener() {
          @Override
          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            StateMachine.instance().enterState(MenuState.class);
+            backToMenu();
             return false;
          }
+
       });
 
       exitButton = new TextButton("Exit", skin);
@@ -79,12 +122,16 @@ public class LostStage extends AbstractStage {
       addActor(table);
    }
 
+   public void backToMenu() {
+      StateMachine.instance().enterState(MenuState.class);
+   }
+
    @Override
    public void draw() {
-      if (Gdx.input.isKeyPressed(Input.Keys.R)) {
-         retry();
-         return;
-      }
+      keyRetry.update();
+      keyBackToMenu.update();
+      keyAndroidBack.update();
+      keyAndroidMenu.update();
       Color color = effects.getCurrentColor();
       challengeButton.setColor(color);
       seedButton.setColor(color);

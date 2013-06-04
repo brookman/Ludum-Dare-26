@@ -32,6 +32,8 @@ public class PauseStage extends AbstractStage {
    private KeyPressEvent keyPause2;
    private KeyPressEvent keyMainMenu;
    private KeyPressEvent keyMainMenu2;
+   private KeyPressEvent keyAndroidBack;
+   private KeyPressEvent keyAndroidMenu;
    
    private LevelState levelState;
 
@@ -56,6 +58,15 @@ public class PauseStage extends AbstractStage {
          public void onPress() {
          }
       };
+      keyAndroidMenu = new KeyPressEvent(Input.Keys.MENU) {         
+         @Override
+         public void onRelease() {
+            doContinue();
+         }
+         @Override
+         public void onPress() {
+         }
+      };
       
       keyMainMenu = new KeyPressEvent(Input.Keys.X) {
          @Override
@@ -68,6 +79,15 @@ public class PauseStage extends AbstractStage {
       };
 
       keyMainMenu2 = new KeyPressEvent(Input.Keys.Q) {
+         @Override
+         public void onRelease() {
+            doExit();
+         }       
+         @Override
+         public void onPress() {
+         }
+      };
+      keyAndroidBack = new KeyPressEvent(Input.Keys.BACK) {
          @Override
          public void onRelease() {
             doExit();
@@ -166,6 +186,8 @@ public class PauseStage extends AbstractStage {
       keyMainMenu2.update();
       keyPause.update();
       keyPause2.update();
+      keyAndroidMenu.update();
+      keyAndroidBack.update();
       Color color = effects.getCurrentColor();
       continueButton.setColor(color);
       menuButton.setColor(color);

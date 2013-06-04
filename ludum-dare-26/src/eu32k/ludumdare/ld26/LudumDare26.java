@@ -67,6 +67,8 @@ public class LudumDare26 extends SimpleGame {
 
    @Override
    public void init() {
+      Gdx.input.setCatchBackKey(true);
+      Gdx.input.setCatchMenuKey(true);
       Preloader.preLoad();
 
       TileSprites.init();
