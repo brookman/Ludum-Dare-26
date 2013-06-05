@@ -44,6 +44,24 @@ public abstract class SimpleGame implements ApplicationListener, InputProcessor 
    }
 
    @Override
+   public void pause() {
+   }
+
+   @Override
+   public void resume() {
+      init();
+      Gdx.input.setInputProcessor(this);
+   }
+
+   @Override
+   public void dispose() {
+      for (Disposable disposable : disposables) {
+         disposable.dispose();
+      }
+      Assets.MANAGER.dispose();
+   }
+
+   @Override
    public void render() {
       draw(Gdx.graphics.getDeltaTime());
    }
@@ -115,19 +133,4 @@ public abstract class SimpleGame implements ApplicationListener, InputProcessor 
       resetCamera();
    }
 
-   @Override
-   public void pause() {
-   }
-
-   @Override
-   public void resume() {
-   }
-
-   @Override
-   public void dispose() {
-      for (Disposable disposable : disposables) {
-         disposable.dispose();
-      }
-      Assets.MANAGER.dispose();
-   }
 }

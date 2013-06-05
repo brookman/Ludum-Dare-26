@@ -52,7 +52,6 @@ public class LudumDare26 extends SimpleGame {
    public LudumDare26(Recorder recorder) {
       super(false);
       this.recorder = recorder;
-
       StateMachine.instance().createState(new GlobalState());
       StateMachine.instance().createState(new MenuState());
       StateMachine.instance().createState(new LevelState());
