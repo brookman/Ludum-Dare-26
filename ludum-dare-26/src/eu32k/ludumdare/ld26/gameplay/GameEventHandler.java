@@ -1,8 +1,11 @@
 package eu32k.ludumdare.ld26.gameplay;
 
+import eu32k.libgdx.common.Profile;
+import eu32k.libgdx.common.ProfileService;
 import eu32k.ludumdare.ld26.events.IEvent;
 import eu32k.ludumdare.ld26.events.IEventHandler;
 import eu32k.ludumdare.ld26.events.messages.GenericEvent;
+import eu32k.ludumdare.ld26.level.LevelConfigSequence;
 import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.state.GameState;
 import eu32k.ludumdare.ld26.state.GlobalState;
@@ -78,15 +81,24 @@ public class GameEventHandler implements IEventHandler {
          break;
       case GenericEvent.GAMEEVENT_TYPE_NEXTLEVEL:
          if (state instanceof LevelWinningState || state instanceof LevelWonState) {
-            if (levelState.getLevels().nextLevel()) {
+            ProfileService service = globalState.getProfileService();
+            Profile profile = service.retrieveProfile();
+            LevelConfigSequence levels = levelState.getLevels();
+            if (levels.nextLevel()) {
                levelState.addSuccessStatistic();
                globalState.pool().tiles().clear();
+               profile.level = levels.getLevelIndex();
+               profile.inGame = true;
+               service.persist();
                levelState.initLevel();
-               PlayerState ps = StateMachine.instance().getState(PlayerState.class);
                StateMachine.instance().enterState(LevelInitState.class);
             } else {
                levelState.addSuccessStatistic();
+               profile.level = 0;
+               profile.inGame = false;
+               service.persist();
                StateMachine.instance().enterState(LevelWonState.class);
+               
             }
          }
          break;

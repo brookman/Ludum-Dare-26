@@ -4,9 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Application.ApplicationType;
-
+import eu32k.libgdx.common.ProfileService;
 import eu32k.ludumdare.ld26.events.EventQueue;
 import eu32k.ludumdare.ld26.pool.GamePool;
 
@@ -23,6 +21,12 @@ public class GlobalState extends GameState {
    
    private GamePool pool;
       
+   private ProfileService profile;
+   
+   public GlobalState(ProfileService profile){
+      this.profile = profile;
+   }
+   
    @Override
    public void init() {
       pool = new GamePool();
@@ -56,6 +60,10 @@ public class GlobalState extends GameState {
    
    public Random getRandom(String name) {
       return randoms.get(name);
+   }
+   
+   public ProfileService getProfileService(){
+      return profile;
    }
    
    public EventQueue getEvents() {

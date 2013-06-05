@@ -35,6 +35,8 @@ public abstract class SimpleGame implements ApplicationListener, InputProcessor 
 
    public abstract void init();
 
+   public abstract void resumeGame();
+   
    public abstract void draw(float delta);
 
    @Override
@@ -45,11 +47,12 @@ public abstract class SimpleGame implements ApplicationListener, InputProcessor 
 
    @Override
    public void pause() {
+
    }
 
    @Override
    public void resume() {
-      init();
+      resumeGame();
       Gdx.input.setInputProcessor(this);
    }
 

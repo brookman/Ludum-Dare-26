@@ -373,7 +373,7 @@ public class GameStage extends AbstractStage {
       return null;
    }
 
-   private void retry() {
+   public void retry() {
       LevelState levelState = StateMachine.instance().getState(LevelState.class);
       levelState.events.clear();
       globalState.pool().fades().setInUseForAll(false);

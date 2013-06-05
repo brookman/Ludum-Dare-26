@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Random;
 
 import com.badlogic.gdx.math.Vector2;
-import com.sun.corba.se.spi.orbutil.fsm.State;
 
 import eu32k.libgdx.common.TempVector2;
 import eu32k.ludumdare.ld26.animation.TileAnimator;
@@ -243,9 +242,11 @@ public class LevelState extends GameState {
    }
 
    public void update(float delta) {
-      events.tick(delta);
-      tileSpawner.update(delta);
-      levelRunning += delta;
+      if(!isPaused()){
+         events.tick(delta);
+         tileSpawner.update(delta);
+         levelRunning += delta;
+      }
    }
 
    private void findSuitableGoalPosition(Vector2 p, Vector2 g, Vector2 tmp) {
@@ -258,7 +259,6 @@ public class LevelState extends GameState {
          do {
             g.set(random.nextInt(width), random.nextInt(height));
          } while (g.x == p.x && g.y == p.y);
-
       }
    }
 
@@ -311,7 +311,6 @@ public class LevelState extends GameState {
       PlayerState ps = StateMachine.instance().getState(PlayerState.class);
       addTime(ps, PlayerState.STATISTIC_TOTALTIME);
       addTime(ps, PlayerState.STATISTIC_SUCCESSFULTIME);
-
    }
 
    public int getCurrentLevelIndex() {

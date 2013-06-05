@@ -56,6 +56,10 @@ public class LevelConfigSequence {
       return levelIndex < levels.size();
    }
    
+   public void setLevelIndex(int index){
+      this.levelIndex = index;
+   }
+   
    public LevelConfig getCurrentConfig() {
       if(levels.size() == 0 || levelIndex >= levels.size())
          return null;

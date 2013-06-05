@@ -1,14 +1,17 @@
 package eu32k.ludumdare.ld26;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import eu32k.libgdx.SimpleGame;
+import eu32k.libgdx.common.DesktopIOWriter;
+import eu32k.libgdx.common.Profile;
+import eu32k.libgdx.common.ProfileService;
 import eu32k.libgdx.rendering.DynamicFrameBuffer;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
 import eu32k.ludumdare.ld26.effects.SoundButton;
+import eu32k.ludumdare.ld26.events.messages.GenericEvent;
 import eu32k.ludumdare.ld26.level.TileBoundingBoxes;
 import eu32k.ludumdare.ld26.level.TileSprites;
 import eu32k.ludumdare.ld26.recorder.Recorder;
@@ -44,15 +47,25 @@ public class LudumDare26 extends SimpleGame {
    private AbstractStage pauseStage;
 
    private Recorder recorder;
+   private ProfileService profileService;
 
    public LudumDare26() {
-      this(null);
+      this(null, new ProfileService(new DesktopIOWriter(), ".imbarinth/profile-v1.json"));
    }
 
    public LudumDare26(Recorder recorder) {
+      this(recorder, new ProfileService(new DesktopIOWriter(), ".imbarinth/profile-v1.json"));
+   }
+   
+   public LudumDare26(ProfileService profileService){
+      this(null, profileService);
+   }
+   
+   public LudumDare26(Recorder recorder, ProfileService profileService) {
       super(false);
+      this.profileService = profileService;
       this.recorder = recorder;
-      StateMachine.instance().createState(new GlobalState());
+      StateMachine.instance().createState(new GlobalState(this.profileService));
       StateMachine.instance().createState(new MenuState());
       StateMachine.instance().createState(new LevelState());
       StateMachine.instance().createState(new LevelWinningState());
@@ -66,6 +79,12 @@ public class LudumDare26 extends SimpleGame {
 
    @Override
    public void init() {
+      initAssets();
+      initState();
+      StateMachine.instance().enterState(MenuState.class);
+   }
+
+   private void initAssets() {
       Gdx.input.setCatchBackKey(true);
       Gdx.input.setCatchMenuKey(true);
       Preloader.preLoad();
@@ -73,7 +92,47 @@ public class LudumDare26 extends SimpleGame {
       TileSprites.init();
       TileBoundingBoxes.init();
       SoundButton.init();
+   }
+   
+   public void resumeGame(){
+      if(Gdx.app.getType() == ApplicationType.Android ){
+         initAssets();
+         initState();
+         reload();
+      }
+      LevelState ls = StateMachine.instance().getState(LevelState.class);
+      ls.setPaused(false);
+   }
+   
+   @Override
+   public void pause() {
+      LevelState ls = StateMachine.instance().getState(LevelState.class);
+      ls.setPaused(true);
+      GlobalState state = StateMachine.instance().getState(GlobalState.class);
+      state.getProfileService().persist();
+      //GameStage stage = (GameStage) ls.getStage();
+//      stage.retry();
+      ls.getEvents().enqueue(state.pool().events().gameplayEvent(GenericEvent.GAMEEVENT_TYPE_LOSE, 0, GenericEvent.GAMEEVENT_LOSE_FALLOFFBOARD));
 
+   }
+   
+   private void reload(){
+      GlobalState state = StateMachine.instance().getState(GlobalState.class);
+      Profile profile = state.getProfileService().retrieveProfile();
+      if(profile.inGame){
+         if(profile.inChallengeMode){
+            MenuStage.challengeMode();
+         }
+         else{
+            MenuStage.seedMode();
+         }
+      }
+      else{
+         StateMachine.instance().enterState(MenuState.class);
+      }
+   }
+   
+   private void initState() {
       effects = new EffectsManager();
       // effects.initOtgy(1000);
       effects.initBitbreak(1000);
@@ -94,7 +153,6 @@ public class LudumDare26 extends SimpleGame {
       StateMachine.instance().getState(LevelLostState.class).setStage(lostStage);
       StateMachine.instance().getState(LevelWonState.class).setStage(finishStage);
       StateMachine.instance().getState(LevelPauseState.class).setStage(pauseStage);
-      StateMachine.instance().enterState(MenuState.class);
       GlobalState gs = StateMachine.instance().getState(GlobalState.class);
       gs.setGravitySensorEnabled(Gdx.app.getType() == ApplicationType.Android);
    }
