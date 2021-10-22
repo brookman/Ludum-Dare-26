@@ -43,7 +43,7 @@ public class TileMove implements IRunningEffect {
       Vector2 t2 = TempVector2.tmp2;
       t1.set(tile.getX(), tile.getY());
       t2.set(targetX, targetY);
-      t2.sub(t1).nor().mul(speed);
+      t2.sub(t1).nor().scl(speed);
       speedX = t2.x;
       speedY = t2.y;
    }

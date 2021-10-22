@@ -3,7 +3,6 @@ package eu32k.ludumdare.ld26;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-
 import eu32k.libgdx.SimpleGame;
 import eu32k.libgdx.common.DesktopIOWriter;
 import eu32k.libgdx.common.Profile;
@@ -15,24 +14,8 @@ import eu32k.ludumdare.ld26.events.messages.GenericEvent;
 import eu32k.ludumdare.ld26.level.TileBoundingBoxes;
 import eu32k.ludumdare.ld26.level.TileSprites;
 import eu32k.ludumdare.ld26.recorder.Recorder;
-import eu32k.ludumdare.ld26.stages.AbstractStage;
-import eu32k.ludumdare.ld26.stages.FinishStage;
-import eu32k.ludumdare.ld26.stages.GameStage;
-import eu32k.ludumdare.ld26.stages.LostStage;
-import eu32k.ludumdare.ld26.stages.MenuStage;
-import eu32k.ludumdare.ld26.stages.PauseStage;
-import eu32k.ludumdare.ld26.stages.SeedStage;
-import eu32k.ludumdare.ld26.state.GlobalState;
-import eu32k.ludumdare.ld26.state.LevelInitState;
-import eu32k.ludumdare.ld26.state.LevelLosingState;
-import eu32k.ludumdare.ld26.state.LevelLostState;
-import eu32k.ludumdare.ld26.state.LevelPauseState;
-import eu32k.ludumdare.ld26.state.LevelState;
-import eu32k.ludumdare.ld26.state.LevelWinningState;
-import eu32k.ludumdare.ld26.state.LevelWonState;
-import eu32k.ludumdare.ld26.state.MenuState;
-import eu32k.ludumdare.ld26.state.SeedState;
-import eu32k.ludumdare.ld26.state.StateMachine;
+import eu32k.ludumdare.ld26.stages.*;
+import eu32k.ludumdare.ld26.state.*;
 
 public class LudumDare26 extends SimpleGame {
 
@@ -56,11 +39,11 @@ public class LudumDare26 extends SimpleGame {
    public LudumDare26(Recorder recorder) {
       this(recorder, new ProfileService(new DesktopIOWriter(), ".imbarinth/profile-v1.json"));
    }
-   
+
    public LudumDare26(ProfileService profileService){
       this(null, profileService);
    }
-   
+
    public LudumDare26(Recorder recorder, ProfileService profileService) {
       super(false);
       this.profileService = profileService;
@@ -93,7 +76,7 @@ public class LudumDare26 extends SimpleGame {
       TileBoundingBoxes.init();
       SoundButton.init();
    }
-   
+
    public void resumeGame(){
       if(Gdx.app.getType() == ApplicationType.Android ){
          initAssets();
@@ -103,7 +86,7 @@ public class LudumDare26 extends SimpleGame {
       LevelState ls = StateMachine.instance().getState(LevelState.class);
       ls.setPaused(false);
    }
-   
+
    @Override
    public void pause() {
       LevelState ls = StateMachine.instance().getState(LevelState.class);
@@ -115,7 +98,7 @@ public class LudumDare26 extends SimpleGame {
       ls.getEvents().enqueue(state.pool().events().gameplayEvent(GenericEvent.GAMEEVENT_TYPE_LOSE, 0, GenericEvent.GAMEEVENT_LOSE_FALLOFFBOARD));
 
    }
-   
+
    private void reload(){
       GlobalState state = StateMachine.instance().getState(GlobalState.class);
       Profile profile = state.getProfileService().retrieveProfile();
@@ -131,7 +114,7 @@ public class LudumDare26 extends SimpleGame {
          StateMachine.instance().enterState(MenuState.class);
       }
    }
-   
+
    private void initState() {
       effects = new EffectsManager();
       // effects.initOtgy(1000);
@@ -188,12 +171,10 @@ public class LudumDare26 extends SimpleGame {
    public void resize(int width, int height) {
       DynamicFrameBuffer.resetAllBuffers(width, height);
 
-      menuStage.setViewport(width, height, false);
-      lostStage.setViewport(width, height, false);
-      finishStage.setViewport(width, height, false);
-      pauseStage.setViewport(width, height, false);
-
-      // aspectRatio = (float) width / (float) height;
-      // resetCamera();
+      menuStage.getViewport().update(width, height, true);
+      gameStage.getViewport().update(width, height, true);
+      lostStage.getViewport().update(width, height, true);
+      finishStage.getViewport().update(width, height, true);
+      pauseStage.getViewport().update(width, height, true);
    }
 }

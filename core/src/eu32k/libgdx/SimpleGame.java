@@ -125,7 +125,7 @@ public abstract class SimpleGame implements ApplicationListener, InputProcessor 
    }
 
    @Override
-   public boolean scrolled(int amount) {
+   public boolean scrolled(float x, float y) {
       return false;
    }
 

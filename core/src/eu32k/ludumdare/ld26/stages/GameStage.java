@@ -1,14 +1,10 @@
 package eu32k.ludumdare.ld26.stages;
 
-import java.util.Iterator;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-
 import eu32k.libgdx.common.KeyPressEvent;
 import eu32k.libgdx.common.TempVector2;
 import eu32k.ludumdare.ld26.effects.EffectsManager;
@@ -20,13 +16,10 @@ import eu32k.ludumdare.ld26.level.Tile;
 import eu32k.ludumdare.ld26.objects.Goal;
 import eu32k.ludumdare.ld26.objects.Player;
 import eu32k.ludumdare.ld26.rendering.MainRenderer;
-import eu32k.ludumdare.ld26.state.GameState;
-import eu32k.ludumdare.ld26.state.GlobalState;
-import eu32k.ludumdare.ld26.state.LevelInitState;
-import eu32k.ludumdare.ld26.state.LevelLosingState;
-import eu32k.ludumdare.ld26.state.LevelState;
-import eu32k.ludumdare.ld26.state.PlayerState;
-import eu32k.ludumdare.ld26.state.StateMachine;
+import eu32k.ludumdare.ld26.state.*;
+
+import java.util.Iterator;
+import java.util.List;
 
 public class GameStage extends AbstractStage {
 
@@ -42,84 +35,84 @@ public class GameStage extends AbstractStage {
    private PlayerState playerState;
 
    private GlobalState globalState;
-   
+
    private KeyPressEvent keyPause;
    private KeyPressEvent keyPause2;
    private KeyPressEvent keyRetry;
-   
+
    private KeyPressEvent keyAndroidBack;
    private KeyPressEvent keyAndroidMenu;
-   
+
    public GameStage(EffectsManager effects) {
       this.effects = effects;
 
       keyPause = new KeyPressEvent(Input.Keys.P) {
-         
+
          @Override
          public void onRelease() {
             // TODO Auto-generated method stub
             pause();
          }
-         
+
          @Override
          public void onPress() {
             // TODO Auto-generated method stub
-            
+
          }
       };
       keyPause2 = new KeyPressEvent(Input.Keys.ESCAPE) {
-         
+
          @Override
          public void onRelease() {
-            pause();            
+            pause();
          }
-         
+
          @Override
          public void onPress() {
             // TODO Auto-generated method stub
-            
+
          }
       };
       keyRetry = new KeyPressEvent(Input.Keys.R){
-         
+
          @Override
          public void onRelease() {
-            retry();            
+            retry();
          }
-         
+
          @Override
          public void onPress() {
             // TODO Auto-generated method stub
-            
+
          }
       };
       keyAndroidBack = new KeyPressEvent(Input.Keys.BACK){
-         
+
          @Override
          public void onRelease() {
-            retry();            
+            retry();
          }
-         
+
          @Override
          public void onPress() {
             // TODO Auto-generated method stub
-            
+
          }
       };
       keyAndroidMenu = new KeyPressEvent(Input.Keys.MENU) {
-         
+
          @Override
          public void onRelease() {
-            pause();            
+            pause();
          }
-         
+
          @Override
          public void onPress() {
             // TODO Auto-generated method stub
-            
+
          }
       };
-      
+
       new GameEventHandler();
 
       levelState = StateMachine.instance().getState(LevelState.class);
@@ -135,7 +128,7 @@ public class GameStage extends AbstractStage {
 
    @Override
    public void draw() {
-      
+
       boolean running = levelState.isRunning();
       float delta = Gdx.graphics.getDeltaTime();
 
@@ -144,7 +137,7 @@ public class GameStage extends AbstractStage {
       keyPause2.update();
       keyAndroidBack.update();
       keyAndroidMenu.update();
-      
+
       if (!levelState.ready()) {
          return;
       }
@@ -168,7 +161,7 @@ public class GameStage extends AbstractStage {
          checkGameConditions(delta);
 
          updatePlayerInput(delta);
-      } 
+      }
       Color mainColor = effects.getCurrentColor();
       Color inverseColor = new Color();
       inverseColor.r = 1f - mainColor.r;
@@ -193,9 +186,11 @@ public class GameStage extends AbstractStage {
 
       renderer.setPaused(levelState.isPaused());
       // rendering ------------------------------------
-      setViewport(level.getWidth() + 2.0f, level.getHeight() + 2.0f, true);
+      getViewport().setWorldSize(level.getWidth() + 2.0f, level.getHeight() + 2.0f);
+      getViewport().apply();
       getCamera().position.x = level.getWidth() / 2.0f;
       getCamera().position.y = level.getHeight() / 2.0f;
+
       super.draw();
       renderer.render(delta, getCamera(), level.getTiles(), player, levelState.getGoal(), mainColor, playerColor, inverseColor);
    }
@@ -298,7 +293,7 @@ public class GameStage extends AbstractStage {
       }
       float factor = 1.0f;
 
-      
+
       if (globalState.isGravitySensorEnabled() && ( Gdx.input.getPitch() != 0.0f || Gdx.input.getRoll() != 0.0f)) {
          float x = MathUtils.clamp(-Gdx.input.getPitch(), -20.0f, 20.0f);
 
