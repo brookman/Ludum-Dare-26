@@ -3,4 +3,5 @@
 <module>
 	<source path="eu32k/ludumdare/ld26" />
 	<source path="eu32k/libgdx" />
+	<extend-configuration-property name="gdx.reflect.include" value="eu32k" />
 </module>

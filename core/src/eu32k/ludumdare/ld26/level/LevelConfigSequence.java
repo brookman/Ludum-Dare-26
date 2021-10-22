@@ -27,7 +27,7 @@ public class LevelConfigSequence {
       levelIndex = 0;
    }
 
-   public static void addLevelsToSequence(LevelConfigSequence sequence, long sequenceSeed, LevelConfig from, LevelConfig to, int levels) {
+   public static void addLevelsToSequence(LevelConfigSequence sequence, int sequenceSeed, LevelConfig from, LevelConfig to, int levels) {
       Random random = new Random(sequenceSeed);
       float v = 0;
       float levelsF = levels;

@@ -12,12 +12,12 @@ public class Goal extends GameObject {
 
    public static final float WIDTH = 0.4f, HEIGHT = 0.4f;
 
-   private GameObjectParticleEffect particleEffect;
+//   private GameObjectParticleEffect particleEffect;
 
    public Goal(float x, float y) {
       super(new Vector2(x - WIDTH / 2.0f, y - WIDTH / 2.0f), WIDTH, HEIGHT);
 
-      particleEffect = new GameObjectParticleEffect(this, "particles/goal.txt");
+//      particleEffect = new GameObjectParticleEffect(this, "particles/goal.txt");
    }
 
    @Override
@@ -32,9 +32,9 @@ public class Goal extends GameObject {
       return sprite;
    }
 
-   public GameObjectParticleEffect getEffect() {
-      return particleEffect;
-   }
+//   public GameObjectParticleEffect getEffect() {
+//      return particleEffect;
+//   }
 
    @Override
    public float radius() {

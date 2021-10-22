@@ -152,7 +152,7 @@ public class SeedStage extends AbstractStage {
       maxHeightSlider.setValue(profile.maxHeight);
       startingSpeedSlider.setValue(profile.speed);
       levelCountSlider.setValue(profile.levels);
-      seed.setText(Long.toString(profile.seed));
+      seed.setText(Long.toString(profile.seed2));
       
       addSliderListener(minWidthSlider);
       addSliderListener(maxWidthSlider);
@@ -252,10 +252,10 @@ public class SeedStage extends AbstractStage {
       profile.levels = (int) levelCountSlider.getValue();
       try
       {
-         profile.seed = Long.parseLong(seed.getText());
+         profile.seed2 = Integer.parseInt(seed.getText());
       }
       catch(Exception e){
-         profile.seed = 0;
+         profile.seed2 = 0;
       }
    }
 

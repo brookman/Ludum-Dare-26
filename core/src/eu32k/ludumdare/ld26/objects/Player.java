@@ -24,11 +24,11 @@ public class Player extends GameObject {
 
    private boolean movingWithTile = false;
 
-   private GameObjectParticleEffect particleEffect;
+//   private GameObjectParticleEffect particleEffect;
 
    public Player(float x, float y) {
       super(new Vector2(x - WIDTH / 2.0f, y - WIDTH / 2.0f), WIDTH, HEIGHT);
-      particleEffect = new GameObjectParticleEffect(this, "particles/player.txt");
+//      particleEffect = new GameObjectParticleEffect(this, "particles/player.txt");
    }
 
    @Override
@@ -125,9 +125,9 @@ public class Player extends GameObject {
       return position;
    }
 
-   public GameObjectParticleEffect getEffect() {
-      return particleEffect;
-   }
+//   public GameObjectParticleEffect getEffect() {
+//      return particleEffect;
+//   }
 
    @Override
    public float radius() {

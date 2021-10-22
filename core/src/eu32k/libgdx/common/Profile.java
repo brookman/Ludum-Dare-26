@@ -7,7 +7,7 @@ public class Profile {
    public int minHeight = 3;
    public int maxHeight = 15;
    public float speed = 0;
-   public long seed = 47289239;
+   public int seed2 = 47289239;
    public int levels;
    
    //game state

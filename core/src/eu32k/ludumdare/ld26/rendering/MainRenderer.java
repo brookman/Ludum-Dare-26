@@ -201,7 +201,7 @@ public class MainRenderer {
       player.getSprite().setColor(playerColor);
       player.draw(batch);
       if (Config.SHOW_PARTICLES && bg || Config.SHOW_PARTICLES_GLOW && !bg) {
-         player.getEffect().draw(batch, playerColor, deltaTime);
+//         player.getEffect().draw(batch, playerColor, deltaTime);
       }
 
       if (bg) {
@@ -214,7 +214,7 @@ public class MainRenderer {
       goal.getSprite().setColor(inverseColor);
       goal.draw(batch);
       if (Config.SHOW_PARTICLES && bg || Config.SHOW_PARTICLES_GLOW && !bg) {
-         goal.getEffect().draw(batch, inverseColor, deltaTime);
+//         goal.getEffect().draw(batch, inverseColor, deltaTime);
       }
 
       batch.end();

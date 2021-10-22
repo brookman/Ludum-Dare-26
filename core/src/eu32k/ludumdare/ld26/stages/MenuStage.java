@@ -199,7 +199,7 @@ public class MenuStage extends AbstractStage {
       StateMachine.instance().enterState(SeedState.class);
    }
 
-   public static void startGame(long seed, LevelConfig from, LevelConfig to, int levelCount, boolean inChallengeMode) {
+   public static void startGame(int seed, LevelConfig from, LevelConfig to, int levelCount, boolean inChallengeMode) {
       // TODO Auto-generated method stub
       LevelState levelState = StateMachine.instance().getState(LevelState.class);
       LevelConfigSequence levels = new LevelConfigSequence();
@@ -244,7 +244,7 @@ public class MenuStage extends AbstractStage {
       float sInterval = Interpolation.linear.apply(FROM_SPAWNINTERVAL, TO_SPAWNINTERVAL, speed);
       float sFade = Interpolation.linear.apply(FROM_TILEFADETIME, TO_TILEFADETIME, speed);
       
-      long seedValue = profile.seed;
+      int seedValue = profile.seed2;
       LevelConfig from = new LevelConfig();
       from.width = profile.minWidth;
       from.height = profile.minHeight;
